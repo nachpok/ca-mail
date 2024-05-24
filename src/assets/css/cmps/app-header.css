@@ -4,29 +4,17 @@
     margin: 8px;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
 }
 
-/* .app-header section.container {
+.header-home-link {
+    margin-right: 100px;
+}
+
+.header-search-bar {
     display: flex;
+    flex-direction: row;
+    align-self: center;
     align-items: center;
-
 }
-
-.app-header h1.logo {
-    flex-grow: 1;
-    font-weight: 600;
-}
-
-.app-header .back {
-    flex-grow: 1;
-}
-
-.app-header nav a:not(:last-child) {
-    margin-right: 10px;
-}
-
-.app-header section.container>section {
-    flex-grow: 1;
-} */

@@ -30,11 +30,14 @@ async function query(filterBy) {
 
     if (filterBy) {
         const { txt, status, isRead } = filterBy
-        if (txt) {
+        if (txt && txt !== '') {
             const regex = new RegExp(`(${txt})`, 'gi')
             mails = mails.filter(mail => regex.test(mail.subject) || regex.test(mail.body))
         }
         if (status && status.length > 0) {
+            if (status.includes('all-mail')) {
+                return mails
+            }
             if (status.includes('inbox')) {
                 mails = mails.filter(mail => mail.to === (loggedinUser.email))
             }

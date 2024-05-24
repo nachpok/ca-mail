@@ -7,6 +7,11 @@
     padding: 10px;
     align-items: center;
     justify-content: space-between;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.mail-preview:hover {
+    border: 2px solid #ccc;
 }
 
 .mail-preview-left,
@@ -54,20 +59,31 @@
 
 .mail-preview-from {
     margin-right: 10px;
-    font-weight: bold;
     width: 200px;
     text-align: left;
 }
 
+.mail-preview-unread .mail-preview-from {
+    font-weight: bold;
+}
+
 .mail-preview-subject {
     margin-right: 10px;
-    font-weight: bold;
+
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     flex-shrink: 0;
     flex-grow: 1;
+}
+
+.mail-preview-read {
+    background-color: #f2f6fb;
+}
+
+.mail-preview-unread .mail-preview-subject {
+    font-weight: bold;
 }
 
 .mail-preview-body {

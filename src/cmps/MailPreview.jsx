@@ -10,10 +10,10 @@ export function MailPreview({ mail }) {
 
     //TODO style body text
     return (
-        <div className="mail-preview">
+        <div className={`mail-preview ${mail.isRead ? 'mail-preview-read' : 'mail-preview-unread'}`}>
             <div className='mail-preview-left'>
                 <input type="checkbox" className='mail-preview-checkbox' />
-                <StarCheckbox cb={handleStar} className='mail-preview-star-checkbox' />
+                <StarCheckbox cb={handleStar} defaultChecked={mail.isStarred} className='mail-preview-star-checkbox' />
                 <p className='mail-preview-from'>{mail.fromName}</p>
             </div>
             <div className='mail-preview-center'>
