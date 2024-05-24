@@ -1,0 +1,50 @@
+.app-side-bar {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 100vh;
+    padding-top: 20px;
+}
+
+
+
+.side-bar-btn {
+    display: block;
+    background-color: #c1e7fe;
+    padding: 10px 20px;
+    width: 150px;
+    height: 60px;
+    border-radius: 10px;
+    border: none;
+    transition: box-shadow 0.2s ease-in-out;
+    font-size: 1.4em;
+    margin: 0 0 20px 20px;
+
+}
+
+.side-bar-btn:hover {
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.side-bar-link {
+    display: block;
+    text-decoration: none;
+    color: black;
+    font-size: 1.4em;
+    padding: 10px 0;
+    flex-grow: 1;
+    margin-right: 20px;
+    border-radius: 0 20px 20px 0;
+}
+
+.side-bar-link:hover {
+    background-color: #c4d9e6;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.side-bar-link.active {
+    background-color: #c1e7fe;
+    text-decoration: none;
+    font-weight: normal;
+}

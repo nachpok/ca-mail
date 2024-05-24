@@ -1,0 +1,17 @@
+.mail-preview {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-basis: 50px;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+}
+
+.star-checkbox {
+    cursor: pointer;
+    margin-top: 6px;
+}
+
+.star-checkbox.fas {
+    color: #f5c742;
+}
