@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-export default function StarCheckbox({ cb }) {
+export default function StarCheckbox({ cb, className }) {
     const [isChecked, setIsChecked] = useState(false);
     const toggleStar = () => {
         setIsChecked(isChecked => !isChecked);
@@ -10,8 +10,9 @@ export default function StarCheckbox({ cb }) {
     }
     return (
         <i
-            className={`star-checkbox ${isChecked ? "fas fa-star" : "far fa-star"}`}
+            className={`star-checkbox ${isChecked ? "fas fa-star" : "far fa-star"} ${className}`}
             onClick={toggleStar}
+
         ></i>
     );
 }

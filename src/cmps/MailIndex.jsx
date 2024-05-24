@@ -4,7 +4,6 @@ import { mailService } from '../services/mail.service.js';
 import { useLocation } from 'react-router-dom'
 
 export function MailIndex() {
-
     const [mails, setMails] = useState(null)
 
 
@@ -12,6 +11,7 @@ export function MailIndex() {
     const location = useLocation()
     const currentUrl = location.pathname
     let filter = currentUrl.split('/')[1]
+
     useEffect(() => {
         filter === '' && (filter = 'inbox')
         loadMails({ status: filter })

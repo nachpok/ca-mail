@@ -22,11 +22,12 @@ const MAIL_KEY = 'mail'
 //     isRead: true / false / null,
 // }
 
+_createMockMails()
+
 async function query(filterBy) {
+
     let mails = await storageService.query(MAIL_KEY);
-    if (!mails || mails.length === 0) {
-        mails = _createMockMails()
-    }
+
     if (filterBy) {
         const { txt, status, isRead } = filterBy
         if (txt) {
@@ -35,10 +36,10 @@ async function query(filterBy) {
         }
         if (status && status.length > 0) {
             if (status.includes('inbox')) {
-                mails = mails.filter(mail => mail.from === (loggedinUser.email))
+                mails = mails.filter(mail => mail.to === (loggedinUser.email))
             }
             if (status.includes("sent")) {
-                mails = mails.filter(mail => mail.to === (loggedinUser.email))
+                mails = mails.filter(mail => mail.from === (loggedinUser.email))
             }
             if (status.includes('star')) {
                 mails = mails.filter(mail => mail.isStarred)
@@ -77,39 +78,46 @@ function createMail(mail) {
 }
 
 async function _createMockMails() {
+    let mails = await storageService.query(MAIL_KEY);
     const mockEmails = [
         {
             id: 'e101',
             subject: 'Meeting Reminder',
-            body: 'Don\'t forget about the meeting tomorrow at 10 AM.',
+            body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             isRead: false,
             isStarred: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'boss@company.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'Boss',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e102',
             subject: 'Project Update',
-            body: 'The project is on track and will be completed by the end of the month.',
+            body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             isRead: true,
             isStarred: true,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'manager@company.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'Manager',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e103',
             subject: 'Lunch Plans',
-            body: 'How about lunch at 1 PM today?',
+            body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             isRead: false,
             isStarred: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'friend@social.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'Friend',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e104',
@@ -120,7 +128,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'billing@service.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'Billing Service',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e105',
@@ -131,7 +141,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'support@service.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'Support Service',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e106',
@@ -142,7 +154,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'no-reply@service.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'No Reply Service',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e107',
@@ -153,7 +167,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'newsletter@service.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'Newsletter Service',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e108',
@@ -164,7 +180,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'hr@company.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'HR Department',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e109',
@@ -175,7 +193,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'events@company.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'Events Team',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e110',
@@ -186,7 +206,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'no-reply@service.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'No Reply Service',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e111',
@@ -197,7 +219,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'shipping@store.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'Shipping Department',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e113',
@@ -208,7 +232,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'feedback@service.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'Feedback Team',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e114',
@@ -219,7 +245,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'security@service.com',
-            to: 'user@appsus.com'
+            to: 'user@appsus.com',
+            fromName: 'Security Team',
+            toName: 'Mahatma Appsus'
         },
         {
             id: 'e115',
@@ -230,7 +258,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'user@appsus.com',
-            to: 'promotions@store.com'
+            to: 'promotions@store.com',
+            fromName: 'Mahatma Appsus',
+            toName: 'Promotions Team'
         },
         {
             id: 'e116',
@@ -241,7 +271,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'user@appsus.com',
-            to: 'support@service.com'
+            to: 'support@service.com',
+            fromName: 'Mahatma Appsus',
+            toName: 'Support Team'
         },
         {
             id: 'e117',
@@ -252,7 +284,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'user@appsus.com',
-            to: 'updates@service.com'
+            to: 'updates@service.com',
+            fromName: 'Mahatma Appsus',
+            toName: 'Updates Team'
         },
         {
             id: 'e118',
@@ -263,7 +297,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'user@appsus.com',
-            to: 'no-reply@service.com'
+            to: 'no-reply@service.com',
+            fromName: 'Mahatma Appsus',
+            toName: 'No Reply Service'
         },
         {
             id: 'e119',
@@ -274,7 +310,9 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'user@appsus.com',
-            to: 'survey@service.com'
+            to: 'survey@service.com',
+            fromName: 'Mahatma Appsus',
+            toName: 'Survey Team'
         },
         {
             id: 'e120',
@@ -285,11 +323,15 @@ async function _createMockMails() {
             sentAt: 1631133930594,
             removedAt: null,
             from: 'user@appsus.com',
-            to: 'support@service.com'
+            to: 'support@service.com',
+            fromName: 'Mahatma',
+            toName: 'Support Team'
         }
     ];
-    for (const mail of mockEmails) {
-        await storageService.post(MAIL_KEY, mail)
+    if (!mails || mails.length === 0) {
+        for (const mail of mockEmails) {
+            await storageService.post(MAIL_KEY, mail)
+        }
     }
 }
 
