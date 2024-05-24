@@ -2,6 +2,8 @@ import { MailList } from './MailList.jsx';
 import { useState, useEffect } from 'react';
 import { mailService } from '../services/mail.service.js';
 import { useLocation } from 'react-router-dom'
+import { AppHeader } from './AppHeader.jsx';
+import { SideBar } from './SideBar.jsx';
 
 export function MailIndex() {
     const [mails, setMails] = useState(null)
@@ -33,7 +35,11 @@ export function MailIndex() {
 
     return (
         <div className='mail-index'>
-            <MailList mails={mails} />
+            <AppHeader />
+            <div className="mail-index-content">
+                <SideBar />
+                <MailList mails={mails} />
+            </div>
         </div>
     )
 }
