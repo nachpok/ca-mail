@@ -9,7 +9,7 @@ export function MailList({ mails }) {
         <div className='mail-list'>
             <MailListHeader />
             {mails.map(mail => <MailPreview key={mail.id} mail={mail} />)}
-            {/* <MailListFooter /> */}
+
         </div>
     )
 }

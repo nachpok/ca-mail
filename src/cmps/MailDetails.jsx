@@ -20,15 +20,21 @@ export function MailDetails() {
         const mail = await mailService.getById(params.mailId)
         setMail(mail)
     }
-    function handleStar() {
-        // mailService.toggleStar(mail._id)
-        // setMail(prevMail => ({ ...prevMail, isStarred: !prevMail.isStarred }))
+    const handleStar = (star) => {
+        mail.isStarred = star
+        mailService.updateMail(mail)
+    }
+
+    const handleUnread = async () => {
+        mail.isRead = false
+        await mailService.updateMail(mail)
+        history.back()
     }
     if (!mail) return <div>Loading...</div>
     return (
         <div className="mail-details-outlet">
             <div className="mail-details-header">
-                <div className='btn mail-details-btn'>
+                <div className='btn mail-details-btn' onClick={() => history.back()}>
                     <IoMdArrowRoundBack />
                 </div>
                 <div className='btn mail-details-btn'>
@@ -40,7 +46,7 @@ export function MailDetails() {
                 <div className='btn mail-details-btn'>
                     <IoTrashOutline />
                 </div>
-                <div className='btn mail-details-btn'>
+                <div className='btn mail-details-btn' onClick={handleUnread}>
                     <IoMailUnreadOutline />
                 </div>
             </div>

@@ -3,9 +3,12 @@ import React, { useState } from 'react';
 
 export default function StarCheckbox({ cb, defaultChecked, className }) {
     const [isChecked, setIsChecked] = useState(defaultChecked);
-    const toggleStar = () => {
+    const toggleStar = (e) => {
+        e.preventDefault();
+        // const current = isChecked;
         setIsChecked(isChecked => !isChecked);
-        cb(isChecked);
+        console.log('isChecked:', isChecked);
+        cb(!isChecked);
     }
     return (
         <i

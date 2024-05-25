@@ -31,6 +31,8 @@ export function MailIndex() {
     const handleSearchChange = (e) => {
         setSearchValue(e.target.value);
     };
+
+
     const isMailDetailsRoute = currentUrl.split('/').length > 2;
 
     //TODO set loading wheel

@@ -11,7 +11,8 @@ export const mailService = {
     remove,
     save,
     createMail,
-    loggedinUser
+    updateMail,
+    loggedinUser,
 }
 
 const MAIL_KEY = 'mail'
@@ -80,6 +81,10 @@ function save(mail) {
 function createMail(mail) {
     mail.id = utilService.makeId()
     return storageService.post(MAIL_KEY, mail)
+}
+
+function updateMail(mail) {
+    return storageService.put(MAIL_KEY, mail)
 }
 
 async function _createMockMails() {

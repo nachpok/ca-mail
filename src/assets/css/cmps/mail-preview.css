@@ -45,6 +45,15 @@
 
 .mail-preview-checkbox {
     margin-right: 10px;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.mail-preview-checkbox:hover {
+    background-color: #ccc;
 }
 
 .mail-preview-star-checkbox {
