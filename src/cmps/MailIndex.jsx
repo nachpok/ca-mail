@@ -1,7 +1,7 @@
 import { MailList } from './MailList.jsx';
 import { useState, useEffect, useRef } from 'react';
 import { mailService } from '../services/mail.service.js';
-import { useLocation } from 'react-router-dom'
+import { useLocation, Outlet } from 'react-router-dom'
 import { AppHeader } from './AppHeader.jsx';
 import { SideBar } from './SideBar.jsx';
 
@@ -31,6 +31,8 @@ export function MailIndex() {
     const handleSearchChange = (e) => {
         setSearchValue(e.target.value);
     };
+    const isMailDetailsRoute = currentUrl.split('/').length > 2;
+
     //TODO set loading wheel
     if (!mails) return <div>Loading...</div>
 
@@ -39,7 +41,8 @@ export function MailIndex() {
             <AppHeader searchValue={searchValue} handleSearchChange={handleSearchChange} />
             <div className="mail-index-content">
                 <SideBar />
-                <MailList mails={mails} />
+                {isMailDetailsRoute ? <Outlet /> : <MailList mails={mails} />}
+
             </div>
         </div>
     )

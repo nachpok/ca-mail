@@ -1,16 +1,22 @@
 import StarCheckbox from './StarCheckbox.jsx';
 import { useState } from 'react';
 import { utilService } from '../services/util.service.js';
+import { Link, useParams, useLocation } from 'react-router-dom';
 
 export function MailPreview({ mail }) {
     const [isStarred, setIsStarred] = useState(false);
+    const location = useLocation();
+
     const handleStar = (star) => {
         setIsStarred(star);
     }
 
+    let pathname = location.pathname.split('/')[1]
+    if (pathname === '') pathname = 'inbox'
+
     //TODO style body text
     return (
-        <div className={`mail-preview ${mail.isRead ? 'mail-preview-read' : 'mail-preview-unread'}`}>
+        <Link to={`/${pathname}/${mail.id}`} className={`mail-preview ${mail.isRead ? 'mail-preview-read' : 'mail-preview-unread'}`}>
             <div className='mail-preview-left'>
                 <input type="checkbox" className='mail-preview-checkbox' />
                 <StarCheckbox cb={handleStar} defaultChecked={mail.isStarred} className='mail-preview-star-checkbox' />
@@ -23,7 +29,7 @@ export function MailPreview({ mail }) {
             <div className='mail-preview-right'>
                 <p className='mail-preview-date'>{utilService.formatDate(mail.sentAt)}</p>
             </div>
-        </div>
+        </Link>
     )
 }
 

@@ -12,6 +12,8 @@
 
 .mail-preview:hover {
     border: 2px solid #ccc;
+    text-decoration: none;
+
 }
 
 .mail-preview-left,

@@ -12,6 +12,7 @@ export function SideBar() {
                     <NavLink className={`side-bar-link `} to='/starred'  >Starred</NavLink>
                     <NavLink className={`side-bar-link `} to='/sent'  >Sent</NavLink>
                     <NavLink className={`side-bar-link `} to='/all-mail'  >All Mail</NavLink>
+                    <NavLink className={`side-bar-link `} to='/trash'  >Trash</NavLink>
                 </nav>
             </section>
         </header>

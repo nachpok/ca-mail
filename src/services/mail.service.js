@@ -49,6 +49,8 @@ async function query(filterBy) {
             }
             if (status.includes('trash')) {
                 mails = mails.filter(mail => mail.removedAt !== null)
+            } else {
+                mails = mails.filter(mail => mail.removedAt === null)
             }
         }
         if (isRead !== undefined) {
@@ -324,7 +326,7 @@ async function _createMockMails() {
             isRead: true,
             isStarred: true,
             sentAt: 1631133930594,
-            removedAt: null,
+            removedAt: 1631133931594,
             from: 'user@appsus.com',
             to: 'support@service.com',
             fromName: 'Mahatma',
