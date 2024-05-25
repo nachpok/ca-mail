@@ -1,4 +1,5 @@
 {
+  "homepage": "https://nachpok.github.io/ca-mail",
   "name": "react-robots-inclass-starter",
   "private": true,
   "version": "0.0.0",
@@ -7,10 +8,13 @@
     "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "node deploy.js",
+    "predeploy": "npm run build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.5.2",
+    "dotenv": "^16.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.2.1",
@@ -24,6 +28,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "gh-pages": "^6.1.1",
     "vite": "^4.4.5"
   }
 }
