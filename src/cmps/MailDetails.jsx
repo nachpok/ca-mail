@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation, useHistory } from 'react-router-dom'
 import { mailService } from '../services/mail.service.js'
 
 import StarCheckbox from './StarCheckbox.jsx';
@@ -9,6 +9,8 @@ import { MailActions } from './MailActions.jsx';
 export function MailDetails() {
     const [mail, setMail] = useState(null)
     const params = useParams()
+    const location = useLocation();
+    const history = useHistory();
 
     useEffect(() => {
         loadMail()
@@ -34,12 +36,19 @@ export function MailDetails() {
         await mailService.updateMail(mail)
         history.back()
     }
+
+    const goBack = () => {
+        const targetPath = `/${location.pathname.split('/')[1]}`;
+        history.push(targetPath);
+    }
+
     if (!mail) return <div>Loading...</div>
+
 
     //TODO show full body
     return (
         <div className="mail-details-outlet">
-            <MailActions goBack={() => history.back()} handleDelete={handleDelete} handleUnread={handleUnread} />
+            <MailActions goBack={goBack} handleDelete={handleDelete} handleUnread={handleUnread} />
             <div className="mail-details-header">
                 <h1>{mail.subject}</h1>
             </div>

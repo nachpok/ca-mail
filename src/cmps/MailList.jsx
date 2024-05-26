@@ -2,6 +2,7 @@ import { MailPreview } from './MailPreview.jsx'
 import { MailListHeader } from './MailListHeader.jsx'
 import { useState, useEffect } from 'react';
 import { mailService } from '../services/mail.service.js';
+import { useLocation } from 'react-router-dom';
 
 export function MailList({ mails, reloadMails }) {
     const [isCheckAll, setIsCheckAll] = useState(false);
@@ -55,10 +56,6 @@ export function MailList({ mails, reloadMails }) {
         reloadMails()
     }
 
-    const goBack = () => {
-        window.history.back()
-        reloadMails()
-    }
     return (
         <div className='mail-list'>
             <MailListHeader reloadMails={reloadMails} handleSelectAll={handleSelectAll} checkIds={checkIds} handleUnread={handleUnreadSelected} handleDelete={handleDeleteSelected} />
