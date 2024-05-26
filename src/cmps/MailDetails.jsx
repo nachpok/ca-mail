@@ -28,13 +28,17 @@ export function MailDetails() {
     const handleUnread = async () => {
         mail.isRead = false
         await mailService.updateMail(mail)
-        history.back()
+        const targetPath = `/${location.pathname.split('/')[1]}`;
+        console.log('targetPath: ', targetPath)
+        history.push(targetPath);
     }
 
     const handleDelete = async () => {
         mail.removedAt = new Date();
         await mailService.updateMail(mail)
-        history.back()
+        const targetPath = `/${location.pathname.split('/')[1]}`;
+        console.log('targetPath: ', targetPath)
+        history.push(targetPath);
     }
 
     const goBack = () => {
