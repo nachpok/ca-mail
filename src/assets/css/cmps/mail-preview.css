@@ -8,12 +8,12 @@
     align-items: center;
     justify-content: space-between;
     transition: box-shadow 0.2s ease-in-out;
+    box-sizing: border-box;
 }
 
 .mail-preview:hover {
-    border: 2px solid #ccc;
+    outline: 2px solid #ccc;
     text-decoration: none;
-
 }
 
 .mail-preview-left,
