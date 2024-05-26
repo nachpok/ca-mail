@@ -34,6 +34,7 @@ export function MailIndex() {
     }, [mails])
 
     async function loadMails(filterBy) {
+        console.log("MailIndex.loadMails")
         try {
             const mails = await mailService.query(filterBy)
             setMails(mails)
