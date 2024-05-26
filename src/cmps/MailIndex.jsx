@@ -14,17 +14,24 @@ export function MailIndex() {
 
   const location = useLocation();
   const currentUrl = location.pathname;
-  const filter = currentUrl.split("/")[1];
 
   const fetchMails = async () => {
+    const filter = currentUrl.split("/")[1];
     const filterBy = { status: filter, txt: searchValue };
     if (filter === "") filterBy.status = "inbox";
-    await loadMails(filterBy);
+    try {
+      const mails = await mailService.query(filterBy);
+      console.log("MailIndex.loadMails.mails: ", mails);
+      setMails(mails);
+    } catch (error) {
+      console.error("Having issues with loading mails:", error);
+      // showUserMsg('Problem!')
+    }
   };
 
   useEffect(() => {
     fetchMails();
-  }, [filter, searchValue]);
+  }, [location]);
 
   useEffect(() => {
     if (!mails) {
@@ -38,15 +45,6 @@ export function MailIndex() {
     }
   }, [mails]);
 
-  const loadMails = async (filterBy) => {
-    try {
-      const mails = await mailService.query(filterBy);
-      setMails(mails);
-    } catch (error) {
-      console.error("Having issues with loading mails:", error);
-      // showUserMsg('Problem!')
-    }
-  };
 
   const handleSearchChange = (e) => {
     setSearchValue(e.target.value);
@@ -70,11 +68,11 @@ export function MailIndex() {
       <div className="mail-index-content">
         <SideBar handleComposeMailModal={handleComposeMailModal} />
         {isMailDetailsRoute ? (
-          <Outlet context={{ reloadMails: loadMails }} />
+          <Outlet context={{ reloadMails: fetchMails }} />
         ) : (
           <MailList
             mails={mails}
-            reloadMails={(filterBy) => loadMails(filterBy)}
+            reloadMails={fetchMails}
           />
         )}
         {isComposeMailOpen && (
