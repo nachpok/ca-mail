@@ -10,6 +10,7 @@ import { useOutletContext } from 'react-router-dom';
 export function MailDetails() {
     const [mail, setMail] = useState(null)
     const { reloadMails } = useOutletContext();
+    console.log('MailDetails.reloadMails: ', reloadMails)
     const params = useParams()
     const location = useLocation();
     const navigate = useNavigate();
