@@ -34,15 +34,17 @@ export function MailPreview({ mail, checked, checkPreview }) {
         mailService.updateMail(mail);
     }
     let pathname = location.pathname.split('/')[1]
-    if (pathname === '') pathname = 'inbox'
+    if (pathname === '') pathname = 'inbox';
+
+    const isSent = mail.from === mailService.loggedinUser.email
 
     //TODO style body text
     return (
-        <Link onClick={handleOpenMail} to={`/${pathname}/${mail.id}`} className={`mail-preview ${mail.isRead ? 'mail-preview-read' : 'mail-preview-unread'}`}>
+        <Link onClick={handleOpenMail} to={`/${pathname}/${mail.id}`} className={`mail-preview ${mail.isRead || isSent ? 'mail-preview-read' : 'mail-preview-unread'}`}>
             <div className='mail-preview-left'>
                 <input type="checkbox" className='mail-preview-checkbox' checked={isChecked} onClick={handleClick} onChange={handleChange} />
                 <StarCheckbox cb={handleStar} defaultChecked={mail.isStarred} className='mail-preview-star-checkbox' />
-                <p className='mail-preview-from'>{mail.fromName}</p>
+                <p className='mail-preview-from'>{isSent ? mail.to : mail.fromName}</p>
             </div>
             <div className='mail-preview-center'>
                 <h3 className='mail-preview-subject'>{mail.subject}</h3>&nbsp;-&nbsp;
