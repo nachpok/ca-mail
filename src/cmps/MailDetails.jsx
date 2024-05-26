@@ -32,7 +32,7 @@ export function MailDetails() {
         await mailService.updateMail(mail)
         const targetPath = `/${location.pathname.split('/')[1]}`;
         console.log('targetPath: ', targetPath)
-        reloadMails()
+        await reloadMails()
         navigate(targetPath);
     }
 
@@ -41,7 +41,7 @@ export function MailDetails() {
         await mailService.updateMail(mail)
         const targetPath = `/${location.pathname.split('/')[1]}`;
         console.log('targetPath: ', targetPath)
-        reloadMails
+        await reloadMails()
         navigate(targetPath);
     }
 
