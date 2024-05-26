@@ -17,7 +17,6 @@ export function MailIndex() {
   const filter = currentUrl.split("/")[1];
 
   const fetchMails = async () => {
-    console.log("MailIndex.fetchMails.filter: ", filter);
     const filterBy = { status: filter, txt: searchValue };
     if (filter === "") filterBy.status = "inbox";
     await loadMails(filterBy);
@@ -40,7 +39,6 @@ export function MailIndex() {
   }, [mails]);
 
   const loadMails = async (filterBy) => {
-    console.log("MailIndex.loadMails");
     try {
       const mails = await mailService.query(filterBy);
       setMails(mails);
