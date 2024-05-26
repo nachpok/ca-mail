@@ -100,7 +100,8 @@
 
 .mail-preview-body {
     display: flex;
-    width: 600px;
+    /* width: 600px; */
+    width: calc(100vw-(300px));
     margin-left: 10px;
     flex-direction: row;
     align-items: center;
