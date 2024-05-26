@@ -7,7 +7,6 @@ export default function StarCheckbox({ cb, defaultChecked, className }) {
         e.preventDefault();
         // const current = isChecked;
         setIsChecked(isChecked => !isChecked);
-        console.log('isChecked:', isChecked);
         cb(!isChecked);
     }
     return (
