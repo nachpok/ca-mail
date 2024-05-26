@@ -1,19 +1,14 @@
 .mail-preview {
     display: flex;
-    flex-direction: row;
-    width: 80%;
-    /* flex-basis: 50px; */
-    border-top: 1px solid #ccc;
-    padding: 10px;
     align-items: center;
     justify-content: space-between;
-    transition: box-shadow 0.2s ease-in-out;
+    width: 100%;
+    border-top: 1px solid #ccc;
+    padding: 10px;
     box-sizing: border-box;
-    position: relative;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    transition: box-shadow 0.2s ease-in-out;
 }
+
 
 .mail-preview:hover {
     outline: 2px solid #ccc;
@@ -27,25 +22,27 @@
     align-items: center;
 }
 
+
 .mail-preview-left {
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    /* flex: 1; */
+    width: 300px;
 }
 
 .mail-preview-center {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    align-content: center;
+    align-items: left;
+
+    overflow: hidden;
+    flex-grow: 1;
 }
 
-.mail-preview-right {
+
+/* .mail-preview-right {
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-left: auto;
-}
+} */
 
 .mail-preview-checkbox {
     background-color: #371717;
@@ -84,14 +81,8 @@
 }
 
 .mail-preview-subject {
-    margin-right: 10px;
-
-    text-align: left;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
-    flex-shrink: 0;
-    /* flex-grow: 1; */
 }
 
 .mail-preview-read {
@@ -103,25 +94,18 @@
 }
 
 .mail-preview-body {
-    /* display: flex; */
-    /* width: 600px; */
-    /* width: calc(100vw-(20400px)); */
-    margin-left: 10px;
-    /* flex-direction: row;
-    align-items: center; */
-    /* margin-left: auto; */
-    flex-grow: 1;
+    width: 300px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    margin-left: 10px;
+    flex-grow: 1;
+    flex-shrink: 1;
 }
 
 .mail-preview-right {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: auto;
-    flex-grow: 1;
+    flex: 0;
+    white-space: nowrap;
 }
 
 .mail-preview-date {
