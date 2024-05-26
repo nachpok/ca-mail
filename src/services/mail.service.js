@@ -1,10 +1,10 @@
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
+
 const loggedinUser = {
     email: 'user@appsus.com',
     fullname: 'Mahatma Appsus'
 }
-
 export const mailService = {
     query,
     getById,
@@ -14,6 +14,7 @@ export const mailService = {
     updateMail,
     loggedinUser,
 }
+
 
 const MAIL_KEY = 'mail'
 
@@ -26,9 +27,7 @@ const MAIL_KEY = 'mail'
 _createMockMails()
 
 async function query(filterBy) {
-
     let mails = await storageService.query(MAIL_KEY);
-
     if (filterBy) {
         const { txt, status, isRead } = filterBy
         if (txt && txt !== '') {
@@ -82,6 +81,14 @@ function save(mail) {
 
 function createMail(mail) {
     mail.id = utilService.makeId()
+    mail.sentAt = Date.now()
+    mail.removedAt = null
+    mail.isRead = false
+    mail.isStarred = false
+    mail.isArchived = false
+    mail.from = loggedinUser.email
+    mail.fromName = loggedinUser.fullname
+
     return storageService.post(MAIL_KEY, mail)
 }
 
