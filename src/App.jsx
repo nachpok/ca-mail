@@ -6,27 +6,10 @@ export function App() {
     <Router>
       <section className="main-app">
         <main className="container">
-          {/*                         
-                        <Route path='/inbox' element={<Home />} >
-                        TODO
-                            <Route path='/:folder/:mailId' element={<MailDetails />} />
-                        </Route> */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="*" element={<Home />} />
-            <Route path="/inbox" element={<Home />}>
-              <Route path=":mailId" element={<MailDetails />} />
-            </Route>
-            <Route path="/sent" element={<Home />}>
-              <Route path=":mailId" element={<MailDetails />} />
-            </Route>
-            <Route path="/trash" element={<Home />}>
-              <Route path=":mailId" element={<MailDetails />} />
-            </Route>
-            <Route path="/starred" element={<Home />}>
-              <Route path=":mailId" element={<MailDetails />} />
-            </Route>
-            <Route path="/all-mail" element={<Home />}>
+            <Route path="/:folder" element={<Home />}>
               <Route path=":mailId" element={<MailDetails />} />
             </Route>
           </Routes>
