@@ -5,9 +5,11 @@ import { mailService } from '../services/mail.service.js'
 import StarCheckbox from './StarCheckbox.jsx';
 import { IoReturnUpBack } from "react-icons/io5";
 import { MailActions } from './MailActions.jsx';
+import { useOutletContext } from 'react-router-dom';
 
 export function MailDetails() {
     const [mail, setMail] = useState(null)
+    const { reloadMails } = useOutletContext();
     const params = useParams()
     const location = useLocation();
     const navigate = useNavigate();
@@ -30,6 +32,7 @@ export function MailDetails() {
         await mailService.updateMail(mail)
         const targetPath = `/${location.pathname.split('/')[1]}`;
         console.log('targetPath: ', targetPath)
+        reloadMails()
         navigate(targetPath);
     }
 
@@ -38,6 +41,7 @@ export function MailDetails() {
         await mailService.updateMail(mail)
         const targetPath = `/${location.pathname.split('/')[1]}`;
         console.log('targetPath: ', targetPath)
+        reloadMails
         navigate(targetPath);
     }
 

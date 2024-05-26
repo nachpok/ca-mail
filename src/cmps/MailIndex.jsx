@@ -60,7 +60,7 @@ export function MailIndex() {
             <AppHeader searchValue={searchValue} handleSearchChange={handleSearchChange} unreadCount={unreadCount} />
             <div className="mail-index-content">
                 <SideBar handleComposeMailModal={handleComposeMailModal} />
-                {isMailDetailsRoute ? <Outlet /> : <MailList mails={mails} reloadMails={(filterBy) => loadMails(filterBy)} />}
+                {isMailDetailsRoute ? <Outlet context={{ reloadMails: loadMails }} /> : <MailList mails={mails} reloadMails={(filterBy) => loadMails(filterBy)} />}
                 {isComposeMailOpen && <ComposeMailModal closeComposeMailModal={handleComposeMailModal} />}
             </div>
         </div>
