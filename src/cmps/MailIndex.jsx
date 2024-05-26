@@ -17,6 +17,7 @@ export function MailIndex() {
   const filter = currentUrl.split("/")[1];
 
   const fetchMails = async () => {
+    console.log("MailIndex.fetchMails.filter: ", filter);
     const filterBy = { status: filter, txt: searchValue };
     if (filter === "") filterBy.status = "inbox";
     await loadMails(filterBy);
@@ -24,7 +25,7 @@ export function MailIndex() {
 
   useEffect(() => {
     fetchMails();
-  }, [filter, searchValue, unreadCount]);
+  }, [filter, searchValue]);
 
   useEffect(() => {
     if (!mails) {
