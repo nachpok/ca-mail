@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { mailService } from '../services/mail.service.js'
-import { IoMdArrowRoundBack } from "react-icons/io";
-import { IoMailUnreadOutline, IoTrashOutline } from "react-icons/io5";
-import { BsExclamationOctagon } from "react-icons/bs";
-import { IoArchiveOutline } from "react-icons/io5";
+
 import StarCheckbox from './StarCheckbox.jsx';
 import { IoReturnUpBack } from "react-icons/io5";
+import { MailActions } from './MailActions.jsx';
 
 export function MailDetails() {
     const [mail, setMail] = useState(null)
     const params = useParams()
-    console.log(params)
+
     useEffect(() => {
         loadMail()
     }, [params.mailId])
@@ -30,26 +28,16 @@ export function MailDetails() {
         await mailService.updateMail(mail)
         history.back()
     }
+
+    const handleDelete = async () => {
+        mail.removedAt = new Date();
+        await mailService.updateMail(mail)
+        history.back()
+    }
     if (!mail) return <div>Loading...</div>
     return (
         <div className="mail-details-outlet">
-            <div className="mail-details-header">
-                <div className='btn mail-details-btn' onClick={() => history.back()}>
-                    <IoMdArrowRoundBack />
-                </div>
-                <div className='btn mail-details-btn'>
-                    <IoArchiveOutline />
-                </div>
-                <div className='btn mail-details-btn'>
-                    <BsExclamationOctagon />
-                </div>
-                <div className='btn mail-details-btn'>
-                    <IoTrashOutline />
-                </div>
-                <div className='btn mail-details-btn' onClick={handleUnread}>
-                    <IoMailUnreadOutline />
-                </div>
-            </div>
+            <MailActions goBack={() => history.back()} handleDelete={handleDelete} handleUnread={handleUnread} />
             <div className="mail-details-header">
                 <h1>{mail.subject}</h1>
             </div>

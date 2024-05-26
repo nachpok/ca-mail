@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { useState, useEffect } from 'react';
 
-export function AppHeader({ searchValue, handleSearchChange }) {
+export function AppHeader({ searchValue, handleSearchChange, unreadCount }) {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     return (
@@ -25,6 +25,9 @@ export function AppHeader({ searchValue, handleSearchChange }) {
                         {/* <span className="filter-icon">⚙️</span> */}
                     </div>
                 </div>
+                {unreadCount !== 0 && <div className='app-header-unread-count'>
+                    You have {unreadCount} unread mails
+                </div>}
             </section>
         </header>
     )
