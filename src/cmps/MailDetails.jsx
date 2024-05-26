@@ -11,7 +11,6 @@ export function MailDetails() {
     console.log("MailDetails")
     const [mail, setMail] = useState(null)
     const { reloadMails } = useOutletContext();
-    console.log('MailDetails.reloadMails: ', reloadMails)
     const params = useParams()
     const location = useLocation();
     const navigate = useNavigate();
@@ -42,15 +41,12 @@ export function MailDetails() {
         mail.removedAt = new Date();
         await mailService.updateMail(mail)
         const targetPath = `/${location.pathname.split('/')[1]}`;
-        console.log('targetPath: ', targetPath)
         await reloadMails()
         navigate(targetPath);
     }
 
     const goBack = () => {
         const targetPath = `/${location.pathname.split('/')[1]}`;
-        console.log('targetPath: ', targetPath)
-        console.log('MailDetails.reloadMails: ', reloadMails)
         navigate(targetPath);
     }
 

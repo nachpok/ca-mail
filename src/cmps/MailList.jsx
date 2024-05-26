@@ -23,14 +23,6 @@ export function MailList({ mails, reloadMails }) {
         console.log('reloadMails')
         reloadMails()
     }, [])
-    // useEffect(() => {
-    //     if (isCheckAll) {
-    //         setCheckIds(mails.map(mail => mail.id));
-    //     } else {
-    //         setCheckIds([]);
-    //     }
-    // }, [isCheckAll, mails]);
-
 
     const checkPreview = (id, checked) => {
         if (checked) {

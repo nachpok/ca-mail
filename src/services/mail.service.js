@@ -93,7 +93,6 @@ function createMail(mail) {
 }
 
 function updateMail(mail) {
-    console.log('update mail: ', mail)
     return storageService.put(MAIL_KEY, mail)
 }
 
