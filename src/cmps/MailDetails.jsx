@@ -50,6 +50,7 @@ export function MailDetails() {
     const goBack = () => {
         const targetPath = `/${location.pathname.split('/')[1]}`;
         console.log('targetPath: ', targetPath)
+        console.log('MailDetails.reloadMails: ', reloadMails)
         navigate(targetPath);
     }
 
