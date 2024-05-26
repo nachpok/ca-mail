@@ -55,7 +55,7 @@ export function MailDetails() {
     if (!mail) return <div>Loading...</div>
 
 
-    //TODO show full body
+
     return (
         <div className="mail-details-outlet">
             <MailActions goBack={goBack} handleDelete={handleDelete} handleUnread={handleUnread} />
