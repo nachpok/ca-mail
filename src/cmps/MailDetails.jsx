@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useLocation, useHistory } from 'react-router-dom'
+import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { mailService } from '../services/mail.service.js'
 
 import StarCheckbox from './StarCheckbox.jsx';
@@ -10,7 +10,7 @@ export function MailDetails() {
     const [mail, setMail] = useState(null)
     const params = useParams()
     const location = useLocation();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadMail()
@@ -30,7 +30,7 @@ export function MailDetails() {
         await mailService.updateMail(mail)
         const targetPath = `/${location.pathname.split('/')[1]}`;
         console.log('targetPath: ', targetPath)
-        history.push(targetPath);
+        navigate(targetPath);
     }
 
     const handleDelete = async () => {
@@ -38,13 +38,13 @@ export function MailDetails() {
         await mailService.updateMail(mail)
         const targetPath = `/${location.pathname.split('/')[1]}`;
         console.log('targetPath: ', targetPath)
-        history.push(targetPath);
+        navigate(targetPath);
     }
 
     const goBack = () => {
         const targetPath = `/${location.pathname.split('/')[1]}`;
         console.log('targetPath: ', targetPath)
-        history.push(targetPath);
+        navigate(targetPath);
     }
 
     if (!mail) return <div>Loading...</div>

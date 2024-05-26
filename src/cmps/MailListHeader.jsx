@@ -1,15 +1,15 @@
 import { IoRefreshOutline } from "react-icons/io5";
 import { IoMdMore } from "react-icons/io";
 import { MailActions } from "./MailActions.jsx";
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export function MailListHeader({ reloadMails, handleSelectAll, checkIds, handleUnread, handleDelete }) {
     const location = useLocation();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const goBack = () => {
         const targetPath = `/${location.pathname.split('/')[1]}`;
-        history.push(targetPath);
+        navigate(targetPath);
     }
 
     return (
