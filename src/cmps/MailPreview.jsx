@@ -1,19 +1,29 @@
 import StarCheckbox from './StarCheckbox.jsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { utilService } from '../services/util.service.js';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import { mailService } from '../services/mail.service.js';
 
-export function MailPreview({ mail }) {
-    const [isStarred, setIsStarred] = useState(false);
+export function MailPreview({ mail, checked, checkPreview }) {
     const location = useLocation();
+    const [isChecked, setIsChecked] = useState(checked);
+
+    useEffect(() => {
+        setIsChecked(checked);
+    }, [checked]);
+
 
     const handleStar = (star) => {
-        console.log('handleStar:', star);
         mail.isStarred = star
         mailService.updateMail(mail)
-        setIsStarred(star);
     }
+
+    const handleChange = (e) => {
+        const { checked } = e.target;
+        setIsChecked(checked);
+        checkPreview(mail.id, checked);
+    }
+
     const handleClick = (e) => {
         e.stopPropagation();
     }
@@ -30,7 +40,7 @@ export function MailPreview({ mail }) {
     return (
         <Link onClick={handleOpenMail} to={`/${pathname}/${mail.id}`} className={`mail-preview ${mail.isRead ? 'mail-preview-read' : 'mail-preview-unread'}`}>
             <div className='mail-preview-left'>
-                <input type="checkbox" className='mail-preview-checkbox ' onClick={handleClick} />
+                <input type="checkbox" className='mail-preview-checkbox' checked={isChecked} onClick={handleClick} onChange={handleChange} />
                 <StarCheckbox cb={handleStar} defaultChecked={mail.isStarred} className='mail-preview-star-checkbox' />
                 <p className='mail-preview-from'>{mail.fromName}</p>
             </div>
