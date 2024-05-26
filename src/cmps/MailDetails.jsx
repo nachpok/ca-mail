@@ -8,6 +8,7 @@ import { MailActions } from './MailActions.jsx';
 import { useOutletContext } from 'react-router-dom';
 
 export function MailDetails() {
+    console.log("MailDetails")
     const [mail, setMail] = useState(null)
     const { reloadMails } = useOutletContext();
     console.log('MailDetails.reloadMails: ', reloadMails)
