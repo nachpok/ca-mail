@@ -15,11 +15,6 @@ export function MailList({ mails, reloadMails }) {
     }
   };
 
-  useEffect(() => {
-    console.log("reloadMails");
-    reloadMails();
-  }, []);
-
   const checkPreview = (id, checked) => {
     if (checked) {
       setCheckIds((prev) => [...prev, id]);
