@@ -37,14 +37,12 @@ export function MailPreview({ mail, checked, checkPreview }) {
 
   const isSent = mail.from === mailService.loggedinUser.email;
 
-  //TODO style body text
   return (
     <Link
       onClick={handleOpenMail}
       to={`/${pathname}/${mail.id}`}
-      className={`mail-preview ${
-        mail.isRead || isSent ? "mail-preview-read" : "mail-preview-unread"
-      }`}
+      className={`mail-preview ${mail.isRead || isSent ? "mail-preview-read" : "mail-preview-unread"
+        }`}
     >
       <div className="mail-preview-left">
         <input
