@@ -29,7 +29,7 @@ export function MailIndex() {
     useEffect(() => {
         ('mails: ', mails)
         if (!mails) return
-        const unreadCount = mails.filter(mail => mail.isRead === false).length
+        const unreadCount = mails.filter(mail => mail.isRead === false && mail.to === mailService.loggedinUser.email).length
         setUnreadCount(unreadCount)
     }, [mails])
 

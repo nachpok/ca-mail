@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 export function AppHeader({ searchValue, handleSearchChange, unreadCount }) {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+    let message = 'You have no unread mails'
+    if (unreadCount === 1) message = 'You have 1 unread mail'
+    if (unreadCount > 1) message = `You have ${unreadCount} unread mails`
     return (
         <header className="app-header">
             <section className='container'>
@@ -26,7 +29,7 @@ export function AppHeader({ searchValue, handleSearchChange, unreadCount }) {
                     </div>
                 </div>
                 {unreadCount !== 0 && <div className='app-header-unread-count'>
-                    You have {unreadCount} unread mails
+                    {message}
                 </div>}
             </section>
         </header>
