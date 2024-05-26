@@ -30,9 +30,9 @@ export function MailDetails() {
     const handleUnread = async () => {
         mail.isRead = false
         await mailService.updateMail(mail)
+        await reloadMails()
         const targetPath = `/${location.pathname.split('/')[1]}`;
         console.log('targetPath: ', targetPath)
-        await reloadMails()
         navigate(targetPath);
     }
 
