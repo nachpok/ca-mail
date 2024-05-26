@@ -21,7 +21,6 @@ export function MailIndex() {
     if (filter === "") filterBy.status = "inbox";
     try {
       const mails = await mailService.query(filterBy);
-      console.log("MailIndex.loadMails.mails: ", mails);
       setMails(mails);
     } catch (error) {
       console.error("Having issues with loading mails:", error);
