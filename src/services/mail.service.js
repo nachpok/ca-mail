@@ -39,7 +39,7 @@ async function query(filterBy) {
                 mails = mails.filter(mail => mail.to === (loggedinUser.email))
             }
             if (status.includes('inbox')) {
-                mails = mails.filter(mail => mail.to === (loggedinUser.email) && mail.removedAt === null)
+                mails = mails.filter(mail => (mail.to === (loggedinUser.email) && mail.removedAt === null))
             }
             if (status.includes("sent")) {
                 mails = mails.filter(mail => mail.from === (loggedinUser.email))
