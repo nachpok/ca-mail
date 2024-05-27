@@ -1,6 +1,6 @@
 import { MailPreview } from "./MailPreview.jsx";
 import { MailListHeader } from "./MailListHeader.jsx";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { mailService } from "../services/mail.service.js";
 
 export function MailList({ mails, reloadMails }) {
@@ -43,7 +43,7 @@ export function MailList({ mails, reloadMails }) {
   };
 
   return (
-    <div className="mail-list">
+    <section className="mail-list">
       <MailListHeader
         reloadMails={reloadMails}
         handleSelectAll={handleSelectAll}
@@ -59,6 +59,6 @@ export function MailList({ mails, reloadMails }) {
           checkPreview={checkPreview}
         />
       ))}
-    </div>
+    </section>
   );
 }
