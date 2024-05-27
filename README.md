@@ -1,1 +1,1 @@
-See deployed app at https://nachpok.github.io/ca-mail/#/sent    
+See deployed app at https://nachpok.github.io/ca-mail/
