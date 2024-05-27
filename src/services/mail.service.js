@@ -42,15 +42,13 @@ async function query(filterBy) {
                 mails = mails.filter(mail => (mail.to === (loggedinUser.email) && mail.removedAt === null))
             }
             if (status.includes("sent")) {
-                mails = mails.filter(mail => mail.from === (loggedinUser.email))
+                mails = mails.filter(mail => mail.from === (loggedinUser.email) && mail.removedAt === null)
             }
             if (status.includes('star')) {
-                mails = mails.filter(mail => mail.isStarred)
+                mails = mails.filter(mail => mail.isStarred && mail.removedAt === null)
             }
             if (status.includes('trash')) {
                 mails = mails.filter(mail => mail.removedAt !== null)
-            } else {
-                mails = mails.filter(mail => mail.removedAt === null)
             }
         }
         if (isRead !== undefined) {
