@@ -52,16 +52,16 @@ export function MailDetails() {
   if (!mail) return <div>Loading...</div>;
 
   return (
-    <div className="mail-details-outlet">
+    <article className="mail-details-outlet">
       <MailActions
         goBack={goBack}
         handleDelete={handleDelete}
         handleUnread={handleUnread}
       />
-      <div className="mail-details-header">
+      <header className="mail-details-header">
         <h1>{mail.subject}</h1>
-      </div>
-      <div className="mail-details-meta">
+      </header>
+      <header className="mail-details-meta">
         <div className="mail-details-meta-sub">
           <p className="mail-details-meta-item">
             {mail.fromName} &lt;{mail.from}&gt;
@@ -79,11 +79,11 @@ export function MailDetails() {
             <IoReturnUpBack />
           </div>
         </div>
-      </div>
-      <div className="mail-details-body">
+      </header>
+      <main className="mail-details-body">
         <p>{mail.body}</p>
-      </div>
-    </div>
+      </main>
+    </article>
   );
 }
 function parseDate(date) {
