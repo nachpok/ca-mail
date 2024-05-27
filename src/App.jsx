@@ -1,6 +1,7 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { MailDetails } from "./cmps/MailDetails";
+
 export function App() {
   return (
     <Router>

@@ -5,17 +5,20 @@ import { useLocation, Outlet } from "react-router-dom";
 import { AppHeader } from "./AppHeader.jsx";
 import { SideBar } from "./SideBar.jsx";
 import { ComposeMailModal } from "./ComposeMailModal.jsx";
+import { Loader } from "./Loader.jsx";
 
 export function MailIndex() {
-  const [mails, setMails] = useState(null);
+  const [mails, setMails] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [unreadCount, setUnreadCount] = useState(0);
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const location = useLocation();
   const currentUrl = location.pathname;
 
   const fetchMails = async () => {
+    setLoading(true);
     const filter = currentUrl.split("/")[1];
     const filterBy = { status: filter, txt: searchValue };
     if (filter === "") filterBy.status = "inbox";
@@ -24,7 +27,8 @@ export function MailIndex() {
       setMails(mails);
     } catch (error) {
       console.error("Having issues with loading mails:", error);
-      // showUserMsg('Problem!')
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,39 +53,48 @@ export function MailIndex() {
     setSearchValue(e.target.value);
   };
 
-  const handleComposeMailModal = async (action) => {
-    if (action === false && currentUrl.includes("/sent")) {
+  const handleComposeMailModal = async (isOpen) => {
+    if (isOpen === false && currentUrl.includes("/sent")) {
       await fetchMails();
     }
-    setIsComposeMailOpen(action);
-    console.log(action);
+    setIsComposeMailOpen(isOpen);
   };
+
   const isMailDetailsRoute = currentUrl.split("/").length > 2;
 
   //TODO set loading wheel
-  if (!mails) return <div>Loading...</div>;
 
   return (
-    <div className="mail-index">
-      <AppHeader
-        searchValue={searchValue}
-        handleSearchChange={handleSearchChange}
-        unreadCount={unreadCount}
-      />
+    <section className="mail-index-section">
+      <header>
+        <AppHeader
+          searchValue={searchValue}
+          handleSearchChange={handleSearchChange}
+          unreadCount={unreadCount}
+        />
+      </header>
       <div className="mail-index-content">
-        <SideBar handleComposeMailModal={handleComposeMailModal} />
-        {isMailDetailsRoute ? (
-          <Outlet context={{ reloadMails: fetchMails }} />
-        ) : (
-          <MailList
-            mails={mails}
-            reloadMails={fetchMails}
-          />
-        )}
-        {isComposeMailOpen && (
-          <ComposeMailModal closeComposeMailModal={handleComposeMailModal} />
-        )}
+        <aside>
+          <SideBar handleComposeMailModal={handleComposeMailModal} />
+        </aside>
+        <main className="mail-index-main">
+          {loading ? (
+            <Loader />
+          ) : (
+            isMailDetailsRoute ? (
+              <Outlet context={{ reloadMails: fetchMails }} />
+            ) : (
+              <MailList
+                mails={mails}
+                reloadMails={fetchMails}
+              />
+            )
+          )}
+          {isComposeMailOpen && (
+            <ComposeMailModal closeComposeMailModal={handleComposeMailModal} />
+          )}
+        </main>
       </div>
-    </div>
+    </section>
   );
 }

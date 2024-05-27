@@ -1,15 +1,18 @@
-.mail-index {
+.mail-index-section {
     display: flex;
     flex-direction: column;
     width: 100%;
-    /* align-items: center;
-    justify-content: center; */
-    /* flex-grow: 1; */
+
 }
 
 .mail-index-content {
     display: flex;
     flex-direction: row;
-    /* align-items: center; */
-    /* justify-content: center; */
+}
+
+.mail-index-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
