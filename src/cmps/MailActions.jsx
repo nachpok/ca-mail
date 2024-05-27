@@ -8,7 +8,7 @@ export function MailActions({ goBack, handleDelete, handleUnread }) {
             <div className='btn mail-details-btn' onClick={goBack}>
                 <IoMdArrowRoundBack />
             </div>
-            <div className='btn mail-details-btn'>
+            <div className='btn mail-details-btn' onClick={handleDelete}>
                 <IoArchiveOutline />
             </div>
             <div className='btn mail-details-btn' onClick={handleDelete}>
