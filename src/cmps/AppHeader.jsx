@@ -25,7 +25,6 @@ export function AppHeader({ searchValue, handleSearchChange, unreadCount }) {
               onFocus={() => setIsSearchOpen(true)}
               onBlur={() => setIsSearchOpen(false)}
             />
-            {/* <span className="filter-icon">⚙️</span> */}
           </div>
         </div>
         {unreadCount !== 0 && (
