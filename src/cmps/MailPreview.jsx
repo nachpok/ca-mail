@@ -44,7 +44,7 @@ export function MailPreview({ mail, checked, checkPreview }) {
       className={`mail-preview ${mail.isRead || isSent ? "mail-preview-read" : "mail-preview-unread"
         }`}
     >
-      <div className="mail-preview-left">
+      <aside className="mail-preview-aside">
         <input
           type="checkbox"
           className="mail-preview-checkbox"
@@ -58,16 +58,16 @@ export function MailPreview({ mail, checked, checkPreview }) {
           className="mail-preview-star-checkbox"
         />
         <p className="mail-preview-from">{isSent ? mail.to : mail.fromName}</p>
-      </div>
-      <div className="mail-preview-center">
+      </aside>
+      <main className="mail-preview-main">
         <h3 className="mail-preview-subject">{mail.subject}</h3>&nbsp;-&nbsp;
         <p className="mail-preview-body">{mail.body}</p>
-      </div>
-      <div className="mail-preview-right">
+      </main>
+      <aside className="mail-preview-date-container">
         <p className="mail-preview-date">
           {utilService.formatDate(mail.sentAt)}
         </p>
-      </div>
+      </aside>
     </Link>
   );
 }

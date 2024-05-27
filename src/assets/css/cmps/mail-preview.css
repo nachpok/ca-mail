@@ -15,20 +15,20 @@
     text-decoration: none;
 }
 
-.mail-preview-left,
-.mail-preview-center,
-.mail-preview-right {
+.mail-preview-aside,
+.mail-preview-main,
+.mail-preview-date-container {
     display: flex;
     align-items: center;
 }
 
 
-.mail-preview-left {
+.mail-preview-aside {
     /* flex: 1; */
     width: 300px;
 }
 
-.mail-preview-center {
+.mail-preview-main {
     display: flex;
     align-items: left;
 
@@ -103,7 +103,7 @@
     flex-shrink: 1;
 }
 
-.mail-preview-right {
+.mail-preview-date-container {
     flex: 0;
     white-space: nowrap;
 }
