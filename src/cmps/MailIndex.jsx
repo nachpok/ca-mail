@@ -49,8 +49,12 @@ export function MailIndex() {
     setSearchValue(e.target.value);
   };
 
-  const handleComposeMailModal = (action) => {
+  const handleComposeMailModal = async (action) => {
+    if (action === false && currentUrl.includes("/sent")) {
+      await fetchMails();
+    }
     setIsComposeMailOpen(action);
+    console.log(action);
   };
   const isMailDetailsRoute = currentUrl.split("/").length > 2;
 

@@ -24,32 +24,33 @@ export function ComposeMailModal({ closeComposeMailModal }) {
         }
         await mailService.createMail({ to: toRef.current.value, subject: subjectRef.current.value, body: messageRef.current.value })
         closeComposeMailModal(false)
-        //TODO: fix this
-        window.location.reload();
     };
+
     return (
         <article className='compose-mail-modal'>
-            <div className='compose-mail-modal-header'>
+            <header className='compose-mail-modal-header'>
                 <h1 className='compose-mail-modal-title'>New Message</h1>
                 <button className='compose-mail-modal-close-btn' onClick={() => closeComposeMailModal(false)}>X</button>
-            </div>
-            <div className='compose-mail-modal-body'>
+            </header>
+            <main className='compose-mail-modal-body'>
                 <form className='compose-mail-modal-form'>
                     <input type="email" placeholder='To' className={`compose-mail-modal-form-item compose-mail-modal-form-input`} ref={toRef} />
                     <input type="text" placeholder='Subject' className={`compose-mail-modal-form-item compose-mail-modal-form-input`} ref={subjectRef} />
                     <textarea placeholder='Message' className={`compose-mail-modal-form-item compose-mail-modal-form-textarea`} ref={messageRef}></textarea>
                 </form>
-            </div>
-            <div className='compose-mail-modal-footer'>
+            </main>
+            <footer className='compose-mail-modal-footer'>
                 <button className='compose-mail-modal-send-btn' onClick={onSendMail}>Send</button>
-            </div>
-            {errorModal && <div className="compose-mail-modal-error-modal">
-                <div className="compose-mail-modal-error-modal-content">
-                    <h1>Error</h1>
-                    <p>Please enter a valid email address.</p>
-                    <button onClick={() => setErrorModal(false)} className="compose-mail-modal-error-modal-close-btn">Close</button>
-                </div>
-            </div>}
+            </footer>
+            {errorModal &&
+                <article className="compose-mail-modal-error-modal">
+                    <main className="compose-mail-modal-error-modal-content">
+                        <h1>Error</h1>
+                        <p>Please enter a valid email address.</p>
+                        <button onClick={() => setErrorModal(false)} className="compose-mail-modal-error-modal-close-btn">Close</button>
+                    </main>
+                </article>
+            }
         </article>
 
     )
