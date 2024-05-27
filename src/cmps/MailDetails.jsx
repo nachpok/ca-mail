@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { mailService } from "../services/mail.service.js";
-
+import { Loader } from "./Loader.jsx";
 import StarCheckbox from "./StarCheckbox.jsx";
 import { IoReturnUpBack } from "react-icons/io5";
 import { MailActions } from "./MailActions.jsx";
@@ -49,7 +49,7 @@ export function MailDetails() {
     navigate(targetPath);
   };
 
-  if (!mail) return <div>Loading...</div>;
+  if (!mail) return <div className="loader-container"><Loader /></div>;
 
   return (
     <article className="mail-details-outlet">

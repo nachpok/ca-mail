@@ -79,7 +79,9 @@ export function MailIndex() {
         </aside>
         <main className="mail-index-main">
           {loading ? (
-            <Loader />
+            <div className="loader-container">
+              <Loader />
+            </div>
           ) : (
             isMailDetailsRoute ? (
               <Outlet context={{ reloadMails: fetchMails }} />

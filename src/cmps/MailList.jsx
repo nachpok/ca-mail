@@ -32,6 +32,7 @@ export function MailList({ mails, reloadMails }) {
     }
     reloadMails();
   };
+
   const handleUnreadSelected = async () => {
     let selectedMails = mails.filter((mail) => checkIds.includes(mail.id));
     selectedMails = selectedMails.filter((mail) => mail.isRead === true);
