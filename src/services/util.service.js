@@ -25,7 +25,14 @@ function loadFromStorage(key, defaultValue = null) {
 }
 
 function formatDate(timestamp) {
+    const now = new Date();
     const date = new Date(timestamp);
+
+    if (now.getDate() === date.getDate()) {
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
     return date.toLocaleDateString('en-GB', {
         day: 'numeric',
         month: 'numeric'
