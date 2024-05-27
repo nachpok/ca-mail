@@ -13,7 +13,7 @@ export function MailListHeader({ reloadMails, handleSelectAll, checkIds, handleU
     }
 
     return (
-        <div className="mail-list-header">
+        <section className="mail-list-header">
             <div className=".mail-details-btn-no-hover">
                 <input type='checkbox' onChange={(e) => handleSelectAll(e)} />
             </div>
@@ -22,13 +22,13 @@ export function MailListHeader({ reloadMails, handleSelectAll, checkIds, handleU
                     <div className="mail-details-btn" onClick={reloadMails}>
                         <IoRefreshOutline />
                     </div>
-                    <div className="mail-details-btn">
+                    {/* <div className="mail-details-btn">
                         <IoMdMore />
-                    </div>
+                    </div> */}
                 </>
             }
 
-        </div>
+        </section>
     )
 }
 
