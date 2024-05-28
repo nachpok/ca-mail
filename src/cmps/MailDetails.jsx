@@ -9,7 +9,7 @@ import { useOutletContext } from "react-router-dom";
 
 export function MailDetails() {
   const [mail, setMail] = useState(null);
-  const { reloadMails } = useOutletContext();
+  const { onUpdateSelectedMails } = useOutletContext();
   const params = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,33 +22,10 @@ export function MailDetails() {
     const mail = await mailService.getById(params.mailId);
     setMail(mail);
   }
-  const onStar = (star) => {
-    mail.isStarred = star;
-    mailService.updateMail(mail);
-  };
 
-  const onUnread = async () => {
-    mail.isRead = false;
-    await mailService.updateMail(mail);
-    await reloadMails();
-    const targetPath = `/${location.pathname.split("/")[1]}`;
-    console.log("targetPath: ", targetPath);
-    navigate(targetPath);
-  };
-
-  const onDelete = async () => {
-    mail.removedAt = new Date();
-    await mailService.updateMail(mail);
-    const targetPath = `/${location.pathname.split("/")[1]}`;
-    await reloadMails();
-    navigate(targetPath);
-  };
-
-  const onArchived = async () => {
-    mail.isArchived = true;
-    await mailService.updateMail(mail);
-    await reloadMails();
-  };
+  function onStar() {
+    onUpdateSelectedMails("star", [mail.id]);
+  }
 
   const goBack = () => {
     const targetPath = `/${location.pathname.split("/")[1]}`;
@@ -62,9 +39,8 @@ export function MailDetails() {
     <article className="mail-details-outlet">
       <MailActions
         goBack={goBack}
-        onDelete={onDelete}
-        onUnread={onUnread}
-        onArchived={onArchived}
+        onUpdateSelectedMails={onUpdateSelectedMails}
+        checkIds={[mail.id]}
       />
       <header className="mail-details-header">
         <h1>{mail.subject}</h1>

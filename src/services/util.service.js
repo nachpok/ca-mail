@@ -38,3 +38,4 @@ function formatDate(timestamp) {
         month: 'numeric'
     });
 }
+
