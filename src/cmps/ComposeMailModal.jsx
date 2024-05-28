@@ -2,8 +2,6 @@ import { useRef, useState } from "react";
 import { mailService } from "../services/mail.service";
 
 
-//TODO new line
-//TODO on send hover
 //TODO on seve darft //audo save
 //TODO expand & minimize
 export function ComposeMailModal({ closeComposeMailModal }) {
@@ -27,9 +25,9 @@ export function ComposeMailModal({ closeComposeMailModal }) {
             const answer = confirm("Send this message without a subject or text in the body?");
             if (!answer) return;
         }
-        console.log("messageRef.current.value: \n", messageRef.current.value)
-        // await mailService.createMail({ to: toRef.current.value, subject: subjectRef.current.value, body: messageRef.current.value })
-        // closeComposeMailModal(false)
+
+        await mailService.createMail({ to: toRef.current.value, subject: subjectRef.current.value, body: messageRef.current.value })
+        closeComposeMailModal(false)
     };
 
     return (
