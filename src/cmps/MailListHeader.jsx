@@ -18,14 +18,16 @@ export function MailListHeader({ reloadMails, handleSelectAll, checkIds, handleU
                 <input type='checkbox' onChange={(e) => handleSelectAll(e)} />
             </div>
             {
-                checkIds.length > 0 ? <MailActions goBack={goBack} handleDelete={handleDelete} handleUnread={handleUnread} handleArchived={handleArchived} /> : <>
-                    <div className="mail-details-btn" onClick={reloadMails}>
-                        <IoRefreshOutline />
-                    </div>
-                    {/* <div className="mail-details-btn">
+                checkIds.length > 0 ?
+                    <MailActions goBack={goBack} handleDelete={handleDelete} handleUnread={handleUnread} handleArchived={handleArchived} />
+                    : <>
+                        <div className="mail-details-btn" onClick={reloadMails}>
+                            <IoRefreshOutline />
+                        </div>
+                        {/* <div className="mail-details-btn">
                         <IoMdMore />
                     </div> */}
-                </>
+                    </>
             }
 
         </section>

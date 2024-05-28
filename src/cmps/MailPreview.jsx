@@ -47,7 +47,6 @@ export function MailPreview({ mail, checked, checkPreview }) {
     >
       <aside className="mail-preview-aside">
         <div className="mail-preview-checkbox-container" onClick={e => e.preventDefault()}>
-
           <input
             type="checkbox"
             className="mail-preview-checkbox"
