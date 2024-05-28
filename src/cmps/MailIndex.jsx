@@ -13,7 +13,7 @@ export function MailIndex() {
   const [mails, setMails] = useState([]);
   const [unreadCounters, setUnreadCounters] = useState({
     inbox: 0,
-    star: 0,
+    starred: 0,
     trash: 0,
     allMail: 0,
   });

@@ -58,14 +58,14 @@ async function query(folder) {
 function countUnreadMailsByFolder(mails) {
     const unreadCounters = {
         inbox: 0,
-        star: 0,
+        starred: 0,
         trash: 0,
         allMail: 0,
     }
     const userUnreadMails = mails.filter(mail => mail.to === loggedinUser.email && mail.isRead === false);
     unreadCounters.allMail = userUnreadMails.length || 0;
     unreadCounters.inbox = userUnreadMails.filter(mail => mail.removedAt === null && mail.isArchived === false).length || 0;
-    unreadCounters.star = userUnreadMails.filter(mail => mail.isStarred && mail.removedAt === null).length || 0;
+    unreadCounters.starred = userUnreadMails.filter(mail => mail.isStarred && mail.removedAt === null).length || 0;
     unreadCounters.trash = userUnreadMails.filter(mail => mail.removedAt !== null).length || 0;
     return unreadCounters;
 
