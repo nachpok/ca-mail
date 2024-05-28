@@ -44,6 +44,12 @@ export function MailDetails() {
     navigate(targetPath);
   };
 
+  const handleArchived = async () => {
+    mail.isArchived = true;
+    await mailService.updateMail(mail);
+    await reloadMails();
+  };
+
   const goBack = () => {
     const targetPath = `/${location.pathname.split("/")[1]}`;
     navigate(targetPath);
@@ -57,6 +63,7 @@ export function MailDetails() {
         goBack={goBack}
         handleDelete={handleDelete}
         handleUnread={handleUnread}
+        handleArchivedSelected={handleArchived}
       />
       <header className="mail-details-header">
         <h1>{mail.subject}</h1>

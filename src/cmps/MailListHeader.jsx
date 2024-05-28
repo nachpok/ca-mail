@@ -3,7 +3,7 @@ import { IoMdMore } from "react-icons/io";
 import { MailActions } from "./MailActions.jsx";
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export function MailListHeader({ reloadMails, handleSelectAll, checkIds, handleUnread, handleDelete }) {
+export function MailListHeader({ reloadMails, handleSelectAll, checkIds, handleUnread, handleDelete, handleArchived }) {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ export function MailListHeader({ reloadMails, handleSelectAll, checkIds, handleU
                 <input type='checkbox' onChange={(e) => handleSelectAll(e)} />
             </div>
             {
-                checkIds.length > 0 ? <MailActions goBack={goBack} handleDelete={handleDelete} handleUnread={handleUnread} /> : <>
+                checkIds.length > 0 ? <MailActions goBack={goBack} handleDelete={handleDelete} handleUnread={handleUnread} handleArchived={handleArchived} /> : <>
                     <div className="mail-details-btn" onClick={reloadMails}>
                         <IoRefreshOutline />
                     </div>

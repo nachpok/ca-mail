@@ -43,6 +43,15 @@ export function MailList({ mails, reloadMails }) {
     reloadMails();
   };
 
+  const handleArchivedSelected = async () => {
+    let selectedMails = mails.filter((mail) => checkIds.includes(mail.id));
+    selectedMails = selectedMails.filter((mail) => mail.isArchived === false);
+    for (let mail of selectedMails) {
+      mail.isArchived = true;
+      await mailService.updateMail(mail);
+    }
+    reloadMails();
+  };
   return (
     <section className="mail-list">
       <MailListHeader
@@ -51,6 +60,7 @@ export function MailList({ mails, reloadMails }) {
         checkIds={checkIds}
         handleUnread={handleUnreadSelected}
         handleDelete={handleDeleteSelected}
+        handleArchived={handleArchivedSelected}
       />
       {mails.map((mail) => (
         <MailPreview
