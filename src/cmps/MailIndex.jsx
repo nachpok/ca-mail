@@ -62,8 +62,6 @@ export function MailIndex() {
 
   const isMailDetailsRoute = currentUrl.split("/").length > 2;
 
-  //TODO set loading wheel
-
   return (
     <section className="mail-index-section">
       <header>
