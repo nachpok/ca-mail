@@ -50,7 +50,6 @@ async function query(folder) {
         default:
             throw new Error(`Invalid folder: ${folder}`)
     }
-    console.log("query: ", unreadCounters)
     return { mails, unreadCounters }
 }
 function countUnreadMailsByFolder(mails) {

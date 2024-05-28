@@ -29,7 +29,6 @@ export function MailIndex() {
 
     try {
       const { mails, unreadCounters } = await mailService.query(folder);
-      console.log("MailIndex.unreadCount: ", unreadCounters)
       setMails(mails);
       setUnreadCounters(unreadCounters);
     } catch (error) {
