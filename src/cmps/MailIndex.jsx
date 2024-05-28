@@ -52,7 +52,7 @@ export function MailIndex() {
   const onSearchChange = (e) => {
     setSearchValue(e.target.value);
   };
-  //TODO whats going on
+  //Close compose mail modal and reload mails when sent is in view
   const onComposeMailModal = async (isOpen) => {
     if (isOpen === false && currentUrl.includes("/sent")) {
       await fetchMails();
