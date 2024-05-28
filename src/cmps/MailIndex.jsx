@@ -52,7 +52,6 @@ export function MailIndex() {
   const onSearchChange = (e) => {
     setSearchValue(e.target.value);
   };
-  //TODO all on... not handle...
   //TODO whats going on
   const onComposeMailModal = async (isOpen) => {
     if (isOpen === false && currentUrl.includes("/sent")) {
@@ -61,12 +60,12 @@ export function MailIndex() {
     setIsComposeMailOpen(isOpen);
   };
 
-  //TODO as function
-  const isMailDetailsRoute = currentUrl.split("/").length > 2;
-
+  function isMailDetailsRoute() {
+    return location.pathname.split("/").length > 2;
+  }
   //TODO name parent conpoent calls as compoent name
   return (
-    <section className="mail-index-section">
+    <section className="mail-index">
       <AppHeader
         searchValue={searchValue}
         onSearchChange={onSearchChange}
@@ -82,7 +81,7 @@ export function MailIndex() {
               <Loader />
             </div>
           ) : (
-            isMailDetailsRoute ? (
+            isMailDetailsRoute() ? (
               <Outlet context={{ reloadMails: fetchMails }} />
             ) : (
               <MailList
