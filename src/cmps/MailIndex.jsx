@@ -1,5 +1,5 @@
 import { MailList } from "./MailList.jsx";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { mailService } from "../services/mail.service.js";
 import { useLocation, Outlet } from "react-router-dom";
 import { AppHeader } from "./AppHeader.jsx";
@@ -71,15 +71,13 @@ export function MailIndex() {
         onSearchChange={onSearchChange}
         unreadCount={unreadCount}
       />
-      <div className="mail-index-content">
+      <section className="content">
         <aside>
           <SideBar onComposeMailModal={onComposeMailModal} />
         </aside>
-        <main className="mail-index-main">
+        <main className="main">
           {loading ? (
-            <div className="loader-container">
-              <Loader />
-            </div>
+            <Loader />
           ) : (
             isMailDetailsRoute() ? (
               <Outlet context={{ reloadMails: fetchMails }} />
@@ -94,7 +92,7 @@ export function MailIndex() {
             <ComposeMailModal closeComposeMailModal={onComposeMailModal} />
           )}
         </main>
-      </div>
+      </section>
     </section>
   );
 }

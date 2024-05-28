@@ -5,12 +5,12 @@
 
 }
 
-.mail-index-content {
+.mail-index .content {
     display: flex;
     flex-direction: row;
 }
 
-.mail-index-main {
+.mail-index .main {
     display: flex;
     flex-direction: column;
 }
