@@ -9,7 +9,7 @@ import { Loader } from "./Loader.jsx";
 
 export function MailIndex() {
 
-  //TODO null
+  //TODO null optional
   const [mails, setMails] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [unreadCount, setUnreadCount] = useState(0);
@@ -20,14 +20,13 @@ export function MailIndex() {
   const currentUrl = location.pathname;
   console.log(location)
 
-  //TODO function
   //TODO replace status to folder
-  const fetchMails = async () => {
+  async function fetchMails() {
     setLoading(true);
-    const filter = currentUrl.split("/")[1];
-    const filterBy = { status: filter, txt: searchValue };
+    const folder = currentUrl.split("/")[1];
+    const filterBy = { folder: folder, txt: searchValue };
     //TODO repalce with redirect
-    if (filter === "") filterBy.status = "inbox";
+    if (folder === "") filterBy.folder = "inbox";
     try {
       const mails = await mailService.query(filterBy);
       setMails(mails);

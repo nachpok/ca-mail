@@ -26,32 +26,30 @@ const MAIL_KEY = 'mail'
 
 _createMockMails()
 
+//TODO seperate filter by text form folders
 //TODO redo count on server
-//TODO rename status
-//TODO replace includes
-//TODO all-mail - is all mail
 async function query(filterBy) {
     let mails = await storageService.query(MAIL_KEY);
     if (filterBy) {
-        const { txt, status, isRead } = filterBy
+        const { txt, folder, isRead } = filterBy
         if (txt && txt !== '') {
             const regex = new RegExp(`(${txt})`, 'gi')
             mails = mails.filter(mail => regex.test(mail.subject) || regex.test(mail.body))
         }
-        if (status && status.length > 0) {
-            if (status.includes('all-mail')) {
-                mails = mails.filter(mail => mail.to === (loggedinUser.email))
+        if (folder && folder.length > 0) {
+            if (folder === 'all-mail') {
+                return mails;
             }
-            if (status.includes('inbox')) {
+            if (folder === 'inbox') {
                 mails = mails.filter(mail => (mail.to === (loggedinUser.email) && mail.removedAt === null && mail.isArchived === false))
             }
-            if (status.includes("sent")) {
+            if (folder === "sent") {
                 mails = mails.filter(mail => mail.from === (loggedinUser.email) && mail.removedAt === null)
             }
-            if (status.includes('star')) {
+            if (folder === 'star') {
                 mails = mails.filter(mail => mail.isStarred && mail.removedAt === null)
             }
-            if (status.includes('trash')) {
+            if (folder === 'trash') {
                 mails = mails.filter(mail => mail.removedAt !== null)
             }
         }
