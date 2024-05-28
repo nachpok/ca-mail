@@ -43,6 +43,11 @@
     align-items: center;
     margin-left: auto;
 } */
+.mail-preview-checkbox-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 
 .mail-preview-checkbox {
     background-color: #371717;

@@ -32,6 +32,7 @@ export function MailPreview({ mail, checked, checkPreview }) {
     mail.isRead = true;
     mailService.updateMail(mail);
   };
+
   let pathname = location.pathname.split("/")[1];
   if (pathname === "") pathname = "inbox";
 
@@ -45,18 +46,21 @@ export function MailPreview({ mail, checked, checkPreview }) {
         }`}
     >
       <aside className="mail-preview-aside">
-        <input
-          type="checkbox"
-          className="mail-preview-checkbox"
-          checked={isChecked}
-          onClick={handleClick}
-          onChange={handleChange}
-        />
-        <StarCheckbox
-          cb={handleStar}
-          defaultChecked={mail.isStarred}
-          className="mail-preview-star-checkbox"
-        />
+        <div className="mail-preview-checkbox-container" onClick={e => e.preventDefault()}>
+
+          <input
+            type="checkbox"
+            className="mail-preview-checkbox"
+            checked={isChecked}
+            onClick={handleClick}
+            onChange={handleChange}
+          />
+          <StarCheckbox
+            cb={handleStar}
+            defaultChecked={mail.isStarred}
+            className="mail-preview-star-checkbox"
+          />
+        </div>
         <p className="mail-preview-from">{isSent ? mail.to : mail.fromName}</p>
       </aside>
       <main className="mail-preview-main">
