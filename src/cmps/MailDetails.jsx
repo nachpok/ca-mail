@@ -57,6 +57,7 @@ export function MailDetails() {
 
   if (!mail) return <div className="loader-container"><Loader /></div>;
 
+  const breakBody = mail.body.split("\n");
   return (
     <article className="mail-details-outlet">
       <MailActions
@@ -69,12 +70,12 @@ export function MailDetails() {
         <h1>{mail.subject}</h1>
       </header>
       <header className="mail-details-meta">
-        <div className="mail-details-meta-sub">
+        <div className="mail-details-meta-subject">
           <p className="mail-details-meta-item">
             {mail.fromName} &lt;{mail.from}&gt;
           </p>
         </div>
-        <div className="mail-details-meta-sub">
+        <div className="mail-details-meta-subject">
           <p className="mail-details-meta-item">{parseDate(mail.sentAt)}</p>
           <StarCheckbox
             cb={onStar}
@@ -82,13 +83,14 @@ export function MailDetails() {
             className="mail-preview-star-checkbox mail-details-meta-item"
           />
           <div className="btn mail-details-btn">
-            {" "}
             <IoReturnUpBack />
           </div>
         </div>
       </header>
       <main className="mail-details-body">
-        <p>{mail.body}</p>
+        {breakBody.map((line, idx) => (
+          <p key={idx} className="mail-details-body-line">{line}</p>
+        ))}
       </main>
     </article>
   );
