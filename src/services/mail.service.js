@@ -27,12 +27,10 @@ const MAIL_KEY = 'mail'
 _createMockMails()
 
 //TODO seperate filter by text form folders
-//TODO redo count on server
 async function query(folder) {
     let mails = await storageService.query(MAIL_KEY);
 
-    const unreadCounters = await countUnreadMailsByFolder(mails)
-    // const { folder, isRead } = filterBy
+    const unreadCounters = countUnreadMailsByFolder(mails)
 
     switch (folder) {
         case 'all-mail':
