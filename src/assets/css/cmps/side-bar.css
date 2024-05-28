@@ -27,7 +27,9 @@
 }
 
 .side-bar-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     text-decoration: none;
     color: black;
     font-size: 1.4em;
@@ -48,4 +50,13 @@
     background-color: #c1e7fe;
     text-decoration: none;
     font-weight: normal;
+}
+
+.side-bar-link .unread-count {
+    font-size: 0.7em;
+    margin-right: 10px;
+}
+
+.side-bar-link.active .unread-count {
+    font-weight: bold;
 }

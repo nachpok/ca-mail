@@ -51,9 +51,8 @@ async function query(folder) {
             break;
         default:
             throw new Error(`Invalid folder: ${folder}`)
-            break;
     }
-
+    console.log("query: ", unreadCounters)
     return { mails, unreadCounters }
 }
 function countUnreadMailsByFolder(mails) {
@@ -63,12 +62,12 @@ function countUnreadMailsByFolder(mails) {
         trash: 0,
         allMail: 0,
     }
-    const userUnreadMails = mails.filter(mail => mail.to === loggedinUser.email && mail.isRead === false)
-    unreadCounters.allMail = userUnreadMails.length
-    unreadCounters.inbox = userUnreadMails.filter(mail => mail.removedAt === null && mail.isArchived === false).length
-    unreadCounters.star = userUnreadMails.filter(mail => mail.isStarred && mail.removedAt === null).length
-    unreadCounters.trash = userUnreadMails.filter(mail => mail.removedAt !== null).length
-    return unreadCounters
+    const userUnreadMails = mails.filter(mail => mail.to === loggedinUser.email && mail.isRead === false);
+    unreadCounters.allMail = userUnreadMails.length || 0;
+    unreadCounters.inbox = userUnreadMails.filter(mail => mail.removedAt === null && mail.isArchived === false).length || 0;
+    unreadCounters.star = userUnreadMails.filter(mail => mail.isStarred && mail.removedAt === null).length || 0;
+    unreadCounters.trash = userUnreadMails.filter(mail => mail.removedAt !== null).length || 0;
+    return unreadCounters;
 
 }
 
