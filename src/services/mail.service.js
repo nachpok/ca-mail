@@ -30,6 +30,7 @@ _createMockMails()
 //TODO redo count on server
 async function query(filterBy) {
     let mails = await storageService.query(MAIL_KEY);
+    const unreadCounters = await countUnreadMailsByFolder(mails)
     if (filterBy) {
         const { txt, folder, isRead } = filterBy
         if (txt && txt !== '') {
@@ -60,6 +61,21 @@ async function query(filterBy) {
         mails = mails.filter(mail => mail.to === (loggedinUser.email) && mail.removedAt === null)
     }
     return mails
+}
+function countUnreadMailsByFolder(mails) {
+    const unreadCounters = {
+        inbox: 0,
+        star: 0,
+        trash: 0,
+        allMail: 0,
+    }
+    return mails.then(mails => mails.filter(mail => mail.to === loggedinUser.email && mail.isRead === false)).then(mails => {
+        unreadCounters.allMail = mails.length
+        unreadCounters.inbox = mails.filter(mail => mail.removedAt === null && mail.isArchived === false).length
+        unreadCounters.star = mails.filter(mail => mail.isStarred && mail.removedAt === null).length
+        unreadCounters.trash = mails.filter(mail => mail.removedAt !== null).length
+        return unreadCounters
+    })
 }
 
 function getById(mailId) {
