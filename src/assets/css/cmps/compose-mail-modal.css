@@ -10,7 +10,7 @@
     right: 20px;
 }
 
-.compose-mail-modal-header {
+.compose-mail-modal .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -18,6 +18,11 @@
     background-color: #f5f5f5;
     border-bottom: 1px solid #e0e0e0;
     border-radius: 10px 10px 0 0;
+}
+
+.compose-mail-modal .title {
+    font-size: 1rem;
+    font-weight: bold;
 }
 
 .compose-mail-modal-close-btn {
@@ -31,32 +36,32 @@
     background-color: #e0e0e0;
 }
 
-.compose-mail-modal-form {
+.compose-mail-modal .form {
     display: flex;
     flex-direction: column;
     padding: 20px;
 }
 
-.compose-mail-modal-form-item {
+.compose-mail-modal .form .form-item {
     background-color: transparent;
     border: none;
     margin-bottom: 10px;
 }
 
-.compose-mail-modal-form-input {
+.compose-mail-modal .form .form-item.form-input {
     width: 100%;
     padding: 10px;
     border-bottom: 1px solid #e0e0e0;
 }
 
-.compose-mail-modal-form-textarea {
+.compose-mail-modal .form .form-item.form-textarea {
     width: 100%;
     height: 370px;
     padding: 10px;
     border-radius: 5px;
 }
 
-.compose-mail-modal-send-btn {
+.compose-mail-modal .footer .send-btn {
     background-color: #007bff;
     color: #fff;
     padding: 10px 20px;
@@ -69,12 +74,18 @@
     left: 20px;
 }
 
+.compose-mail-modal .footer .send-btn:hover {
+    background-color: #0056b3;
+    transition: background-color 0.3s;
+    padding: 11px 22px;
+}
+
 .compose-mail-modal-send-btn {
     background-color: #0056b3;
 
 }
 
-.compose-mail-modal-error-modal {
+.compose-mail-modal .error-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -87,21 +98,29 @@
     z-index: 1000;
 }
 
-.compose-mail-modal-error-modal-content {
+.compose-mail-modal .error-modal .error-modal-content {
+    flex-grow: 0;
     background: white;
-    padding: 20px;
+    padding: 40px;
     border-radius: 5px;
     text-align: center;
+    width: 300px;
+    height: 200px;
+    box-sizing: border-box;
+    font-size: 1.5rem;
 }
 
-.compose-mail-modal-error-modal-close-btn {
-    margin-top: 10px;
+.error-modal-content .modal-close-btn {
+    margin-top: 30px;
+    padding: 10px 20px;
     background-color: transparent;
     border: none;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 3px;
+    background-color: #e0e0e0;
 }
 
-.compose-mail-modal-error-modal-close-btn:hover {
-    background-color: #e0e0e0;
+
+.error-modal-content .modal-close-btn:hover {
+    background-color: #b3b3b3;
 }
