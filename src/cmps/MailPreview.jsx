@@ -12,22 +12,22 @@ export function MailPreview({ mail, checked, checkPreview }) {
     setIsChecked(checked);
   }, [checked]);
 
-  const handleStar = (star) => {
+  const onStar = (star) => {
     mail.isStarred = star;
     mailService.updateMail(mail);
   };
 
-  const handleChange = (e) => {
+  const onChange = (e) => {
     const { checked } = e.target;
     setIsChecked(checked);
     checkPreview(mail.id, checked);
   };
 
-  const handleClick = (e) => {
+  const onClick = (e) => {
     e.stopPropagation();
   };
 
-  const handleOpenMail = () => {
+  const onOpenMail = () => {
     if (mail.isRead) return;
     mail.isRead = true;
     mailService.updateMail(mail);
@@ -40,7 +40,7 @@ export function MailPreview({ mail, checked, checkPreview }) {
 
   return (
     <Link
-      onClick={handleOpenMail}
+      onClick={onOpenMail}
       to={`/${pathname}/${mail.id}`}
       className={`mail-preview ${mail.isRead || isSent ? "mail-preview-read" : "mail-preview-unread"
         }`}
@@ -51,11 +51,11 @@ export function MailPreview({ mail, checked, checkPreview }) {
             type="checkbox"
             className="mail-preview-checkbox"
             checked={isChecked}
-            onClick={handleClick}
-            onChange={handleChange}
+            onClick={onClick}
+            onChange={onChange}
           />
           <StarCheckbox
-            cb={handleStar}
+            cb={onStar}
             defaultChecked={mail.isStarred}
             className="mail-preview-star-checkbox"
           />

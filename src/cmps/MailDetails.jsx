@@ -22,12 +22,12 @@ export function MailDetails() {
     const mail = await mailService.getById(params.mailId);
     setMail(mail);
   }
-  const handleStar = (star) => {
+  const onStar = (star) => {
     mail.isStarred = star;
     mailService.updateMail(mail);
   };
 
-  const handleUnread = async () => {
+  const onUnread = async () => {
     mail.isRead = false;
     await mailService.updateMail(mail);
     await reloadMails();
@@ -36,7 +36,7 @@ export function MailDetails() {
     navigate(targetPath);
   };
 
-  const handleDelete = async () => {
+  const onDelete = async () => {
     mail.removedAt = new Date();
     await mailService.updateMail(mail);
     const targetPath = `/${location.pathname.split("/")[1]}`;
@@ -44,7 +44,7 @@ export function MailDetails() {
     navigate(targetPath);
   };
 
-  const handleArchived = async () => {
+  const onArchived = async () => {
     mail.isArchived = true;
     await mailService.updateMail(mail);
     await reloadMails();
@@ -61,9 +61,9 @@ export function MailDetails() {
     <article className="mail-details-outlet">
       <MailActions
         goBack={goBack}
-        handleDelete={handleDelete}
-        handleUnread={handleUnread}
-        handleArchivedSelected={handleArchived}
+        onDelete={onDelete}
+        onUnread={onUnread}
+        onArchived={onArchived}
       />
       <header className="mail-details-header">
         <h1>{mail.subject}</h1>
@@ -77,7 +77,7 @@ export function MailDetails() {
         <div className="mail-details-meta-sub">
           <p className="mail-details-meta-item">{parseDate(mail.sentAt)}</p>
           <StarCheckbox
-            cb={handleStar}
+            cb={onStar}
             defaultChecked={mail.isStarred}
             className="mail-preview-star-checkbox mail-details-meta-item"
           />

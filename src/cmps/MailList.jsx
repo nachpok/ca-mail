@@ -7,7 +7,7 @@ import { mailService } from "../services/mail.service.js";
 export function MailList({ mails, reloadMails }) {
   const [checkIds, setCheckIds] = useState([]);
 
-  const handleSelectAll = (e) => {
+  const onSelectAll = (e) => {
     const { checked } = e.target;
     if (checked) {
       setCheckIds(mails.map((mail) => mail.id));
@@ -24,7 +24,7 @@ export function MailList({ mails, reloadMails }) {
     }
   };
 
-  const handleDeleteSelected = async () => {
+  const onDeleteSelected = async () => {
     let selectedMails = mails.filter((mail) => checkIds.includes(mail.id));
     selectedMails.filter((mail) => mail.removedAt !== null);
     for (let mail of selectedMails) {
@@ -34,7 +34,7 @@ export function MailList({ mails, reloadMails }) {
     reloadMails();
   };
 
-  const handleUnreadSelected = async () => {
+  const onUnreadSelected = async () => {
     let selectedMails = mails.filter((mail) => checkIds.includes(mail.id));
     selectedMails = selectedMails.filter((mail) => mail.isRead === true);
     for (let mail of selectedMails) {
@@ -44,7 +44,7 @@ export function MailList({ mails, reloadMails }) {
     reloadMails();
   };
 
-  const handleArchivedSelected = async () => {
+  const onArchivedSelected = async () => {
     let selectedMails = mails.filter((mail) => checkIds.includes(mail.id));
     selectedMails = selectedMails.filter((mail) => mail.isArchived === false);
     for (let mail of selectedMails) {
@@ -57,11 +57,11 @@ export function MailList({ mails, reloadMails }) {
     <section className="mail-list">
       <MailListHeader
         reloadMails={reloadMails}
-        handleSelectAll={handleSelectAll}
+        onSelectAll={onSelectAll}
         checkIds={checkIds}
-        handleUnread={handleUnreadSelected}
-        handleDelete={handleDeleteSelected}
-        handleArchived={handleArchivedSelected}
+        onUnread={onUnreadSelected}
+        onDelete={onDeleteSelected}
+        onArchived={onArchivedSelected}
       />
       {mails.map((mail) => (
         <MailPreview

@@ -49,12 +49,12 @@ export function MailIndex() {
   }, [mails]);
 
 
-  const handleSearchChange = (e) => {
+  const onSearchChange = (e) => {
     setSearchValue(e.target.value);
   };
   //TODO all on... not handle...
   //TODO whats going on
-  const handleComposeMailModal = async (isOpen) => {
+  const onComposeMailModal = async (isOpen) => {
     if (isOpen === false && currentUrl.includes("/sent")) {
       await fetchMails();
     }
@@ -69,12 +69,12 @@ export function MailIndex() {
     <section className="mail-index-section">
       <AppHeader
         searchValue={searchValue}
-        handleSearchChange={handleSearchChange}
+        onSearchChange={onSearchChange}
         unreadCount={unreadCount}
       />
       <div className="mail-index-content">
         <aside>
-          <SideBar handleComposeMailModal={handleComposeMailModal} />
+          <SideBar onComposeMailModal={onComposeMailModal} />
         </aside>
         <main className="mail-index-main">
           {loading ? (
@@ -92,7 +92,7 @@ export function MailIndex() {
             )
           )}
           {isComposeMailOpen && (
-            <ComposeMailModal closeComposeMailModal={handleComposeMailModal} />
+            <ComposeMailModal closeComposeMailModal={onComposeMailModal} />
           )}
         </main>
       </div>

@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
-export function AppHeader({ searchValue, handleSearchChange, unreadCount }) {
+export function AppHeader({ searchValue, onSearchChange, unreadCount }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   let message = "You have no unread mails";
@@ -21,7 +21,7 @@ export function AppHeader({ searchValue, handleSearchChange, unreadCount }) {
               className="search-input"
               placeholder="Search mail"
               value={searchValue}
-              onChange={handleSearchChange}
+              onChange={onSearchChange}
               onFocus={() => setIsSearchOpen(true)}
               onBlur={() => setIsSearchOpen(false)}
             />
