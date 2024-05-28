@@ -15,20 +15,15 @@ export function MailIndex() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  //TODO replace with redirect
   const location = useLocation();
   const currentUrl = location.pathname;
-  console.log(location)
 
-  //TODO replace status to folder
   async function fetchMails() {
     setLoading(true);
     const folder = currentUrl.split("/")[1];
-    const filterBy = { folder: folder, txt: searchValue };
-    //TODO repalce with redirect
-    if (folder === "") filterBy.folder = "inbox";
+
     try {
-      const mails = await mailService.query(filterBy);
+      const { mails, unreadCount } = await mailService.query(folder);
       setMails(mails);
     } catch (error) {
       console.error("Having issues with loading mails:", error);
@@ -58,7 +53,7 @@ export function MailIndex() {
     setSearchValue(e.target.value);
   };
   //TODO all on... not handle...
-  //TODO whats gooing on
+  //TODO whats going on
   const handleComposeMailModal = async (isOpen) => {
     if (isOpen === false && currentUrl.includes("/sent")) {
       await fetchMails();

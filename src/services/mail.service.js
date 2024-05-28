@@ -28,39 +28,33 @@ _createMockMails()
 
 //TODO seperate filter by text form folders
 //TODO redo count on server
-async function query(filterBy) {
+async function query(folder) {
     let mails = await storageService.query(MAIL_KEY);
+
     const unreadCounters = await countUnreadMailsByFolder(mails)
-    if (filterBy) {
-        const { txt, folder, isRead } = filterBy
-        if (txt && txt !== '') {
-            const regex = new RegExp(`(${txt})`, 'gi')
-            mails = mails.filter(mail => regex.test(mail.subject) || regex.test(mail.body))
-        }
-        if (folder && folder.length > 0) {
-            if (folder === 'all-mail') {
-                return mails;
-            }
-            if (folder === 'inbox') {
-                mails = mails.filter(mail => (mail.to === (loggedinUser.email) && mail.removedAt === null && mail.isArchived === false))
-            }
-            if (folder === "sent") {
-                mails = mails.filter(mail => mail.from === (loggedinUser.email) && mail.removedAt === null)
-            }
-            if (folder === 'star') {
-                mails = mails.filter(mail => mail.isStarred && mail.removedAt === null)
-            }
-            if (folder === 'trash') {
-                mails = mails.filter(mail => mail.removedAt !== null)
-            }
-        }
-        if (isRead !== undefined) {
-            mails = mails?.filter(mail => mail.isRead === isRead)
-        }
-    } else {
-        mails = mails.filter(mail => mail.to === (loggedinUser.email) && mail.removedAt === null)
+    // const { folder, isRead } = filterBy
+
+    switch (folder) {
+        case 'all-mail':
+            break;
+        case 'inbox':
+            mails = mails.filter(mail => mail.to === loggedinUser.email && mail.removedAt === null && mail.isArchived === false);
+            break;
+        case 'sent':
+            mails = mails.filter(mail => mail.from === loggedinUser.email && mail.removedAt === null);
+            break;
+        case 'starred':
+            mails = mails.filter(mail => mail.isStarred && mail.removedAt === null);
+            break;
+        case 'trash':
+            mails = mails.filter(mail => mail.removedAt !== null);
+            break;
+        default:
+            throw new Error(`Invalid folder: ${folder}`)
+            break;
     }
-    return mails
+
+    return { mails, unreadCounters }
 }
 function countUnreadMailsByFolder(mails) {
     const unreadCounters = {
@@ -69,13 +63,13 @@ function countUnreadMailsByFolder(mails) {
         trash: 0,
         allMail: 0,
     }
-    return mails.then(mails => mails.filter(mail => mail.to === loggedinUser.email && mail.isRead === false)).then(mails => {
-        unreadCounters.allMail = mails.length
-        unreadCounters.inbox = mails.filter(mail => mail.removedAt === null && mail.isArchived === false).length
-        unreadCounters.star = mails.filter(mail => mail.isStarred && mail.removedAt === null).length
-        unreadCounters.trash = mails.filter(mail => mail.removedAt !== null).length
-        return unreadCounters
-    })
+    const userUnreadMails = mails.filter(mail => mail.to === loggedinUser.email && mail.isRead === false)
+    unreadCounters.allMail = userUnreadMails.length
+    unreadCounters.inbox = userUnreadMails.filter(mail => mail.removedAt === null && mail.isArchived === false).length
+    unreadCounters.star = userUnreadMails.filter(mail => mail.isStarred && mail.removedAt === null).length
+    unreadCounters.trash = userUnreadMails.filter(mail => mail.removedAt !== null).length
+    return unreadCounters
+
 }
 
 function getById(mailId) {
