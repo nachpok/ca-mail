@@ -1,6 +1,11 @@
 import { useRef, useState } from "react";
 import { mailService } from "../services/mail.service";
 
+
+//TODO new line
+//TODO on send hover
+//TODO on seve darft //audo save
+//TODO expand & minimize
 export function ComposeMailModal({ closeComposeMailModal }) {
     const [errorModal, setErrorModal] = useState(false)
     const toRef = useRef()

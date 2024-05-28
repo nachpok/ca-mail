@@ -8,19 +8,25 @@ import { ComposeMailModal } from "./ComposeMailModal.jsx";
 import { Loader } from "./Loader.jsx";
 
 export function MailIndex() {
+
+  //TODO null
   const [mails, setMails] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [unreadCount, setUnreadCount] = useState(0);
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  //TODO replace with redirect
   const location = useLocation();
   const currentUrl = location.pathname;
+  console.log(location)
 
+  //TODO function
+  //TODO replace status to folder
   const fetchMails = async () => {
     setLoading(true);
     const filter = currentUrl.split("/")[1];
     const filterBy = { status: filter, txt: searchValue };
+    //TODO repalce with redirect
     if (filter === "") filterBy.status = "inbox";
     try {
       const mails = await mailService.query(filterBy);
@@ -52,7 +58,8 @@ export function MailIndex() {
   const handleSearchChange = (e) => {
     setSearchValue(e.target.value);
   };
-
+  //TODO all on... not handle...
+  //TODO whats gooing on
   const handleComposeMailModal = async (isOpen) => {
     if (isOpen === false && currentUrl.includes("/sent")) {
       await fetchMails();
@@ -60,17 +67,17 @@ export function MailIndex() {
     setIsComposeMailOpen(isOpen);
   };
 
+  //TODO as function
   const isMailDetailsRoute = currentUrl.split("/").length > 2;
 
+  //TODO name parent conpoent calls as compoent name
   return (
     <section className="mail-index-section">
-      <header>
-        <AppHeader
-          searchValue={searchValue}
-          handleSearchChange={handleSearchChange}
-          unreadCount={unreadCount}
-        />
-      </header>
+      <AppHeader
+        searchValue={searchValue}
+        handleSearchChange={handleSearchChange}
+        unreadCount={unreadCount}
+      />
       <div className="mail-index-content">
         <aside>
           <SideBar handleComposeMailModal={handleComposeMailModal} />

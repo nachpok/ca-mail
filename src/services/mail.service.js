@@ -26,6 +26,10 @@ const MAIL_KEY = 'mail'
 
 _createMockMails()
 
+//TODO redo count on server
+//TODO rename status
+//TODO replace includes
+//TODO all-mail - is all mail
 async function query(filterBy) {
     let mails = await storageService.query(MAIL_KEY);
     if (filterBy) {

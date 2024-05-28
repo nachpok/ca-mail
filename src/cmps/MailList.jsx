@@ -3,6 +3,7 @@ import { MailListHeader } from "./MailListHeader.jsx";
 import { useState } from "react";
 import { mailService } from "../services/mail.service.js";
 
+//TODO move relaod to index, just call from here
 export function MailList({ mails, reloadMails }) {
   const [checkIds, setCheckIds] = useState([]);
 
