@@ -13,6 +13,7 @@ export const mailService = {
     createMail,
     updateMail,
     loggedinUser,
+    queryByText
 }
 
 
@@ -26,7 +27,7 @@ const MAIL_KEY = 'mail'
 
 _createMockMails()
 
-//TODO seperate filter by text form folders
+
 async function query(folder) {
     let mails = await storageService.query(MAIL_KEY);
 
@@ -52,6 +53,22 @@ async function query(folder) {
     }
     return { mails, unreadCounters }
 }
+
+async function queryByText(text) {
+    let mails = await storageService.query(MAIL_KEY);
+    mails = mails.filter(mail =>
+        mail.subject?.toLowerCase().includes(text.toLowerCase()) ||
+        mail.body?.toLowerCase().includes(text.toLowerCase()) ||
+        mail.fromName?.toLowerCase().includes(text.toLowerCase()) ||
+        mail.toName?.toLowerCase().includes(text.toLowerCase()) ||
+        mail.from?.toLowerCase().includes(text.toLowerCase()) ||
+        mail.to?.toLowerCase().includes(text.toLowerCase())
+    );
+    mails = mails.sort((a, b) => b.sentAt - a.sentAt);
+
+    return mails;
+}
+
 function countUnreadMailsByFolder(mails) {
     const unreadCounters = {
         inbox: 0,
