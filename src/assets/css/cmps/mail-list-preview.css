@@ -1,0 +1,77 @@
+.mail-list-preview {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+    transition: box-shadow 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+
+.mail-list-preview:hover {
+    outline: 2px solid #ccc;
+    text-decoration: none;
+}
+
+.mail-list-preview .main,
+.mail-list-preview .date-container {
+    display: flex;
+    align-items: center;
+}
+
+
+.mail-list-preview .main {
+    display: flex;
+    align-items: left;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+
+.mail-list-preview .main .subject {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 1rem;
+    align-self: start;
+}
+
+.mail-list-preview .main .recipients {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.7rem;
+    align-self: start;
+}
+
+.mail-list-preview.read {
+    background-color: #f2f6fb;
+}
+
+.mail-list-preview.unread .subject {
+    font-weight: bold;
+}
+
+.mail-list-preview .body {
+    width: 300px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-left: 10px;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.mail-list-preview .date-container {
+    flex: 0;
+    white-space: nowrap;
+}
+
+.mail-list-preview .date-container .date {
+    text-align: right;
+    font-weight: bold;
+    width: 100px;
+    margin-left: auto;
+}

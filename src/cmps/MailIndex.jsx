@@ -21,7 +21,6 @@ export function MailIndex() {
   const [searchValue, setSearchValue] = useState("");
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
   const [loadingMails, setLoadingMails] = useState(false);
-  const [loadingSearchMails, setLoadingSearchMails] = useState(false)
   const location = useLocation();
   const currentUrl = location.pathname;
 
@@ -34,14 +33,7 @@ export function MailIndex() {
     fetchMailsByText()
   }, [searchValue])
 
-  useEffect(() => {
-    console.log(searchMails)
-  }, [searchMails])
-
   async function fetchMailsByText() {
-
-    setLoadingSearchMails(true)
-
     try {
       if (searchValue !== '' && searchValue.length > 2) {
         console.log("called with: ", searchValue)
@@ -50,15 +42,16 @@ export function MailIndex() {
       }
     } catch (error) {
       console.error("Having issues with loading search mails:", error);
-    } finally {
-      setLoadingSearchMails(false)
     }
   }
 
   async function fetchMails() {
     setLoadingMails(true);
     const folder = currentUrl.split("/")[1];
-
+    if (folder === "search") {
+      setLoadingMails(false);
+      return;
+    }
     try {
       const { mails, unreadCounters } = await mailService.query(folder);
       setMails(mails);
@@ -122,10 +115,10 @@ export function MailIndex() {
       await fetchMails();
     }
   }
-  //Close compose mail modal and reload mails when sent is in view
-  //TODO add all-mails
+
   async function onComposeMailModal(isOpen) {
-    if (isOpen === false && currentUrl.includes("/sent")) {
+    // refresh if creating new mail when sent Mails are in view
+    if (!isOpen && (currentUrl.includes("/sent") || currentUrl.includes("/all-mails"))) {
       await fetchMails();
     }
     setIsComposeMailOpen(isOpen);
@@ -134,14 +127,21 @@ export function MailIndex() {
   function isMailDetailsRoute() {
     return location.pathname.split("/").length > 2;
   }
-  //TODO name parent conpoent calls as compoent name
-  //TODO implament search in all mails, form searver, use debounce
+
+  function viewMailBySearch() {
+    console.log('viewMailBySearch')
+    navigate(`/search`)
+    setLoadingMails(false)
+    setMails(searchMails)
+  }
+
   return (
     <section className="mail-index">
       <AppHeader
         searchValue={searchValue}
         onSearchChange={onSearchChange}
         searchMails={searchMails}
+        viewMailBySearch={viewMailBySearch}
       />
       <section className="content">
         <aside>
