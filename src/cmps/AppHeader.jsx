@@ -1,26 +1,14 @@
 import { useState } from "react";
 import { HomeButton } from "./HomeButton";
-export function AppHeader({ searchValue, onSearchChange }) {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+import { SearchDropdown } from "./SearchDropdown";
+export function AppHeader({ searchValue, onSearchChange, searchMails }) {
+
 
   return (
     <header className="app-header">
       <section className="container">
         <HomeButton />
-        <div className="header-search-bar">
-          <div className={`search-container ${isSearchOpen ? "open" : ""}`}>
-            <span className="search-icon">🔍</span>
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search mail"
-              value={searchValue}
-              onChange={onSearchChange}
-              onFocus={() => setIsSearchOpen(true)}
-              onBlur={() => setIsSearchOpen(false)}
-            />
-          </div>
-        </div>
+        <SearchDropdown searchValue={searchValue} onSearchChange={onSearchChange} searchMails={searchMails} />
       </section>
     </header>
   );

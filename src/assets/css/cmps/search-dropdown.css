@@ -1,0 +1,14 @@
+.search-dropdown .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.search-dropdown .dropdown-content {
+    display: block;
+    position: absolute;
+    background-color: #f6f6f6;
+    min-width: 230px;
+    overflow: auto;
+    border: 1px solid #ddd;
+    z-index: 10000;
+}
