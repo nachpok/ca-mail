@@ -1,17 +1,17 @@
 import { MailList } from "./MailList.jsx";
 import { useState, useEffect } from "react";
 import { mailService } from "../services/mail.service.js";
-import { useLocation, Outlet } from "react-router-dom";
+import { useLocation, Outlet, useAsyncError } from "react-router-dom";
 import { AppHeader } from "./AppHeader.jsx";
 import { SideBar } from "./SideBar.jsx";
 import { ComposeMailModal } from "./ComposeMailModal.jsx";
 import { Loader } from "./Loader.jsx";
 import { useNavigate } from "react-router-dom";
-import { utilService } from "../services/util.service.js";
 
 export function MailIndex() {
   const navigate = useNavigate();
   const [mails, setMails] = useState([]);
+  const [searchMails, setSearchMails] = useState([])
   const [unreadCounters, setUnreadCounters] = useState({
     inbox: 0,
     starred: 0,
@@ -20,12 +20,43 @@ export function MailIndex() {
   });
   const [searchValue, setSearchValue] = useState("");
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loadingMails, setLoadingMails] = useState(false);
+  const [loadingSearchMails, setLoadingSearchMails] = useState(false)
   const location = useLocation();
   const currentUrl = location.pathname;
 
+
+  useEffect(() => {
+    fetchMails();
+  }, [location]);
+
+  useEffect(() => {
+    fetchMailsByText()
+  }, [searchValue])
+
+  useEffect(() => {
+    console.log(searchMails)
+  }, [searchMails])
+
+  async function fetchMailsByText() {
+
+    setLoadingSearchMails(true)
+
+    try {
+      if (searchValue !== '' && searchValue.length > 2) {
+        console.log("called with: ", searchValue)
+        const searchMails = await mailService.queryByText(searchValue);
+        setSearchMails(searchMails)
+      }
+    } catch (error) {
+      console.error("Having issues with loading search mails:", error);
+    } finally {
+      setLoadingSearchMails(false)
+    }
+  }
+
   async function fetchMails() {
-    setLoading(true);
+    setLoadingMails(true);
     const folder = currentUrl.split("/")[1];
 
     try {
@@ -35,13 +66,9 @@ export function MailIndex() {
     } catch (error) {
       console.error("Having issues with loading mails:", error);
     } finally {
-      setLoading(false);
+      setLoadingMails(false);
     }
   };
-
-  useEffect(() => {
-    fetchMails();
-  }, [location]);
 
   function onSearchChange(e) {
     setSearchValue(e.target.value);
@@ -88,7 +115,7 @@ export function MailIndex() {
     }
 
     if (isMailDetailsRoute()) {
-      setLoading(true);
+      setLoadingMails(true);
       const folder = location.pathname.split("/")[1];
       navigate('/' + folder);
     } else {
@@ -96,6 +123,7 @@ export function MailIndex() {
     }
   }
   //Close compose mail modal and reload mails when sent is in view
+  //TODO add all-mails
   async function onComposeMailModal(isOpen) {
     if (isOpen === false && currentUrl.includes("/sent")) {
       await fetchMails();
@@ -113,13 +141,14 @@ export function MailIndex() {
       <AppHeader
         searchValue={searchValue}
         onSearchChange={onSearchChange}
+        searchMails={searchMails}
       />
       <section className="content">
         <aside>
           <SideBar onComposeMailModal={onComposeMailModal} unreadCounters={unreadCounters} />
         </aside>
         <main className="main">
-          {loading ? (
+          {loadingMails ? (
             <Loader />
           ) : (
             isMailDetailsRoute() ? (
