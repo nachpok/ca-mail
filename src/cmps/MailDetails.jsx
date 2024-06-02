@@ -65,7 +65,7 @@ export function MailDetails() {
       </header>
       <main className="mail-details-body">
         {breakBody.map((line, idx) => (
-          <p key={idx} className="mail-details-body-line">{line}</p>
+          <p key={idx} className="mail-details-body-line">{line}<br /></p>
         ))}
       </main>
     </article>

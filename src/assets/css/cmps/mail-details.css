@@ -1,5 +1,9 @@
 .mail-details-outlet {
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
 }
 
 .mail-details-header {
@@ -55,10 +59,14 @@
 }
 
 .mail-details-body {
+    flex: 1;
     margin: 4rem;
-    width: 400px;
+    width: 600px;
+    overflow: auto;
 }
 
 .mail-details-body-line {
+    max-width: 600px;
     margin: 0.5rem;
+    overflow-wrap: break-word;
 }
