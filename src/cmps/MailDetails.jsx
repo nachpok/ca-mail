@@ -8,6 +8,7 @@ import { MailActions } from "./MailActions.jsx";
 import { useOutletContext } from "react-router-dom";
 
 export function MailDetails() {
+  console.log("MailDetails")
   const [mail, setMail] = useState(null);
   const { onUpdateSelectedMails } = useOutletContext();
   const params = useParams();
@@ -29,7 +30,14 @@ export function MailDetails() {
 
   const goBack = () => {
     const targetPath = `/${location.pathname.split("/")[1]}`;
-    navigate(targetPath);
+    //TODO - Issue - when i get here from search and then i go back i want to go back to the previous folder,
+    //not the search folder 
+    //How can this be done?
+    if (location.pathname.includes("search")) {
+      navigate(`/inbox`);
+    } else {
+      navigate(targetPath);
+    }
   };
 
   if (!mail) return <div className="loader-container"><Loader /></div>;

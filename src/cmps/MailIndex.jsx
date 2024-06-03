@@ -45,16 +45,27 @@ export function MailIndex() {
   async function fetchMails() {
     setLoadingMails(true);
     const folder = currentUrl.split("/")[1];
-    console.log(folder)
     //avoid refetching when back from detals to list of searched 
     if (folder === "search") {
-      console.log(currentUrl.split("/"))
-      const mailId = currentUrl.split("/")[3];
-
-      setMails([mail]);
-      setLoadingMails(false);
+      if (currentUrl.split("/").length > 3) {
+        const mailId = currentUrl.split("/")[3];
+        try {
+          const mail = await mailService.getById(mailId);
+          setMails([mail]);
+          setLoadingMails(false);
+        } catch (error) {
+          console.error("Having issues with loading search mails:", error);
+        }
+        return;
+      } else {
+        const searchByText = currentUrl.split("/")[2];
+        const searchMails = await fetchMailsByText(searchByText);
+        setMails(searchMails);
+        setLoadingMails(false);
+      }
       return;
     }
+
     try {
       const { mails, unreadCounters } = await mailService.query(folder);
       setMails(mails);
@@ -64,11 +75,7 @@ export function MailIndex() {
     } finally {
       setLoadingMails(false);
     }
-  };
-
-  function onSearchChange(e) {
-    setSearchValue(e.target.value);
-  };
+  }
 
   async function onUpdateSelectedMails(action, ids) {
     let selectedMails = mails.filter((mail) => ids.includes(mail.id));
@@ -129,21 +136,17 @@ export function MailIndex() {
   };
 
   function isMailDetailsRoute() {
-    return location.pathname.split("/").length > 2;
-  }
-
-
-  //TODO repalce search with current folder
-  function viewMailBySearch(mails) {
-    navigate(`/search`)
-    setLoadingMails(false)
-    setMails(mails)
+    const pathSegments = location.pathname.split("/");
+    const folder = pathSegments[1];
+    if (folder === "search") {
+      return pathSegments.length > 3;
+    }
+    return pathSegments.length > 2;
   }
 
   return (
     <section className="mail-index">
       <AppHeader
-        viewMailBySearch={viewMailBySearch}
         fetchMailsByText={fetchMailsByText}
       />
       <section className="content">

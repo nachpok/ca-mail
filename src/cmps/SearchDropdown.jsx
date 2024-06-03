@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { MailListPreview } from "./MailListPreview";
+import { useNavigate } from "react-router-dom";
 
-export function SearchDropdown({ fetchMailsByText, viewMailBySearch }) {
+export function SearchDropdown({ fetchMailsByText }) {
+    const navigate = useNavigate();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [filteredMails, setFilteredMails] = useState([]);
     const [searchValue, setSearchValue] = useState('')
@@ -29,9 +31,10 @@ export function SearchDropdown({ fetchMailsByText, viewMailBySearch }) {
     }
 
     function viewAllSearchResults() {
-        viewMailBySearch(filteredMails)
+        navigate(`/search/${searchValue}`)
         setIsSearchOpen(false);
     }
+
     return (
         <section className="search-dropdown">
             <div className="search-bar">
@@ -49,7 +52,7 @@ export function SearchDropdown({ fetchMailsByText, viewMailBySearch }) {
             </div>
             {isSearchOpen && filteredMails.length > 0 && (
                 <ul className="dropdown-list" onMouseDown={handleMouseDown}>
-                    {filteredMails.map((mail, index) => (
+                    {filteredMails.map((mail) => (
                         <MailListPreview key={mail.id} mail={mail} searchValue={searchValue} closeDropdown={closeDropdown} />
                     ))}
                     <li className="dropdown-footer" onClick={viewAllSearchResults}>All search results for "{searchValue}"</li>

@@ -1,19 +1,15 @@
 
 import { utilService } from "../services/util.service.js";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { mailService } from "../services/mail.service.js";
 
 export function MailListPreview({ mail, searchValue, closeDropdown }) {
-    const location = useLocation();
     const navigate = useNavigate();
 
     const onOpenMail = () => {
         navigate(`/search/${searchValue}/${mail.id}`);
         closeDropdown();
     };
-
-    let pathname = location.pathname.split("/")[1];
-    if (pathname === "") pathname = "inbox";
 
     const isSent = mail.from === mailService.loggedinUser.email;
 
