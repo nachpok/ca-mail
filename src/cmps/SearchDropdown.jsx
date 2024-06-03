@@ -12,7 +12,6 @@ export function SearchDropdown({ fetchMailsByText }) {
             if (searchValue.length > 2) {
                 try {
                     const mails = await fetchMailsByText(searchValue);
-                    console.log("mails", mails);
                     setFilteredMails(mails.slice(0, 5));
                 } catch (err) {
                     console.error(err);
