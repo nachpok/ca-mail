@@ -3,12 +3,12 @@ import { utilService } from "../services/util.service.js";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { mailService } from "../services/mail.service.js";
 
-export function MailListPreview({ mail, closeDropdown }) {
+export function MailListPreview({ mail, searchValue, closeDropdown }) {
     const location = useLocation();
     const navigate = useNavigate();
 
     const onOpenMail = () => {
-        navigate(`/all-mail/${mail.id}`);
+        navigate(`/search/${searchValue}/${mail.id}`);
         closeDropdown();
     };
 

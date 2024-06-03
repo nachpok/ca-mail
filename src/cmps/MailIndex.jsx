@@ -11,15 +11,16 @@ import { useNavigate } from "react-router-dom";
 export function MailIndex() {
   const navigate = useNavigate();
   const [mails, setMails] = useState([]);
-  const [searchMails, setSearchMails] = useState([])
   const [unreadCounters, setUnreadCounters] = useState({
     inbox: 0,
     starred: 0,
     trash: 0,
     allMail: 0,
   });
-  const [searchValue, setSearchValue] = useState("");
+  //TODO move to params
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
+  //TODO array fo objects with subject to body and id
+  //getEmptyMail returns empty obj with temp id 
   const [loadingMails, setLoadingMails] = useState(false);
   const location = useLocation();
   const currentUrl = location.pathname;
@@ -29,16 +30,12 @@ export function MailIndex() {
     fetchMails();
   }, [location]);
 
-  useEffect(() => {
-    fetchMailsByText()
-  }, [searchValue])
 
-  async function fetchMailsByText() {
+  async function fetchMailsByText(text) {
     try {
-      if (searchValue !== '' && searchValue.length > 2) {
-        console.log("called with: ", searchValue)
-        const searchMails = await mailService.queryByText(searchValue);
-        setSearchMails(searchMails)
+      if (text !== '' && text.length > 2) {
+        const searchMails = await mailService.queryByText(text);
+        return searchMails;
       }
     } catch (error) {
       console.error("Having issues with loading search mails:", error);
@@ -48,7 +45,13 @@ export function MailIndex() {
   async function fetchMails() {
     setLoadingMails(true);
     const folder = currentUrl.split("/")[1];
+    console.log(folder)
+    //avoid refetching when back from detals to list of searched 
     if (folder === "search") {
+      console.log(currentUrl.split("/"))
+      const mailId = currentUrl.split("/")[3];
+
+      setMails([mail]);
       setLoadingMails(false);
       return;
     }
@@ -74,6 +77,7 @@ export function MailIndex() {
       case 'delete':
         selectedMails = selectedMails.filter((mail) => mail.removedAt === null);
         for (let mail of selectedMails) {
+          //TODO desturcure 
           mail.removedAt = new Date();
           await mailService.updateMail(mail);
         }
@@ -128,25 +132,22 @@ export function MailIndex() {
     return location.pathname.split("/").length > 2;
   }
 
-  function viewMailBySearch() {
-    console.log('viewMailBySearch')
+
+  //TODO repalce search with current folder
+  function viewMailBySearch(mails) {
     navigate(`/search`)
     setLoadingMails(false)
-    setMails(searchMails)
+    setMails(mails)
   }
 
   return (
     <section className="mail-index">
       <AppHeader
-        searchValue={searchValue}
-        onSearchChange={onSearchChange}
-        searchMails={searchMails}
         viewMailBySearch={viewMailBySearch}
+        fetchMailsByText={fetchMailsByText}
       />
       <section className="content">
-        <aside>
-          <SideBar onComposeMailModal={onComposeMailModal} unreadCounters={unreadCounters} />
-        </aside>
+        <SideBar onComposeMailModal={onComposeMailModal} unreadCounters={unreadCounters} />
         <main className="main">
           {loadingMails ? (
             <Loader />

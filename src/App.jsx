@@ -1,5 +1,5 @@
 import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { Home } from "./pages/Home";
+import { MailIndex } from "./cmps/MailIndex";
 import { MailDetails } from "./cmps/MailDetails";
 
 export function App() {
@@ -9,8 +9,8 @@ export function App() {
         <main className="container">
           <Routes>
             <Route path="/" element={<Navigate to="/inbox" />} />
-            <Route path="*" element={<Home />} />
-            <Route path="/:folder" element={<Home />}>
+            <Route path="*" element={<MailIndex />} />
+            <Route path="/:folder" element={<MailIndex />}>
               <Route path=":mailId" element={<MailDetails />} />
             </Route>
           </Routes>

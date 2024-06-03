@@ -4,7 +4,6 @@ import minimise from '../assets/imgs/minimise.svg'
 import expand from '../assets/imgs/expand.svg'
 
 //TODO on seve darft //audo save
-//TODO expand & minimize
 export function ComposeMailModal({ closeComposeMailModal }) {
     const [errorModal, setErrorModal] = useState(false);
     const [modalState, setModalState] = useState('open')

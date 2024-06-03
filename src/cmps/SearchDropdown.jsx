@@ -1,17 +1,24 @@
 import { useState, useEffect } from "react";
 import { MailListPreview } from "./MailListPreview";
 
-export function SearchDropdown({ searchValue, onSearchChange, searchMails, viewMailBySearch }) {
+export function SearchDropdown({ fetchMailsByText, viewMailBySearch }) {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [filteredMails, setFilteredMails] = useState([]);
-
+    const [searchValue, setSearchValue] = useState('')
     useEffect(() => {
-        if (searchValue) {
-            setFilteredMails(searchMails.slice(0, 5));
-        } else {
-            setFilteredMails([]);
+        async function fetchData() {
+            if (searchValue.length > 2) {
+                try {
+                    const mails = await fetchMailsByText(searchValue);
+                    console.log("mails", mails);
+                    setFilteredMails(mails.slice(0, 5));
+                } catch (err) {
+                    console.error(err);
+                }
+            }
         }
-    }, [searchValue, searchMails]);
+        fetchData();
+    }, [searchValue]);
 
     function handleMouseDown(e) {
         e.preventDefault();
@@ -22,7 +29,7 @@ export function SearchDropdown({ searchValue, onSearchChange, searchMails, viewM
     }
 
     function viewAllSearchResults() {
-        viewMailBySearch()
+        viewMailBySearch(filteredMails)
         setIsSearchOpen(false);
     }
     return (
@@ -34,8 +41,7 @@ export function SearchDropdown({ searchValue, onSearchChange, searchMails, viewM
                         type="text"
                         className="search-input"
                         placeholder="Search mail"
-                        value={searchValue}
-                        onChange={onSearchChange}
+                        onChange={(e) => setSearchValue(e.target.value)}
                         onFocus={() => setIsSearchOpen(true)}
                         onBlur={() => setIsSearchOpen(false)}
                     />
@@ -44,7 +50,7 @@ export function SearchDropdown({ searchValue, onSearchChange, searchMails, viewM
             {isSearchOpen && filteredMails.length > 0 && (
                 <ul className="dropdown-list" onMouseDown={handleMouseDown}>
                     {filteredMails.map((mail, index) => (
-                        <MailListPreview key={mail.id} mail={mail} closeDropdown={closeDropdown} />
+                        <MailListPreview key={mail.id} mail={mail} searchValue={searchValue} closeDropdown={closeDropdown} />
                     ))}
                     <li className="dropdown-footer" onClick={viewAllSearchResults}>All search results for "{searchValue}"</li>
                 </ul>

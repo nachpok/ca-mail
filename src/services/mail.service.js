@@ -19,11 +19,6 @@ export const mailService = {
 
 const MAIL_KEY = 'mail'
 
-// const filterBy = {
-//     status: 'inbox/sent/star/trash',
-//     txt: 'puki',
-//     isRead: true / false / null,
-// }
 
 _createMockMails()
 
@@ -65,7 +60,6 @@ async function queryByText(text) {
         mail.to?.toLowerCase().includes(text.toLowerCase())
     );
     mails = mails.sort((a, b) => b.sentAt - a.sentAt);
-
     return mails;
 }
 

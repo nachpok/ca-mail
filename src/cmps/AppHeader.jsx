@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { HomeButton } from "./HomeButton";
 import { SearchDropdown } from "./SearchDropdown";
-export function AppHeader({ searchValue, onSearchChange, searchMails, viewMailBySearch }) {
+export function AppHeader({ viewMailBySearch, fetchMailsByText }) {
 
 
   return (
     <header className="app-header">
       <section className="container">
         <HomeButton />
-        <SearchDropdown searchValue={searchValue} onSearchChange={onSearchChange} searchMails={searchMails} viewMailBySearch={viewMailBySearch} />
+        <SearchDropdown viewMailBySearch={viewMailBySearch} fetchMailsByText={fetchMailsByText} />
       </section>
     </header>
   );
