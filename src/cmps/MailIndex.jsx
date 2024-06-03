@@ -83,34 +83,29 @@ export function MailIndex() {
     switch (action) {
       case 'delete':
         selectedMails = selectedMails.filter((mail) => mail.removedAt === null);
-        for (let mail of selectedMails) {
-          //TODO desturcure 
-          mail.removedAt = new Date();
-          await mailService.updateMail(mail);
+        for (const mail of selectedMails) {
+          await mailService.updateMail({ ...mail, removedAt: new Date() });
         }
         break;
 
       case 'unread':
         selectedMails = selectedMails.filter((mail) => mail.isRead === true);
-        for (let mail of selectedMails) {
-          mail.isRead = false;
-          await mailService.updateMail(mail);
+        for (const mail of selectedMails) {
+          await mailService.updateMail({ ...mail, isRead: false });
         }
         break;
 
       case 'archive':
         selectedMails = selectedMails.filter((mail) => mail.isArchived === false);
-        for (let mail of selectedMails) {
-          mail.isArchived = true;
-          await mailService.updateMail(mail);
+        for (const mail of selectedMails) {
+          await mailService.updateMail({ ...mail, isArchived: true });
         }
         break;
 
       case 'star':
         selectedMails = selectedMails.filter((mail) => mail.isStarred === false);
-        for (let mail of selectedMails) {
-          mail.isStarred = true;
-          await mailService.updateMail(mail);
+        for (const mail of selectedMails) {
+          await mailService.updateMail({ ...mail, isStarred: true });
         }
         break;
 
