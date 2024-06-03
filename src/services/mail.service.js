@@ -97,16 +97,8 @@ function save(mail) {
 }
 
 function createMail(mail) {
-    mail.id = utilService.makeId()
-    mail.sentAt = Date.now()
-    mail.removedAt = null
-    mail.isRead = false
-    mail.isStarred = false
-    mail.isArchived = false
-    mail.from = loggedinUser.email
-    mail.fromName = loggedinUser.fullname
-
-    return storageService.post(MAIL_KEY, mail)
+    const newMail = { ...mail, id: utilService.makeId(), sentAt: Date.now(), removedAt: null, isRead: false, isStarred: false, isArchived: false, from: loggedinUser.email, to: loggedinUser.email, fromName: loggedinUser.fullname, toName: loggedinUser.fullname }
+    return storageService.post(MAIL_KEY, newMail)
 }
 
 function updateMail(mail) {
@@ -117,7 +109,7 @@ async function _createMockMails() {
     let mails = await storageService.query(MAIL_KEY);
     const mockEmails = [
         {
-            id: 'e101',
+            id: 'MUIxx-e101',
             subject: 'Meeting Reminder',
             body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             isRead: false,
@@ -131,7 +123,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e102',
+            id: 'MUIxx-e102',
             subject: 'Project Update',
             body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             isRead: true,
@@ -145,7 +137,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e103',
+            id: 'MUIxx-e103',
             subject: 'Lunch Plans',
             body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             isRead: false,
@@ -159,7 +151,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e104',
+            id: 'MUIxx-e104',
             subject: 'Invoice #12345',
             body: 'Please find attached the invoice for your recent purchase.',
             isRead: true,
@@ -173,7 +165,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e105',
+            id: 'MUIxx-e105',
             subject: 'Welcome to Our Service',
             body: 'Thank you for signing up for our service. We hope you enjoy it!',
             isRead: false,
@@ -187,7 +179,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e106',
+            id: 'MUIxx-e106',
             subject: 'Password Reset',
             body: 'Click the link below to reset your password.',
             isRead: true,
@@ -201,7 +193,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e107',
+            id: 'MUIxx-e107',
             subject: 'Weekly Newsletter',
             body: 'Here is your weekly newsletter with the latest updates.',
             isRead: false,
@@ -215,7 +207,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e108',
+            id: 'MUIxx-e108',
             subject: 'Job Application Status',
             body: 'We are pleased to inform you that your application has been accepted.',
             isRead: true,
@@ -229,7 +221,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e109',
+            id: 'MUIxx-e109',
             subject: 'Event Invitation',
             body: 'You are invited to our annual event. Please RSVP.',
             isRead: false,
@@ -243,7 +235,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e110',
+            id: 'MUIxx-e110',
             subject: 'Subscription Confirmation',
             body: 'Thank you for subscribing to our service.',
             isRead: true,
@@ -257,7 +249,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e111',
+            id: 'MUIxx-e111',
             subject: 'Order Shipped',
             body: 'Your order has been shipped and is on its way.',
             isRead: false,
@@ -271,7 +263,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e113',
+            id: 'MUIxx-e113',
             subject: 'Feedback Request',
             body: 'We would love to hear your feedback on our service.',
             isRead: false,
@@ -285,7 +277,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e114',
+            id: 'MUIxx-e114',
             subject: 'Security Alert',
             body: 'We detected a new login to your account from an unknown device.',
             isRead: true,
@@ -299,7 +291,7 @@ async function _createMockMails() {
             toName: 'Mahatma Appsus'
         },
         {
-            id: 'e115',
+            id: 'MUIxx-e115',
             subject: 'Promotion Offer',
             body: 'Get 20% off on your next purchase with this promo code.',
             isRead: false,
@@ -313,7 +305,7 @@ async function _createMockMails() {
             toName: 'Promotions Team'
         },
         {
-            id: 'e116',
+            id: 'MUIxx-e116',
             subject: 'Service Downtime Notice',
             body: 'Our service will be down for maintenance on Saturday from 2 AM to 4 AM.',
             isRead: true,
@@ -327,7 +319,7 @@ async function _createMockMails() {
             toName: 'Support Team'
         },
         {
-            id: 'e117',
+            id: 'MUIxx-e117',
             subject: 'New Feature Announcement',
             body: 'We are excited to announce a new feature in our app.',
             isRead: false,
@@ -341,7 +333,7 @@ async function _createMockMails() {
             toName: 'Updates Team'
         },
         {
-            id: 'e118',
+            id: 'MUIxx-e118',
             subject: 'Account Verification',
             body: 'Please verify your email address by clicking the link below.',
             isRead: true,
@@ -355,7 +347,7 @@ async function _createMockMails() {
             toName: 'No Reply Service'
         },
         {
-            id: 'e119',
+            id: 'MUIxx-e119',
             subject: 'Survey Invitation',
             body: 'We invite you to participate in our customer satisfaction survey.',
             isRead: false,
@@ -369,7 +361,7 @@ async function _createMockMails() {
             toName: 'Survey Team'
         },
         {
-            id: 'e120',
+            id: 'MUIxx-e120',
             subject: 'Thank You!',
             body: 'Thank you for being a valued customer.',
             isRead: true,
@@ -385,6 +377,7 @@ async function _createMockMails() {
     ];
     if (!mails || mails.length === 0) {
         for (const mail of mockEmails) {
+
             await storageService.post(MAIL_KEY, mail)
         }
     }

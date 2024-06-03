@@ -33,15 +33,12 @@ export function MailPreview({ mail, checked, checkPreview }) {
     mailService.updateMail(mail);
   };
 
-  let pathname = location.pathname.split("/")[1];
-  if (pathname === "") pathname = "inbox";
-
   const isSent = mail.from === mailService.loggedinUser.email;
 
   return (
     <Link
       onClick={onOpenMail}
-      to={`/${pathname}/${mail.id}`}
+      to={`${location.pathname}/${mail.id}`}
       className={`mail-preview ${mail.isRead || isSent ? "mail-preview-read" : "mail-preview-unread"
         }`}
     >

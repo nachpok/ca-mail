@@ -132,11 +132,8 @@ export function MailIndex() {
 
   function isMailDetailsRoute() {
     const pathSegments = location.pathname.split("/");
-    const folder = pathSegments[1];
-    if (folder === "search") {
-      return pathSegments.length > 3;
-    }
-    return pathSegments.length > 2;
+    const lastSegment = pathSegments[pathSegments.length - 1];
+    return lastSegment.startsWith("MUIxx-");
   }
 
   return (

@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom";
 
 export function SideBar({ onComposeMailModal, unreadCounters }) {
 
-  //TODO generic NavLinks
   return (
     <header className="app-side-bar">
       <section className="container">

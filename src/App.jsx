@@ -10,10 +10,10 @@ export function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/inbox" />} />
             <Route path="*" element={<MailIndex />} />
-            <Route path="/:folder" element={<MailIndex />}>
+            <Route path="/search/:searchValue" element={<MailIndex />}>
               <Route path=":mailId" element={<MailDetails />} />
             </Route>
-            <Route path="/search/:searchValue" element={<MailIndex />}>
+            <Route path="/:folder" element={<MailIndex />}>
               <Route path=":mailId" element={<MailDetails />} />
             </Route>
           </Routes>
