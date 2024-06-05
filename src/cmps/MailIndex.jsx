@@ -1,7 +1,7 @@
 import { MailList } from "./MailList.jsx";
 import { useState, useEffect } from "react";
 import { mailService } from "../services/mail.service.js";
-import { useLocation, Outlet, useAsyncError } from "react-router-dom";
+import { useLocation, Outlet } from "react-router-dom";
 import { AppHeader } from "./AppHeader.jsx";
 import { SideBar } from "./SideBar.jsx";
 import { ComposeMailModal } from "./ComposeMailModal.jsx";
@@ -25,7 +25,7 @@ export function MailIndex() {
   const location = useLocation();
   const currentUrl = location.pathname;
 
-
+  //TODO move to hook file, add cleanup in the case that the location changes
   useEffect(() => {
     fetchMails();
   }, [location.pathname]);
