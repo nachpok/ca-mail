@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { MailListPreview } from "./MailListPreview";
 import { useNavigate } from "react-router-dom";
 
+//TODO incode the search text
 export function SearchDropdown({ fetchMailsByText }) {
     const navigate = useNavigate();
     const [isSearchOpen, setIsSearchOpen] = useState(false);

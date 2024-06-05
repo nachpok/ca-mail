@@ -2,7 +2,7 @@ import { MailPreview } from "./MailPreview.jsx";
 import { MailListHeader } from "./MailListHeader.jsx";
 import { useState } from "react";
 
-export function MailList({ mails, reloadMails, onUpdateSelectedMails }) {
+export function MailList({ mails, reloadMails, onUpdateSelectedMails, openDraftById }) {
   const [checkIds, setCheckIds] = useState([]);
 
   function onSelectAll(e) {
@@ -36,6 +36,7 @@ export function MailList({ mails, reloadMails, onUpdateSelectedMails }) {
           mail={mail}
           checked={checkIds.includes(mail.id)}
           checkPreview={checkPreview}
+          openDraftById={openDraftById}
         />
       ))}
     </section>

@@ -3,9 +3,11 @@ import { useState, useEffect } from "react";
 import { utilService } from "../services/util.service.js";
 import { Link, useLocation } from "react-router-dom";
 import { mailService } from "../services/mail.service.js";
+import { useNavigate } from "react-router-dom";
 
-export function MailPreview({ mail, checked, checkPreview }) {
+export function MailPreview({ mail, checked, checkPreview, openDraftById }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(checked);
 
   useEffect(() => {
@@ -27,18 +29,27 @@ export function MailPreview({ mail, checked, checkPreview }) {
     e.stopPropagation();
   };
 
-  const onOpenMail = () => {
-    if (mail.isRead) return;
-    mail.isRead = true;
-    mailService.updateMail(mail);
+  const onPreviewClick = (e) => {
+    if (mail.isDraft) {
+      e.preventDefault();
+      openDraftById(true, mail.id)
+      navigate({
+        pathname: location.pathname,
+        search: `?compose=${mail.id}`
+      });
+    } else {
+      if (mail.isRead) return;
+      mail.isRead = true;
+      mailService.updateMail(mail);
+    }
   };
 
   const isSent = mail.from === mailService.loggedinUser.email;
 
   return (
     <Link
-      onClick={onOpenMail}
-      to={`${location.pathname}/${mail.id}`}
+      onClick={(e) => onPreviewClick(e)}
+      to={!mail.isDraft && `${location.pathname}/${mail.id}`}
       className={`mail-preview ${mail.isRead || isSent ? "mail-preview-read" : "mail-preview-unread"
         }`}
     >

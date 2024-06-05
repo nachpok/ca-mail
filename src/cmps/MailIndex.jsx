@@ -131,20 +131,31 @@ export function MailIndex() {
   }
 
 
-  async function onComposeMailModal(isOpen) {
+  async function onComposeMailModal(isOpen, mailId) {
     // refresh if creating new mail when sent Mails are in view
     if (!isOpen && (currentUrl.includes("/sent") || currentUrl.includes("/all-mails"))) {
       await fetchMails();
 
     }
-    if (isOpen) {
+    if (isOpen && !mailId) {
       navigate(location.pathname + "?compose=new");
+    } else if (isOpen && mailId) {
+      navigate(`${location.pathname}/${mailId}`);
     } else {
       navigate({ pathname: location.pathname, search: '' });
     }
 
     setIsComposeMailOpen(isOpen);
   };
+
+  async function refeshDrafsOnComposeEdit(updatedMail) {
+    //TODO - Ask if this is the best way to update the drafts
+    if (location.pathname.includes("drafts")) {
+      setMails((prevMails) =>
+        prevMails.map((mail) => (mail.id === updatedMail.id ? updatedMail : mail))
+      );
+    }
+  }
 
   function onComposeClick() {
     navigate(location.pathname + "?compose=new");
@@ -175,11 +186,12 @@ export function MailIndex() {
                 mails={mails}
                 reloadMails={fetchMails}
                 onUpdateSelectedMails={onUpdateSelectedMails}
+                openDraftById={onComposeMailModal}
               />
             )
           )}
           {isComposeMailOpen && (
-            <ComposeMailModal closeComposeMailModal={onComposeMailModal} />
+            <ComposeMailModal closeComposeMailModal={onComposeMailModal} refeshDrafsOnComposeEdit={refeshDrafsOnComposeEdit} />
           )}
         </main>
       </section>

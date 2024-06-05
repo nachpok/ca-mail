@@ -6,22 +6,43 @@ import trash from '../assets/imgs/trash.svg'
 import { useNavigate, useLocation } from "react-router-dom";
 
 //TODO on seve darft //audo save
-export function ComposeMailModal({ closeComposeMailModal }) {
+export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEdit }) {
     const navigate = useNavigate();
     const location = useLocation();
     const [errorModal, setErrorModal] = useState(false);
     const [modalStateOpen, setModalStateOpen] = useState(true)
     const [modalWindowFull, setModalWindowFull] = useState(false)
+    const [mail, setMail] = useState({})
     const [to, setTo] = useState('');
     const [subject, setSubject] = useState('');
     const [message, setMessage] = useState('');
     const [draftId, setDraftId] = useState(null);
 
     useEffect(() => {
-        async function saveDraft() {
-            let currentDraftId = draftId;
+        const searchParams = new URLSearchParams(location.search);
+        const draftId = searchParams.get('compose');
 
-            if (draftId) {
+        async function setDraft() {
+            if (draftId && draftId.includes('MUIxx')) {
+                const draft = await mailService.getById(draftId)
+                setMail(draft)
+                //TODO destructure the draft
+                setTo(draft.to || '')
+                setSubject(draft.subject || '')
+                setMessage(draft.body || '')
+            }
+        }
+        if (draftId) {
+            setDraft()
+        }
+    }, [location.search])
+
+    useEffect(() => {
+        async function saveDraft() {
+            const searchParams = new URLSearchParams(location.search);
+            let currentDraftId = searchParams.get('compose');
+
+            if (draftId && draftId.includes('MUIxx')) {
                 await mailService.updateMail({ id: currentDraftId, to: to, subject: subject, body: message })
             } else {
                 console.log("create draft")
@@ -29,16 +50,16 @@ export function ComposeMailModal({ closeComposeMailModal }) {
                 currentDraftId = newDraft.id;
                 setDraftId(currentDraftId);
             }
-
-            const searchParams = new URLSearchParams();
+            setMail({ ...mail, to: to, subject: subject, body: message })
+            refeshDrafsOnComposeEdit({ ...mail, to: to, subject: subject, body: message })
             const currentSearchParams = searchParams.toString()
             if (currentSearchParams !== `compose=${currentDraftId}` && currentSearchParams !== 'compose=new') {
                 searchParams.set('compose', currentDraftId);
-                navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
+
             }
         }
 
-        if ((to !== '' || subject !== '' || message !== '')) {
+        if ((to !== '' || subject !== '' || message !== '' || !draftId)) {
             saveDraft()
         }
     }, [to, subject, message])
@@ -97,6 +118,7 @@ export function ComposeMailModal({ closeComposeMailModal }) {
     function onModalHeaderClick(e) {
         setModalStateOpen((prev) => !prev)
     }
+
     function trashDraft() {
         if (draftId) {
             mailService.remove(draftId)
