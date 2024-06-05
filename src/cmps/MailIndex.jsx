@@ -28,7 +28,7 @@ export function MailIndex() {
 
   useEffect(() => {
     fetchMails();
-  }, [location]);
+  }, [location.pathname]);
 
 
   async function fetchMailsByText(text) {
@@ -130,13 +130,20 @@ export function MailIndex() {
     }
   }
 
+
   async function onComposeMailModal(isOpen) {
     // refresh if creating new mail when sent Mails are in view
     if (!isOpen && (currentUrl.includes("/sent") || currentUrl.includes("/all-mails"))) {
       await fetchMails();
     }
+    navigate(location.pathname + "?compose=new");
     setIsComposeMailOpen(isOpen);
   };
+
+  function onComposeClick() {
+    navigate(location.pathname + "?compose=new");
+    setIsComposeMailOpen(true);
+  }
 
   function isMailDetailsRoute() {
     const pathSegments = location.pathname.split("/");
@@ -150,7 +157,7 @@ export function MailIndex() {
         fetchMailsByText={fetchMailsByText}
       />
       <section className="content">
-        <SideBar onComposeMailModal={onComposeMailModal} unreadCounters={unreadCounters} />
+        <SideBar onComposeClick={onComposeClick} unreadCounters={unreadCounters} />
         <main className="main">
           {loadingMails ? (
             <Loader />

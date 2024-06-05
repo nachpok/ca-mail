@@ -13,7 +13,8 @@ export const mailService = {
     createMail,
     updateMail,
     loggedinUser,
-    queryByText
+    queryByText,
+    createDraft
 }
 
 
@@ -35,13 +36,16 @@ async function query(folder) {
             mails = mails.filter(mail => mail.to === loggedinUser.email && mail.removedAt === null && mail.isArchived === false);
             break;
         case 'sent':
-            mails = mails.filter(mail => mail.from === loggedinUser.email && mail.removedAt === null);
+            mails = mails.filter(mail => mail.from === loggedinUser.email && mail.removedAt === null && mail.isDraft === false);
             break;
         case 'starred':
             mails = mails.filter(mail => mail.isStarred && mail.removedAt === null);
             break;
         case 'trash':
             mails = mails.filter(mail => mail.removedAt !== null);
+            break;
+        case 'drafts':
+            mails = mails.filter(mail => mail.isDraft);
             break;
         default:
             throw new Error(`Invalid folder: ${folder}`)
@@ -96,8 +100,13 @@ function save(mail) {
     }
 }
 
+function createDraft(mail) {
+    const newMail = { id: utilService.makeId(), sentAt: null, removedAt: null, isRead: false, isStarred: false, isArchived: false, from: loggedinUser.email, to: mail.to, fromName: loggedinUser.fullname, toName: mail.toName, isDraft: true }
+    return storageService.post(MAIL_KEY, newMail)
+}
+
 function createMail(mail) {
-    const newMail = { ...mail, id: utilService.makeId(), sentAt: Date.now(), removedAt: null, isRead: false, isStarred: false, isArchived: false, from: loggedinUser.email, to: loggedinUser.email, fromName: loggedinUser.fullname, toName: loggedinUser.fullname }
+    const newMail = { id: mail.id, sentAt: Date.now(), removedAt: null, isRead: false, isStarred: false, isArchived: false, from: loggedinUser.email, to: mail.to, fromName: loggedinUser.fullname, toName: mail.toName, isDraft: mail.isDraft }
     return storageService.post(MAIL_KEY, newMail)
 }
 
@@ -115,6 +124,7 @@ async function _createMockMails() {
             isRead: false,
             isArchived: false,
             isStarred: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'boss@company.com',
@@ -129,6 +139,7 @@ async function _createMockMails() {
             isRead: true,
             isStarred: true,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'manager@company.com',
@@ -143,6 +154,7 @@ async function _createMockMails() {
             isRead: false,
             isStarred: false,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'friend@social.com',
@@ -157,6 +169,7 @@ async function _createMockMails() {
             isRead: true,
             isStarred: false,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'billing@service.com',
@@ -171,6 +184,7 @@ async function _createMockMails() {
             isRead: false,
             isStarred: true,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'support@service.com',
@@ -185,6 +199,7 @@ async function _createMockMails() {
             isRead: true,
             isStarred: false,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'no-reply@service.com',
@@ -213,6 +228,7 @@ async function _createMockMails() {
             isRead: true,
             isStarred: true,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'hr@company.com',
@@ -227,6 +243,7 @@ async function _createMockMails() {
             isRead: false,
             isStarred: false,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'events@company.com',
@@ -241,6 +258,7 @@ async function _createMockMails() {
             isRead: true,
             isStarred: false,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'no-reply@service.com',
@@ -255,6 +273,7 @@ async function _createMockMails() {
             isRead: false,
             isStarred: true,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'shipping@store.com',
@@ -269,6 +288,7 @@ async function _createMockMails() {
             isRead: false,
             isStarred: false,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'feedback@service.com',
@@ -283,6 +303,7 @@ async function _createMockMails() {
             isRead: true,
             isStarred: true,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'security@service.com',
@@ -311,6 +332,7 @@ async function _createMockMails() {
             isRead: true,
             isStarred: false,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'user@appsus.com',
@@ -325,6 +347,7 @@ async function _createMockMails() {
             isRead: false,
             isStarred: true,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'user@appsus.com',
@@ -339,6 +362,7 @@ async function _createMockMails() {
             isRead: true,
             isStarred: false,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'user@appsus.com',
@@ -353,6 +377,7 @@ async function _createMockMails() {
             isRead: false,
             isStarred: false,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: null,
             from: 'user@appsus.com',
@@ -367,6 +392,7 @@ async function _createMockMails() {
             isRead: true,
             isStarred: true,
             isArchived: false,
+            isDraft: false,
             sentAt: 1631133930594,
             removedAt: 1631133931594,
             from: 'user@appsus.com',
