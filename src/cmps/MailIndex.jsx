@@ -135,8 +135,14 @@ export function MailIndex() {
     // refresh if creating new mail when sent Mails are in view
     if (!isOpen && (currentUrl.includes("/sent") || currentUrl.includes("/all-mails"))) {
       await fetchMails();
+
     }
-    navigate(location.pathname + "?compose=new");
+    if (isOpen) {
+      navigate(location.pathname + "?compose=new");
+    } else {
+      navigate({ pathname: location.pathname, search: '' });
+    }
+
     setIsComposeMailOpen(isOpen);
   };
 

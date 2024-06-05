@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { mailService } from "../services/mail.service";
 import minimise from '../assets/imgs/minimise.svg'
 import expand from '../assets/imgs/expand.svg'
+import trash from '../assets/imgs/trash.svg'
 import { useNavigate, useLocation } from "react-router-dom";
 
 //TODO on seve darft //audo save
@@ -9,11 +10,13 @@ export function ComposeMailModal({ closeComposeMailModal }) {
     const navigate = useNavigate();
     const location = useLocation();
     const [errorModal, setErrorModal] = useState(false);
-    const [modalState, setModalState] = useState('open')
+    const [modalStateOpen, setModalStateOpen] = useState(true)
+    const [modalWindowFull, setModalWindowFull] = useState(false)
     const [to, setTo] = useState('');
     const [subject, setSubject] = useState('');
     const [message, setMessage] = useState('');
     const [draftId, setDraftId] = useState(null);
+
     useEffect(() => {
         async function saveDraft() {
             let currentDraftId = draftId;
@@ -26,7 +29,7 @@ export function ComposeMailModal({ closeComposeMailModal }) {
                 currentDraftId = newDraft.id;
                 setDraftId(currentDraftId);
             }
-            console.log("saveDraft", currentDraftId)
+
             const searchParams = new URLSearchParams();
             const currentSearchParams = searchParams.toString()
             if (currentSearchParams !== `compose=${currentDraftId}` && currentSearchParams !== 'compose=new') {
@@ -59,37 +62,61 @@ export function ComposeMailModal({ closeComposeMailModal }) {
         closeComposeMailModal(false)
     };
 
-    function minimiseModal() {
-        setModalState('minimised')
+    function minimiseModal(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setModalStateOpen(false)
     }
 
-    function openModal() {
-        setModalState('open')
+    function openModal(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setModalStateOpen(true)
     }
 
-    function expandModal() {
-        setModalState('expanded')
+    function expandModal(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setModalStateOpen(true)
+        setModalWindowFull(true)
     }
 
+    function shrinkModal(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setModalWindowFull(false)
+        setModalStateOpen(true)
+    }
+
+    function closeModal(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeComposeMailModal(false)
+    }
+
+    function onModalHeaderClick(e) {
+        setModalStateOpen((prev) => !prev)
+    }
     function trashDraft() {
-        const draftId = location.pathname.split('/')[2]
-        mailService.remove(draftId)
+        if (draftId) {
+            mailService.remove(draftId)
+        }
         closeComposeMailModal(false)
     }
 
     return (
-        <article className={`compose-mail-modal ${modalState}`}>
-            <header className='header'>
+        <article className={`compose-mail-modal ${modalStateOpen ? modalWindowFull ? 'expanded' : 'open' : 'minimised'}`}>
+            <header className='header' onClick={onModalHeaderClick}>
                 <h1 className='title'>New Message</h1>
                 <div className="btns">
-                    {modalState !== 'minimised' && <button className="btn" onClick={minimiseModal}>_</button>}
-                    {modalState === 'minimised' && <button className="btn flip-btn" onClick={openModal}>_</button>}
-                    {modalState !== 'expanded' && <button className="btn svg-btn" onClick={expandModal}><img src={expand} alt="expand" /></button>}
-                    {modalState === 'expanded' && <button className="btn svg-btn" onClick={openModal}><img src={minimise} alt="minimise" /></button>}
-                    <button className='btn' onClick={() => closeComposeMailModal(false)}>X</button>
+                    {modalStateOpen && <button className="btn" onClick={(e) => minimiseModal(e)}>_</button>}
+                    {!modalStateOpen && <button className="btn flip-btn" onClick={(e) => openModal(e)}>_</button>}
+                    {(!modalWindowFull || !modalStateOpen) && <button className="btn svg-btn" onClick={(e) => expandModal(e)}><img src={expand} alt="expand" /></button>}
+                    {modalWindowFull && modalStateOpen && <button className="btn svg-btn" onClick={(e) => shrinkModal(e)}><img src={minimise} alt="shrink" /></button>}
+                    <button className='btn' onClick={(e) => closeModal(e)}>X</button>
                 </div>
             </header>
-            {modalState !== 'minimised' && <>
+            {modalStateOpen !== 'minimised' && <>
                 <form className='form'>
                     <input type="email" placeholder='To' className={`form-item form-input`} value={to} onChange={(e) => setTo(e.target.value)} />
                     <input type="text" placeholder='Subject' className={`form-item form-input`} value={subject} onChange={(e) => setSubject(e.target.value)} />
@@ -97,6 +124,7 @@ export function ComposeMailModal({ closeComposeMailModal }) {
                 </form>
                 <footer className='footer'>
                     <button className='send-btn' onClick={onSendMail}>Send</button>
+                    <button className="btn trash-btn" onClick={trashDraft}><img src={trash} alt="trash" /></button>
                 </footer>
                 {errorModal &&
                     <article className="compose-mail-modal error-modal">

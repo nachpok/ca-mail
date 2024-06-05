@@ -46,25 +46,32 @@
     font-weight: bold;
 }
 
-.compose-mail-modal .header .btns .btn {
+.compose-mail-modal .header .btns .btn,
+.compose-mail-modal .footer .btn {
     background-color: transparent;
     border: none;
     cursor: pointer;
     border-radius: 2px;
 }
 
-.compose-mail-modal .header .btns .btn :hover {
-    background-color: #7f5555;
+.compose-mail-modal .header .btns .btn:hover,
+.compose-mail-modal .footer .btn:hover {
+    background-color: #bc9898;
 }
 
 .flip-btn {
     transform: rotate(180deg);
 }
 
-.compose-mail-modal .header .btns .svg-btn {
-
+.compose-mail-modal .header .btns .btn {
     height: 25px;
     width: 25px;
+}
+
+.compose-mail-modal .footer .btn.trash-btn {
+    height: 35px;
+    width: 35px;
+    margin: 0 20px;
 }
 
 .compose-mail-modal .form {
@@ -87,9 +94,10 @@
 
 .compose-mail-modal.open .form .form-item.form-textarea {
     width: 100%;
-    min-height: 370px;
+    min-height: 350px;
     padding: 10px;
     border-radius: 5px;
+    resize: none;
 }
 
 .compose-mail-modal.expanded .form .form-item.form-textarea {
@@ -99,23 +107,32 @@
     border-radius: 5px;
 }
 
+.compose-mail-modal .footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+
+}
+
 .compose-mail-modal .footer .send-btn {
     background-color: #007bff;
     color: #fff;
     padding: 10px 20px;
-    margin-left: 20px;
+    margin: 20px;
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    position: relative;
+    /* position: relative;
     bottom: 20px;
-    left: 20px;
+    left: 20px; */
 }
 
 .compose-mail-modal .footer .send-btn:hover {
     background-color: #0056b3;
     transition: background-color 0.3s;
-    padding: 11px 22px;
+    /* padding: 11px 22px; */
 }
 
 .compose-mail-modal-send-btn {
