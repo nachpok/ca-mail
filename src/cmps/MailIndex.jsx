@@ -149,11 +149,21 @@ export function MailIndex() {
   };
 
   async function refeshDrafsOnComposeEdit(updatedMail) {
-    //TODO - Ask if this is the best way to update the drafts
     if (location.pathname.includes("drafts")) {
-      setMails((prevMails) =>
-        prevMails.map((mail) => (mail.id === updatedMail.id ? updatedMail : mail))
-      );
+      if (mails.find(mail => mail.id === updatedMail.id)) {
+        if (updatedMail.isDraft && updatedMail.removedAt) {
+          await mailService.remove(updatedMail.id)
+          setMails((prevMails) =>
+            prevMails.filter((mail) => mail.id !== updatedMail.id)
+          )
+        } else {
+          setMails((prevMails) =>
+            prevMails.map((mail) => (mail.id === updatedMail.id ? updatedMail : mail))
+          );
+        }
+      } else {
+        setMails((prevMails) => [...prevMails, updatedMail]);
+      }
     }
   }
 

@@ -3,7 +3,7 @@ import { mailService } from "../services/mail.service";
 import minimise from '../assets/imgs/minimise.svg'
 import expand from '../assets/imgs/expand.svg'
 import trash from '../assets/imgs/trash.svg'
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 
 //TODO on seve darft //audo save
 export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEdit }) {
@@ -12,57 +12,32 @@ export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEd
     const [errorModal, setErrorModal] = useState(false);
     const [modalStateOpen, setModalStateOpen] = useState(true)
     const [modalWindowFull, setModalWindowFull] = useState(false)
+    //TODO null mail
     const [mail, setMail] = useState({})
     const [to, setTo] = useState('');
     const [subject, setSubject] = useState('');
     const [message, setMessage] = useState('');
     const [draftId, setDraftId] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [composeTitle, setComposeTitle] = useState('New Message')
 
     useEffect(() => {
-        const searchParams = new URLSearchParams(location.search);
-        const draftId = searchParams.get('compose');
+        const currentDraftId = searchParams.get('compose');
 
-        async function setDraft() {
-            if (draftId && draftId.includes('MUIxx')) {
-                const draft = await mailService.getById(draftId)
-                setMail(draft)
-                //TODO destructure the draft
-                setTo(draft.to || '')
-                setSubject(draft.subject || '')
-                setMessage(draft.body || '')
-            }
+        async function initDraft() {
+            const draft = await mailService.getById(currentDraftId)
+            const { to, subject, body } = draft
+            setMail(draft)
+            setTo(to || '')
+            setSubject(subject || '')
+            setMessage(body || '')
         }
-        if (draftId) {
-            setDraft()
+        if (currentDraftId && currentDraftId.includes('MUIxx')) {
+            initDraft()
         }
     }, [location.search])
 
-    useEffect(() => {
-        async function saveDraft() {
-            const searchParams = new URLSearchParams(location.search);
-            let currentDraftId = searchParams.get('compose');
 
-            if (draftId && draftId.includes('MUIxx')) {
-                await mailService.updateMail({ id: currentDraftId, to: to, subject: subject, body: message })
-            } else {
-                console.log("create draft")
-                const newDraft = await mailService.createDraft({ to: to, subject: subject, body: message })
-                currentDraftId = newDraft.id;
-                setDraftId(currentDraftId);
-            }
-            setMail({ ...mail, to: to, subject: subject, body: message })
-            refeshDrafsOnComposeEdit({ ...mail, to: to, subject: subject, body: message })
-            const currentSearchParams = searchParams.toString()
-            if (currentSearchParams !== `compose=${currentDraftId}` && currentSearchParams !== 'compose=new') {
-                searchParams.set('compose', currentDraftId);
-
-            }
-        }
-
-        if ((to !== '' || subject !== '' || message !== '' || !draftId)) {
-            saveDraft()
-        }
-    }, [to, subject, message])
 
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -82,6 +57,40 @@ export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEd
         await mailService.updateMail({ id: draftId, to: to, subject: subject, body: message, isDraft: false, sentAt: Date.now() })
         closeComposeMailModal(false)
     };
+
+    async function onToBlur(e) {
+        const currentDraftId = searchParams.get('compose');
+
+        if (currentDraftId || to || subject || message) {
+            if (currentDraftId && currentDraftId.includes('MUIxx')) {
+                await mailService.updateMail({ id: currentDraftId, to: to, subject: subject, body: message })
+                setMail({ ...mail, to: to, subject: subject, body: message })
+                refeshDrafsOnComposeEdit({ ...mail, to: to, subject: subject, body: message })
+            } else {
+                const newDraft = await mailService.createDraft({ to: to, subject: subject, body: message })
+                setDraftId(newDraft.id);
+                setMail(newDraft)
+                refeshDrafsOnComposeEdit(newDraft)
+                setSearchParams({ compose: newDraft.id });
+
+            }
+
+            const searchParams = new URLSearchParams(location.search);
+            const currentSearchParams = searchParams.toString()
+            if (currentSearchParams !== `compose=${draftId}` && currentSearchParams !== 'compose=new') {
+                searchParams.set('compose', draftId);
+            }
+        }
+        setComposeTitle('Draft Saved')
+        //TODO cleanup 
+        setTimeout(() => {
+            if (subject !== "") {
+                setComposeTitle(subject)
+            } else {
+                setComposeTitle('New Message')
+            }
+        }, 1500)
+    }
 
     function minimiseModal(e) {
         e.preventDefault();
@@ -120,16 +129,14 @@ export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEd
     }
 
     function trashDraft() {
-        if (draftId) {
-            mailService.remove(draftId)
-        }
+        refeshDrafsOnComposeEdit({ ...mail, isDraft: true, removedAt: Date.now() })
         closeComposeMailModal(false)
     }
 
     return (
         <article className={`compose-mail-modal ${modalStateOpen ? modalWindowFull ? 'expanded' : 'open' : 'minimised'}`}>
             <header className='header' onClick={onModalHeaderClick}>
-                <h1 className='title'>New Message</h1>
+                <h1 className='title'>{composeTitle}</h1>
                 <div className="btns">
                     {modalStateOpen && <button className="btn" onClick={(e) => minimiseModal(e)}>_</button>}
                     {!modalStateOpen && <button className="btn flip-btn" onClick={(e) => openModal(e)}>_</button>}
@@ -140,9 +147,9 @@ export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEd
             </header>
             {modalStateOpen !== 'minimised' && <>
                 <form className='form'>
-                    <input type="email" placeholder='To' className={`form-item form-input`} value={to} onChange={(e) => setTo(e.target.value)} />
-                    <input type="text" placeholder='Subject' className={`form-item form-input`} value={subject} onChange={(e) => setSubject(e.target.value)} />
-                    <textarea placeholder='Message' className={`form-item form-textarea`} value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
+                    <input type="email" placeholder='To' className={`form-item form-input`} value={to} onChange={(e) => setTo(e.target.value)} onBlur={(e) => onToBlur(e)} />
+                    <input type="text" placeholder='Subject' className={`form-item form-input`} value={subject} onChange={(e) => setSubject(e.target.value)} onBlur={(e) => onToBlur(e)} />
+                    <textarea placeholder='Message' className={`form-item form-textarea`} value={message} onChange={(e) => setMessage(e.target.value)} onBlur={(e) => onToBlur(e)}></textarea>
                 </form>
                 <footer className='footer'>
                     <button className='send-btn' onClick={onSendMail}>Send</button>

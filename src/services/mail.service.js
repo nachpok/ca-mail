@@ -87,7 +87,7 @@ function getById(mailId) {
     return storageService.get(MAIL_KEY, mailId)
 }
 
-function remove(mailId) {
+async function remove(mailId) {
     return storageService.remove(MAIL_KEY, mailId)
 }
 
