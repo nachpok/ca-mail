@@ -79,7 +79,7 @@ export function MailPreview({ mail, checked, checkPreview, openDraftById, onUpda
         <p className="mail-preview-body">{mail.body}</p>
       </main>
       <aside className="mail-preview-date-container">
-        {isHover ? <MailPreviewActions onUpdateSelectedMails={onUpdateSelectedMails} checkId={[mail.id]} /> : (
+        {isHover ? <MailPreviewActions onUpdateSelectedMails={onUpdateSelectedMails} checkId={[mail.id]} isRead={mail.isRead} /> : (
           <p className="mail-preview-date">
             {utilService.formatDate(mail.sentAt)}
           </p>

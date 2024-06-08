@@ -109,6 +109,13 @@ export function MailIndex() {
         }
         break;
 
+      case 'read':
+        selectedMails = selectedMails.filter((mail) => mail.isRead === false);
+        for (const mail of selectedMails) {
+          await mailService.updateMail({ ...mail, isRead: true });
+        }
+        break;
+
       default:
         throw new Error('Invalid action type');
     }
