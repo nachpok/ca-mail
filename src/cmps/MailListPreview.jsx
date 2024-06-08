@@ -3,7 +3,7 @@ import { utilService } from "../services/util.service.js";
 import { useNavigate } from "react-router-dom";
 import { mailService } from "../services/mail.service.js";
 
-export function MailListPreview({ mail, searchValue, closeDropdown }) {
+export function SearchMailListPreview({ mail, searchValue, closeDropdown }) {
     const navigate = useNavigate();
 
     const onOpenMail = () => {

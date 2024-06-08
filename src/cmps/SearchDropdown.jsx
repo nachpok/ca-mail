@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MailListPreview } from "./MailListPreview";
+import { SearchMailListPreview } from "./MailListPreview";
 import { useNavigate } from "react-router-dom";
 
 //TODO incode the search text
@@ -53,7 +53,7 @@ export function SearchDropdown({ fetchMailsByText }) {
             {isSearchOpen && filteredMails.length > 0 && (
                 <ul className="dropdown-list" onMouseDown={handleMouseDown}>
                     {filteredMails.map((mail) => (
-                        <MailListPreview key={mail.id} mail={mail} searchValue={searchValue} closeDropdown={closeDropdown} />
+                        <SearchMailListPreview key={mail.id} mail={mail} searchValue={searchValue} closeDropdown={closeDropdown} />
                     ))}
                     <li className="dropdown-footer" onClick={viewAllSearchResults}>All search results for "{searchValue}"</li>
                 </ul>
