@@ -35,16 +35,28 @@ export function SearchDropdown({ fetchMailsByText }) {
         setIsSearchOpen(false);
     }
 
+    function onClear() {
+        setSearchValue('');
+        setFilteredMails([]);
+    }
+    function handleInput(e) {
+        const value = e.target.value;
+        setSearchValue(value);
+        if (value === '') {
+            onClear();
+        }
+    }
+
     return (
         <section className="search-dropdown">
             <div className="search-bar">
                 <div className={`search-container ${isSearchOpen ? "open" : ""} ${filteredMails.length > 0 ? "list" : ''}`}>
                     <span className="search-icon">🔍</span>
                     <input
-                        type="text"
+                        type="search"
                         className="search-input"
                         placeholder="Search mail"
-                        onChange={(e) => setSearchValue(e.target.value)}
+                        onChange={handleInput}
                         onFocus={() => setIsSearchOpen(true)}
                         onBlur={() => setIsSearchOpen(false)}
                     />
