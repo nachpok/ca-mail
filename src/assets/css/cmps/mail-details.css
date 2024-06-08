@@ -2,8 +2,8 @@
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+    height: calc(100vh - 64px - 20px);
+    overflow-y: scroll;
 }
 
 .mail-details-header {
@@ -62,7 +62,8 @@
     flex: 1;
     margin: 4rem;
     width: 600px;
-    overflow: auto;
+    height: calc(100vh - 64px - 20px - 48px - 31px - 48px);
+    /* overflow-y: scroll; */
 }
 
 .mail-details-body-line {

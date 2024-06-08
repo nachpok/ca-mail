@@ -30,16 +30,18 @@ export function MailList({ mails, reloadMails, onUpdateSelectedMails, openDraftB
         checkIds={checkIds}
         onUpdateSelectedMails={onUpdateSelectedMails}
       />
-      {mails.map((mail) => (
-        <MailPreview
-          key={mail.id}
-          mail={mail}
-          checked={checkIds.includes(mail.id)}
-          checkPreview={checkPreview}
-          openDraftById={openDraftById}
-          onUpdateSelectedMails={onUpdateSelectedMails}
-        />
-      ))}
+      <div className="mail-preview-list">
+        {mails.map((mail) => (
+          <MailPreview
+            key={mail.id}
+            mail={mail}
+            checked={checkIds.includes(mail.id)}
+            checkPreview={checkPreview}
+            openDraftById={openDraftById}
+            onUpdateSelectedMails={onUpdateSelectedMails}
+          />
+        ))}
+      </div>
     </section>
   );
 }
