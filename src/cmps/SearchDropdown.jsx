@@ -47,6 +47,12 @@ export function SearchDropdown({ fetchMailsByText }) {
         }
     }
 
+    function handleKeyDown(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            viewAllSearchResults();
+        }
+    }
     return (
         <section className="search-dropdown">
             <div className="search-bar">
@@ -59,6 +65,7 @@ export function SearchDropdown({ fetchMailsByText }) {
                         onChange={handleInput}
                         onFocus={() => setIsSearchOpen(true)}
                         onBlur={() => setIsSearchOpen(false)}
+                        onKeyDown={handleKeyDown}
                     />
                 </div>
             </div>
