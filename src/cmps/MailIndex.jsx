@@ -7,6 +7,7 @@ import { SideBar } from "./SideBar.jsx";
 import { ComposeMailModal } from "./ComposeMailModal.jsx";
 import { Loader } from "./Loader.jsx";
 import { useNavigate } from "react-router-dom";
+import { showSuccessMsg } from "../services/event-bus.service";
 
 export function MailIndex() {
   const navigate = useNavigate();
@@ -79,12 +80,40 @@ export function MailIndex() {
 
   async function onUpdateSelectedMails(action, ids) {
     let selectedMails = mails.filter((mail) => ids.includes(mail.id));
-
+    let text = "";
+    let undo = () => { }
     switch (action) {
       case 'delete':
         selectedMails = selectedMails.filter((mail) => mail.removedAt === null);
         for (const mail of selectedMails) {
           await mailService.updateMail({ ...mail, removedAt: new Date() });
+        }
+        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations moved to Trash.` : "Conversation moved to Trash."
+        undo = async () => {
+          for (const mail of selectedMails) {
+            await mailService.updateMail({ ...mail, removedAt: null });
+          }
+        }
+        break;
+
+      case 'restore':
+        selectedMails = selectedMails.filter((mail) => mail.removedAt !== null);
+        for (const mail of selectedMails) {
+          await mailService.updateMail({ ...mail, removedAt: null });
+        }
+        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations restored.` : "Conversation restored."
+        break;
+
+      case 'read':
+        selectedMails = selectedMails.filter((mail) => mail.isRead === false);
+        for (const mail of selectedMails) {
+          await mailService.updateMail({ ...mail, isRead: true });
+        }
+        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations marked as read.` : "Conversation marked as read."
+        undo = async () => {
+          for (const mail of selectedMails) {
+            await mailService.updateMail({ ...mail, isRead: false });
+          }
         }
         break;
 
@@ -93,6 +122,12 @@ export function MailIndex() {
         for (const mail of selectedMails) {
           await mailService.updateMail({ ...mail, isRead: false });
         }
+        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations marked as unread.` : "Conversation marked as unread."
+        undo = async () => {
+          for (const mail of selectedMails) {
+            await mailService.updateMail({ ...mail, isRead: true });
+          }
+        }
         break;
 
       case 'archive':
@@ -100,6 +135,20 @@ export function MailIndex() {
         for (const mail of selectedMails) {
           await mailService.updateMail({ ...mail, isArchived: true });
         }
+        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations archived.` : "Conversation archived."
+        undo = async () => {
+          for (const mail of selectedMails) {
+            await mailService.updateMail({ ...mail, isArchived: false });
+          }
+        }
+        break;
+
+      case 'unarchive':
+        selectedMails = selectedMails.filter((mail) => mail.isArchived === true);
+        for (const mail of selectedMails) {
+          await mailService.updateMail({ ...mail, isArchived: false });
+        }
+        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations unarchived.` : "Conversation unarchived."
         break;
 
       case 'star':
@@ -109,15 +158,18 @@ export function MailIndex() {
         }
         break;
 
-      case 'read':
-        selectedMails = selectedMails.filter((mail) => mail.isRead === false);
-        for (const mail of selectedMails) {
-          await mailService.updateMail({ ...mail, isRead: true });
-        }
-        break;
+
 
       default:
         throw new Error('Invalid action type');
+    }
+    const undeAndRefresh = async () => {
+      //Notice, undo needs to be async 
+      await undo()
+      await fetchMails()
+    }
+    if (selectedMails.length > 0) {
+      showSuccessMsg(text, undeAndRefresh);
     }
 
     if (isMailDetailsRoute()) {
@@ -132,9 +184,10 @@ export function MailIndex() {
       const folder = pathSegments.join("/");
 
       navigate(folder);
-    } else {
+    } else if (selectedMails.length > 0) {
       await fetchMails();
     }
+
   }
 
 

@@ -1,6 +1,7 @@
 import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { MailIndex } from "./cmps/MailIndex";
 import { MailDetails } from "./cmps/MailDetails";
+import { UserMsg } from "./cmps/UserMsg";
 
 export function App() {
   return (
@@ -17,6 +18,7 @@ export function App() {
               <Route path=":mailId" element={<MailDetails />} />
             </Route>
           </Routes>
+          <UserMsg />
         </main>
       </section>
     </Router>
