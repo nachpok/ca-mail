@@ -8,19 +8,34 @@ export function SearchDropdown({ fetchMailsByText }) {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [filteredMails, setFilteredMails] = useState([]);
     const [searchValue, setSearchValue] = useState('')
+    const [last7Days, setLast7Days] = useState(false);
+    const [fromMe, setFromMe] = useState(false);
+    const [hasAttachments, setHasAttachments] = useState(false);
+
     useEffect(() => {
         async function fetchData() {
-            if (searchValue.length > 2) {
+            if (searchValue !== '' || hasAttachments || last7Days || fromMe) {
                 try {
-                    const mails = await fetchMailsByText(searchValue);
-                    setFilteredMails(mails.slice(0, 5));
+                    const filters = {
+                        hasAttachments: hasAttachments,
+                        last7Days: last7Days,
+                        fromMe: fromMe
+                    }
+                    try {
+                        const mails = await fetchMailsByText(searchValue, filters);
+                        if (mails) {
+                            setFilteredMails(mails.slice(0, 5));
+                        }
+                    } catch (e) {
+                        console.error(e)
+                    }
                 } catch (err) {
                     console.error(err);
                 }
             }
         }
         fetchData();
-    }, [searchValue]);
+    }, [searchValue, hasAttachments, last7Days, fromMe]);
 
     function handleMouseDown(e) {
         e.preventDefault();
@@ -69,12 +84,17 @@ export function SearchDropdown({ fetchMailsByText }) {
                     />
                 </div>
             </div>
-            {isSearchOpen && filteredMails.length > 0 && (
+            {isSearchOpen && (
                 <ul className="dropdown-list" onMouseDown={handleMouseDown}>
+                    <li className="dropdown-header">
+                        <button className={`dropdown-header-button ${hasAttachments ? "active" : ""}`} onClick={() => { setHasAttachments(prev => !prev) }}>Has Attachments</button>
+                        <button className={`dropdown-header-button ${last7Days ? "active" : ""}`} onClick={() => { setLast7Days(prev => !prev) }}>Last 7 days</button>
+                        <button className={`dropdown-header-button ${fromMe ? "active" : ""}`} onClick={() => { setFromMe(prev => !prev) }}>From me</button>
+                    </li>
                     {filteredMails.map((mail) => (
                         <SearchMailListPreview key={mail.id} mail={mail} searchValue={searchValue} closeDropdown={closeDropdown} />
                     ))}
-                    <li className="dropdown-footer" onClick={viewAllSearchResults}>All search results for "{searchValue}"</li>
+                    <li className="dropdown-footer" onClick={viewAllSearchResults}>{filteredMails.length > 0 && `All search results for "${searchValue}"`}</li>
                 </ul>
             )}
         </section>

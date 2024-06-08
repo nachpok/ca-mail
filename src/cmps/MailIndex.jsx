@@ -32,10 +32,11 @@ export function MailIndex() {
   }, [location.pathname]);
 
 
-  async function fetchMailsByText(text) {
+  async function fetchMailsByText(text, filters) {
+
     try {
-      if (text !== '' && text.length > 2) {
-        const searchMails = await mailService.queryByText(text);
+      if (text !== '' || filters.hasAttachments || filters.last7Days || filters.fromMe) {
+        const searchMails = await mailService.queryByText(text, filters);
         return searchMails;
       }
     } catch (error) {

@@ -53,16 +53,39 @@ async function query(folder) {
     return { mails, unreadCounters }
 }
 
-async function queryByText(text) {
-    let mails = await storageService.query(MAIL_KEY);
-    mails = mails.filter(mail =>
-        mail.subject?.toLowerCase().includes(text.toLowerCase()) ||
-        mail.body?.toLowerCase().includes(text.toLowerCase()) ||
-        mail.fromName?.toLowerCase().includes(text.toLowerCase()) ||
-        mail.toName?.toLowerCase().includes(text.toLowerCase()) ||
-        mail.from?.toLowerCase().includes(text.toLowerCase()) ||
-        mail.to?.toLowerCase().includes(text.toLowerCase())
-    );
+async function queryByText(text, filters) {
+
+    if (!filters) return [];
+    const { hasAttachments, last7Days, fromMe } = filters;
+    let mails = []
+    try {
+        mails = await storageService.query(MAIL_KEY);
+    } catch (err) {
+        console.log(err)
+    }
+
+    const now = Date.now();
+    const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
+
+    if (text !== "") {
+        mails = mails.filter(mail =>
+            mail.subject?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.body?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.fromName?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.toName?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.from?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.to?.toLowerCase().includes(text.toLowerCase())
+        );
+    }
+
+    if (last7Days) {
+        mails = mails.filter(mail => mail.sentAt >= sevenDaysAgo);
+    }
+
+    if (fromMe) {
+        mails = mails.filter(mail => mail.from === loggedinUser.email);
+    }
+
     mails = mails.sort((a, b) => b.sentAt - a.sentAt);
     return mails;
 }
