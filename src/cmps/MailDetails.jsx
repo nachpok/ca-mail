@@ -49,26 +49,28 @@ export function MailDetails() {
         onUpdateSelectedMails={onUpdateSelectedMails}
         checkIds={[mail.id]}
       />
-      <header className="mail-details-header">
-        <h1>{mail.subject}</h1>
-      </header>
-      <header className="mail-details-meta">
-        <div className="mail-details-meta-subject">
-          <p className="mail-details-meta-item">
-            {mail.fromName} &lt;{mail.from}&gt;
-          </p>
-        </div>
-        <div className="mail-details-meta-subject">
-          <p className="mail-details-meta-item">{parseDate(mail.sentAt)}</p>
-          <StarCheckbox
-            cb={onStar}
-            defaultChecked={mail.isStarred}
-            className="mail-preview-star-checkbox mail-details-meta-item"
-          />
-          <div className="btn mail-details-btn">
-            <IoReturnUpBack />
+      <header>
+        <article className="mail-details-title">
+          <h1>{mail.subject}</h1>
+        </article>
+        <article className="mail-details-meta">
+          <div className="mail-details-meta-subject">
+            <p className="mail-details-meta-item">
+              {mail.fromName} &lt;{mail.from}&gt;
+            </p>
           </div>
-        </div>
+          <div className="mail-details-meta-subject">
+            <p className="mail-details-meta-item">{parseDate(mail.sentAt)}</p>
+            <StarCheckbox
+              cb={onStar}
+              defaultChecked={mail.isStarred}
+              className="mail-preview-star-checkbox mail-details-meta-item"
+            />
+            <div className="btn mail-details-btn">
+              <IoReturnUpBack />
+            </div>
+          </div>
+        </article>
       </header>
       <main className="mail-details-body">
         {breakBody.map((line, idx) => (
