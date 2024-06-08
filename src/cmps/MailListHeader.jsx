@@ -14,7 +14,7 @@ export function MailListHeader({ reloadMails, onSelectAll, checkIds, onUpdateSel
 
     return (
         <section className="mail-list-header">
-            <div className=".mail-details-btn-no-hover">
+            <div className="select-all">
                 <input type='checkbox' onChange={(e) => onSelectAll(e)} />
             </div>
             {

@@ -37,6 +37,7 @@ export function MailList({ mails, reloadMails, onUpdateSelectedMails, openDraftB
           checked={checkIds.includes(mail.id)}
           checkPreview={checkPreview}
           openDraftById={openDraftById}
+          onUpdateSelectedMails={onUpdateSelectedMails}
         />
       ))}
     </section>

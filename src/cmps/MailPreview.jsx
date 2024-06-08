@@ -4,8 +4,10 @@ import { utilService } from "../services/util.service.js";
 import { Link, useLocation } from "react-router-dom";
 import { mailService } from "../services/mail.service.js";
 import { useNavigate } from "react-router-dom";
+import { MailPreviewActions } from "./MailPreviewActions.jsx";
 
-export function MailPreview({ mail, checked, checkPreview, openDraftById }) {
+export function MailPreview({ mail, checked, checkPreview, openDraftById, onUpdateSelectedMails }) {
+  const [isHover, setIsHover] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(checked);
@@ -52,6 +54,8 @@ export function MailPreview({ mail, checked, checkPreview, openDraftById }) {
       to={!mail.isDraft && `${location.pathname}/${mail.id}`}
       className={`mail-preview ${mail.isRead || isSent ? "mail-preview-read" : "mail-preview-unread"
         }`}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
     >
       <aside className="mail-preview-aside">
         <div className="mail-preview-checkbox-container" onClick={e => e.preventDefault()}>
@@ -75,9 +79,11 @@ export function MailPreview({ mail, checked, checkPreview, openDraftById }) {
         <p className="mail-preview-body">{mail.body}</p>
       </main>
       <aside className="mail-preview-date-container">
-        <p className="mail-preview-date">
-          {utilService.formatDate(mail.sentAt)}
-        </p>
+        {isHover ? <MailPreviewActions onUpdateSelectedMails={onUpdateSelectedMails} checkId={[mail.id]} /> : (
+          <p className="mail-preview-date">
+            {utilService.formatDate(mail.sentAt)}
+          </p>
+        )}
       </aside>
     </Link>
   );

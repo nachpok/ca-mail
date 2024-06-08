@@ -1,0 +1,22 @@
+.mail-preview-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.mail-preview-actions-btn {
+    font-size: 1.2rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    /* margin: 0.5rem;
+    padding: 0.5rem; */
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.mail-preview-actions-btn:hover {
+    background-color: rgb(201, 186, 186);
+}
