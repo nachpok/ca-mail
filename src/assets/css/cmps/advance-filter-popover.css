@@ -1,10 +1,76 @@
-.advance-filter-popover {
+.advanced-filter-popover {
     position: absolute;
     width: 500px;
     max-width: 1000px;
     background-color: #fff;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     padding: 10px;
-    border: 1px solid #815e5e;
+    border: 1px solid #d8baba;
     z-index: 1000;
+}
+
+.advanced-filter-popover .input-field {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.advanced-filter-popover .input-field .input-label {
+    width: 150px;
+}
+
+.advanced-filter-popover .input-field .popover-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #d8baba;
+}
+
+
+.advanced-filter-popover-input:focus {
+    border-bottom: 1px solid #7150f3;
+}
+
+.advanced-filter-popover .input-field .popover-select {
+    flex: 1;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #d8baba;
+}
+
+.advanced-filter-popover .input-field .popover-date {
+    flex: 1;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #d8baba;
+}
+
+.advanced-filter-popover .button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.advanced-filter-popover .button-container .btn {
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.advanced-filter-popover .button-container .btn.search-btn {
+    background-color: #7150f3;
+    color: #fff;
+}
+
+.advanced-filter-popover .button-container .btn.search-btn:hover {
+    background-color: #6346c9;
+}
+
+.advanced-filter-popover .button-container .btn:hover {
+    background-color: #d7d1d1;
 }

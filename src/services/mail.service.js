@@ -84,38 +84,70 @@ async function queryByAdvancedSearch(text, filters, limit = 0) {
 
     if (!filters) return [];
 
-    let mails = []
+    let mailsToFilter = []
     try {
-        mails = await storageService.query(MAIL_KEY);
+        if (filters.search) {
+            const { mails } = await query(filters.search);
+            mailsToFilter = mails;
+        } else {
+            mailsToFilter = await storageService.query(MAIL_KEY);
+        }
+
     } catch (err) {
         console.log(err)
     }
 
-    if (text !== "") {
-        mails = mails.filter(mail =>
-            mail.subject?.toLowerCase().includes(text.toLowerCase()) ||
-            mail.body?.toLowerCase().includes(text.toLowerCase()) ||
-            mail.fromName?.toLowerCase().includes(text.toLowerCase()) ||
-            mail.toName?.toLowerCase().includes(text.toLowerCase()) ||
-            mail.from?.toLowerCase().includes(text.toLowerCase()) ||
-            mail.to?.toLowerCase().includes(text.toLowerCase())
+    if (text !== "" || filters.hastWords) {
+        let searchText = text.toLowerCase();
+        if (filters.hastWords) {
+            searchText = filters.hastWords.toLowerCase();
+        }
+        mailsToFilter = mailsToFilter.filter(mail =>
+            mail.subject?.toLowerCase().includes(searchText) ||
+            mail.body?.toLowerCase().includes(searchText) ||
+            mail.fromName?.toLowerCase().includes(searchText) ||
+            mail.toName?.toLowerCase().includes(searchText) ||
+            mail.from?.toLowerCase().includes(searchText) ||
+            mail.to?.toLowerCase().includes(searchText)
         );
+    }
+
+
+
+    if (filters.from) {
+        mailsToFilter = mailsToFilter.filter(mail => mail.from === filters.from);
+    }
+
+    if (filters.to) {
+        mailsToFilter = mailsToFilter.filter(mail => mail.to === filters.to);
+    }
+
+    if (filters.subject) {
+        mailsToFilter = mailsToFilter.filter(mail => mail.subject.toLowerCase().includes(filters.subject.toLowerCase()));
+    }
+
+    if (filters.doesntHave) {
+        mailsToFilter = mailsToFilter.filter(mail => !mail.subject.toLowerCase().includes(filters.doesntHave.toLowerCase()));
     }
 
     if (filters.datestart && filters.daterangetype === "custom_range") {
         const startDate = new Date(filters.datestart);
-        mails = mails.filter(mail => mail.sentAt >= startDate);
+        mailsToFilter = mailsToFilter.filter(mail => mail.sentAt >= startDate);
     }
 
-    if (filters.from) {
-        mails = mails.filter(mail => mail.from === filters.from);
+    if (filters.dateWithinSelect && filters.dateWithinInput) {
+        const startDate = new Date(filters.dateWithinInput);
+        const endDate = new Date(filters.dateWithinInput);
+        mailsToFilter = mailsToFilter.filter(mail => mail.sentAt >= startDate && mail.sentAt <= endDate);
     }
 
-    mails = mails.sort((a, b) => b.sentAt - a.sentAt);
+
+    console.log(mailsToFilter);
+    mailsToFilter = mailsToFilter.sort((a, b) => b.sentAt - a.sentAt);
     if (limit >= 1) {
-        mails = mails.slice(0, limit);
+        mailsToFilter = mailsToFilter.slice(0, limit);
     }
-    return mails;
+    return mailsToFilter;
 }
 
 function countUnreadMailsByFolder(mails) {
@@ -152,7 +184,7 @@ function save(mail) {
 }
 
 function createDraft(mail) {
-    const newMail = { id: utilService.makeId(), sentAt: null, removedAt: null, isRead: false, isStarred: false, isArchived: false, from: loggedinUser.email, to: mail.to, fromName: loggedinUser.fullname, toName: mail.toName, isDraft: true }
+    const newMail = { id: utilService.makeId(), sentAt: Date.now(), removedAt: null, isRead: false, isStarred: false, isArchived: false, from: loggedinUser.email, to: mail.to, fromName: loggedinUser.fullname, toName: mail.toName, isDraft: true }
     return storageService.post(MAIL_KEY, newMail)
 }
 

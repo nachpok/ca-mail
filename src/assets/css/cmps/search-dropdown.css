@@ -103,7 +103,7 @@
     justify-content: start;
 }
 
-.dropdown-header-button {
+.search-dropdown .dropdown-list .dropdown-header button {
     background: #f0f0f0;
     border: 1px solid #ccc;
     outline: none;
@@ -117,13 +117,13 @@
     justify-content: center;
 }
 
-.dropdown-header-button.active {
+.search-dropdown .dropdown-list .dropdown-header button.active {
     background: #cee9fa;
     border: 1px solid #cee9fa;
     padding-left: 24px;
 }
 
-.dropdown-header-button.active::before {
+.search-dropdown .dropdown-list .dropdown-header button.active::before {
     content: '✔';
     position: absolute;
     left: 8px;
