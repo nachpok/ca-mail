@@ -67,13 +67,13 @@ export default function AdvanceFilterPopover({ onClose, onSubmit }) {
                 </select>
             </div>
             <div className="button-container">
-                <button className="btn" onClick={onClose}>
+                <button type="button" className="btn" onClick={onClose}>
                     Close
                 </button>
-                <button className="btn" onClick={(e) => clearFilter(e)}>
+                <button type="button" className="btn" onClick={(e) => clearFilter(e)}>
                     Clear filter
                 </button>
-                <button className="btn search-btn" onClick={(e) => searchFilter(e)}>
+                <button type="submit" className="btn search-btn" onClick={(e) => searchFilter(e)}>
                     Search
                 </button>
             </div>
