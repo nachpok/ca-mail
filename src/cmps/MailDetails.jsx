@@ -24,16 +24,14 @@ export function MailDetails() {
   }
 
   function onStar() {
-    onUpdateSelectedMails("star", [mail.id]);
+    onUpdateSelectedMails(mail.isStarred ? "unstar" : "star", [mail.id]);
   }
 
   const goBack = () => {
     const targetPath = `/${location.pathname.split("/")[1]}`;
-    //TODO - Issue - when i get here from search and then i go back i want to go back to the previous folder,
-    //not the search folder 
-    //How can this be done?
+
     if (location.pathname.includes("search")) {
-      navigate(`/inbox`);
+      // Gmail disables this
     } else {
       navigate(targetPath);
     }
@@ -42,44 +40,44 @@ export function MailDetails() {
   if (!mail) return <div className="loader-container"><Loader /></div>;
 
   const breakBody = mail.body.split("\n");
+
   return (
-    <article className="mail-details-outlet">
+    <article className="mail-details">
       <MailActions
         goBack={goBack}
         onUpdateSelectedMails={onUpdateSelectedMails}
         checkIds={[mail.id]}
       />
-      <header>
-        <article className="mail-details-title">
+      <header className="header">
+        <article className="title">
           <h1>{mail.subject}</h1>
         </article>
-        <article className="mail-details-meta">
-          <div className="mail-details-meta-subject">
-            <p className="mail-details-meta-item">
-              {mail.fromName} &lt;{mail.from}&gt;
-            </p>
+        <article className="meta">
+          <div className="from">
+            {mail.fromName} &lt;{mail.from}&gt;
           </div>
-          <div className="mail-details-meta-subject">
-            <p className="mail-details-meta-item">{parseDate(mail.sentAt)}</p>
+          <div className="sub-header">
+            <div className="">{parseDate(mail.sentAt)}</div>
             <StarCheckbox
               cb={onStar}
               defaultChecked={mail.isStarred}
-              className="mail-preview-star-checkbox mail-details-meta-item"
+              className="item btn"
             />
-            <div className="btn mail-details-btn">
+            <div className="item btn">
               <IoReturnUpBack />
             </div>
           </div>
         </article>
       </header>
-      <main className="mail-details-body">
+      <main className="body">
         {breakBody.map((line, idx) => (
-          <p key={idx} className="mail-details-body-line">{line}<br /></p>
+          <p key={idx} className="text-line">{line}<br /></p>
         ))}
       </main>
     </article>
   );
 }
+
 function parseDate(date) {
   return new Date(date).toLocaleDateString();
 }
