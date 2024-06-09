@@ -163,13 +163,14 @@ export function MailIndex() {
       default:
         throw new Error('Invalid action type');
     }
-    const undeAndRefresh = async () => {
+    const undoAndRefresh = async () => {
       //Notice, undo needs to be async 
       await undo()
       await fetchMails()
     }
+
     if (selectedMails.length > 0) {
-      showSuccessMsg(text, undeAndRefresh);
+      showSuccessMsg(text, undoAndRefresh);
     }
 
     if (isMailDetailsRoute()) {
@@ -193,7 +194,7 @@ export function MailIndex() {
 
   async function onComposeMailModal(isOpen, mailId) {
     // refresh if creating new mail when sent Mails are in view
-    if (!isOpen && (currentUrl.includes("/sent") || currentUrl.includes("/all-mails"))) {
+    if (!isOpen && (currentUrl.includes("/sent") || currentUrl.includes("/all-mails") || currentUrl.includes("/drafts"))) {
       await fetchMails();
 
     }

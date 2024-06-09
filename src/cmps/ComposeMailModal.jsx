@@ -31,6 +31,7 @@ export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEd
             setTo(to || '')
             setSubject(subject || '')
             setMessage(body || '')
+            setDraftId(currentDraftId)
         }
         if (currentDraftId && currentDraftId.includes('MUIxx')) {
             initDraft()
