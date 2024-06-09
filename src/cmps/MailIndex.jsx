@@ -32,11 +32,11 @@ export function MailIndex() {
   }, [location.pathname]);
 
 
-  async function fetchMailsByText(text, filters) {
+  async function fetchMailsByText(text) {
 
     try {
-      if (text !== '' || filters.hasAttachments || filters.last7Days || filters.fromMe) {
-        const searchMails = await mailService.queryByText(text, filters);
+      if (text !== '') {
+        const searchMails = await mailService.queryByText(text);
         return searchMails;
       }
     } catch (error) {
@@ -44,6 +44,15 @@ export function MailIndex() {
     }
   }
 
+  async function fetchMailsByAdvancedSearch(text, filters) {
+    console.log("MailIndex, fetchMailsByAdvancedSearch", text, filters)
+    try {
+      // const searchMails = await mailService.queryByAdvancedSearch(text, filters);
+      // return searchMails;
+    } catch (error) {
+      console.error("Having issues with loading search mails:", error);
+    }
+  }
   async function fetchMails() {
     setLoadingMails(true);
     const folder = currentUrl.split("/")[1];
@@ -62,12 +71,16 @@ export function MailIndex() {
       } else {
         const searchByText = currentUrl.split("/")[2];
         const searchMails = await fetchMailsByText(searchByText);
+        console.log("searchMails", searchMails)
         setMails(searchMails);
         setLoadingMails(false);
       }
       return;
     }
-
+    if (folder === "advanced-search") {
+      //TODO decode filters and call fetchMailsByAdvancedSearch
+      return;
+    }
     try {
       const { mails, unreadCounters } = await mailService.query(folder);
       setMails(mails);
@@ -243,6 +256,7 @@ export function MailIndex() {
     <section className="mail-index">
       <AppHeader
         fetchMailsByText={fetchMailsByText}
+        fetchMailsByAdvancedSearch={fetchMailsByAdvancedSearch}
       />
       <section className="content">
         <SideBar onComposeClick={onComposeClick} unreadCounters={unreadCounters} />

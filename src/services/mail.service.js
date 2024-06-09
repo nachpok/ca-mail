@@ -14,7 +14,8 @@ export const mailService = {
     updateMail,
     loggedinUser,
     queryByText,
-    createDraft
+    createDraft,
+    queryByAdvancedSearch
 }
 
 
@@ -53,7 +54,30 @@ async function query(folder) {
     return { mails, unreadCounters }
 }
 
-async function queryByText(text, filters) {
+async function queryByText(text) {
+    let mails = []
+    try {
+        mails = await storageService.query(MAIL_KEY);
+    } catch (err) {
+        console.log(err)
+    }
+
+    if (text !== "") {
+        mails = mails.filter(mail =>
+            mail.subject?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.body?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.fromName?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.toName?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.from?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.to?.toLowerCase().includes(text.toLowerCase())
+        );
+    }
+
+    mails = mails.sort((a, b) => b.sentAt - a.sentAt);
+    return mails;
+}
+
+async function queryByAdvancedSearch(text, filters) {
 
     if (!filters) return [];
     const { hasAttachments, last7Days, fromMe } = filters;

@@ -3,7 +3,9 @@ import { SearchMailListPreview } from "./MailListPreview";
 import { useNavigate } from "react-router-dom";
 
 //TODO incode the search text
-export function SearchDropdown({ fetchMailsByText }) {
+//TODO on advance search put filters in the url, for example last 7 days and text 'abc':
+//https://mail.google.com/mail/u/1/#advanced-search/from=nachpok%40gmail.com&attach_or_drive=true&query=abc&isrefinement=true&fromdisplay=nachliel+pokroy&datestart=2024-06-03&daterangetype=custom_range
+export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch }) {
     const navigate = useNavigate();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [filteredMails, setFilteredMails] = useState([]);
@@ -22,7 +24,12 @@ export function SearchDropdown({ fetchMailsByText }) {
                         fromMe: fromMe
                     }
                     try {
-                        const mails = await fetchMailsByText(searchValue, filters);
+                        let mails = []
+                        if (searchValue !== "" && !filterSelected()) {
+                            mails = await fetchMailsByText(searchValue);
+                        } else {
+                            mails = await fetchMailsByAdvancedSearch(searchValue, filters);
+                        }
                         if (mails) {
                             setFilteredMails(mails.slice(0, 5));
                         }
@@ -46,7 +53,11 @@ export function SearchDropdown({ fetchMailsByText }) {
     }
 
     function viewAllSearchResults() {
-        navigate(`/search/${searchValue}`)
+        if (searchValue !== "" && !filterSelected()) {
+            navigate(`/search/${searchValue}`)
+        } else if (filterSelected()) {
+            navigate(`/advanced-search/${searchValue}`)
+        }
         setIsSearchOpen(false);
     }
 
@@ -63,11 +74,28 @@ export function SearchDropdown({ fetchMailsByText }) {
     }
 
     function handleKeyDown(e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && (searchValue !== "" || filterSelected())) {
             e.preventDefault();
             viewAllSearchResults();
         }
     }
+
+    function filterSelected() {
+        return hasAttachments || last7Days || fromMe;
+    }
+    const numOfSelectedFilters = Number(!!hasAttachments + !!last7Days + !!fromMe);
+    let searchFotterText = ""
+    if (searchValue !== "" && numOfSelectedFilters > 0) {
+        searchFotterText += `All search results for "${searchValue}" +${numOfSelectedFilters} filter`;
+        numOfSelectedFilters > 1 && (searchFotterText += `s`);
+    } else if (searchValue !== "" && numOfSelectedFilters === 0) {
+        searchFotterText += `All search results for "${searchValue}"`
+    } else if (searchValue === "" && numOfSelectedFilters !== 0) {
+        searchFotterText += `All search results for ${numOfSelectedFilters} filter`
+        numOfSelectedFilters > 1 && (searchFotterText += `s`);
+    }
+
+
     return (
         <section className="search-dropdown">
             <div className="search-bar">
@@ -94,7 +122,7 @@ export function SearchDropdown({ fetchMailsByText }) {
                     {filteredMails.map((mail) => (
                         <SearchMailListPreview key={mail.id} mail={mail} searchValue={searchValue} closeDropdown={closeDropdown} />
                     ))}
-                    <li className="dropdown-footer" onClick={viewAllSearchResults}>{filteredMails.length > 0 && `All search results for "${searchValue}"`}</li>
+                    <li className="dropdown-footer" onClick={viewAllSearchResults}>{searchFotterText !== "" && searchFotterText}</li>
                 </ul>
             )}
         </section>
