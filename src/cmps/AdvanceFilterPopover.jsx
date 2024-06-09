@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 export default function AdvanceFilterPopover({ onClose, onSubmit }) {
     //TODO get list of sent from and sent to, use for autocomplete
+    //TODO dynamic list of folders
     const [filters, setFilters] = useState({});
 
     function onChange(e) {
@@ -14,13 +15,13 @@ export default function AdvanceFilterPopover({ onClose, onSubmit }) {
         setFilters(emptyFilters);
     }
 
-    function searchFilter(e) {
+    function onSubmitSearchForm(e) {
         e.preventDefault();
         onSubmit(filters);
     }
 
     return (
-        <form className="advanced-filter-popover" onSubmit={searchFilter}>
+        <form className="advanced-filter-popover" onSubmit={onSubmitSearchForm}>
             <div className="input-field">
                 <label className="input-label">From</label>
                 <input type="text" className="popover-input" name="from" value={filters.from} onChange={onChange} />
@@ -73,7 +74,7 @@ export default function AdvanceFilterPopover({ onClose, onSubmit }) {
                 <button type="button" className="btn" onClick={(e) => clearFilter(e)}>
                     Clear filter
                 </button>
-                <button type="submit" className="btn search-btn" onClick={(e) => searchFilter(e)}>
+                <button type="submit" className="btn search-btn" onClick={(e) => onSubmitSearchForm(e)}>
                     Search
                 </button>
             </div>

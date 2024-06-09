@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { HomeButton } from "./HomeButton";
 import { SearchDropdown } from "./SearchDropdown";
 export function AppHeader({ fetchMailsByText, fetchMailsByAdvancedSearch }) {
