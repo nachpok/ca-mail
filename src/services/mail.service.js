@@ -142,8 +142,6 @@ async function queryByAdvancedSearch(text, filters, limit = 0) {
         mailsToFilter = mailsToFilter.filter(mail => mail.sentAt >= startDate && mail.sentAt <= endDate);
     }
 
-
-    console.log(mailsToFilter);
     mailsToFilter = mailsToFilter.sort((a, b) => b.sentAt - a.sentAt);
     if (limit >= 1) {
         mailsToFilter = mailsToFilter.slice(0, limit);
