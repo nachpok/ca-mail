@@ -288,12 +288,12 @@ export function MailIndex() {
                 mails={mails}
                 reloadMails={fetchMails}
                 onUpdateSelectedMails={onUpdateSelectedMails}
-                openDraft={handleComposeMailModal}
+                onOpenDraft={handleComposeMailModal}
               />
             )
           )}
           {isComposeMailOpen && (
-            <ComposeMailModal onComposeNewDraft={handleComposeMailModal} onEditDraft={onDraftEdite} />
+            <ComposeMailModal onCloseCompose={handleComposeMailModal} onEditDraft={onDraftEdite} />
           )}
         </main>
       </section>
