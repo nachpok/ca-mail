@@ -29,69 +29,6 @@ export function MailIndex() {
     fetchMails();
   }, [location.pathname]);
 
-
-  async function fetchMailsByText(text, limit = 0) {
-    try {
-      if (text !== '') {
-        const searchMails = await mailService.queryByText(text, limit);
-        return searchMails;
-      }
-    } catch (error) {
-      console.error("Having issues with loading search mails:", error);
-    }
-  }
-
-  async function fetchMailsByAdvancedSearch(text, filters, limit = 0) {
-    try {
-      const searchMails = await mailService.queryByAdvancedSearch(text, filters, limit);
-      return searchMails;
-    } catch (error) {
-      console.error("Having issues with loading search mails:", error);
-    }
-  }
-
-  async function fetchMails() {
-    setLoadingMails(true);
-    const folder = currentUrl.split("/")[1];
-
-    if (folder === "advanced-search") {
-      if (isMailDetailsRoute()) {
-        try {
-          const segments = currentUrl.split("/");
-          const mailId = segments[segments.length - 1];
-          const mail = await mailService.getById(mailId);
-          setMails([mail]);
-          setLoadingMails(false);
-        } catch (error) {
-          console.error("Having issues with loading search mails:", error);
-        }
-        return;
-      }
-
-      const filters = decodeURIComponent(currentUrl.split("/")[2]).split("&")
-      const filtersMap = filters.reduce((acc, filter) => {
-        const [key, value] = filter.split("=");
-        acc[key] = value;
-        return acc;
-      }, {});
-
-      const mails = await fetchMailsByAdvancedSearch(filtersMap.query || "", filtersMap);
-      setMails(mails);
-      setLoadingMails(false);
-      return;
-    }
-
-    try {
-      const { mails, unreadCounters } = await mailService.query(folder);
-      setMails(mails);
-      setUnreadCounters(unreadCounters);
-    } catch (error) {
-      console.error("Having issues with loading mails:", error);
-    } finally {
-      setLoadingMails(false);
-    }
-  }
-
   async function onUpdateSelectedMails(action, ids) {
     let selectedMails = mails.filter((mail) => ids.includes(mail.id));
 
@@ -218,51 +155,118 @@ export function MailIndex() {
 
   }
 
-  async function onComposeMailModal(isOpen, mailId) {
-    // refresh if creating new mail when sent Mails are in view
-    if (!isOpen && (currentUrl.includes("/sent") || currentUrl.includes("/all-mails") || currentUrl.includes("/drafts"))) {
-      await fetchMails();
-
-    }
-    if (isOpen && !mailId) {
-      navigate(location.pathname + "?compose=new");
-    } else if (isOpen && mailId) {
-      navigate(`${location.pathname}/${mailId}`);
-    } else {
-      navigate({ pathname: location.pathname, search: '' });
-    }
-
-    setIsComposeMailOpen(isOpen);
-  };
-
-  async function refeshDrafsOnComposeEdit(updatedMail) {
+  async function onDraftEdite(updatedMail) {
     if (location.pathname.includes("drafts")) {
-      if (mails.find(mail => mail.id === updatedMail.id)) {
+      const existingMail = mails.find(mail => mail.id === updatedMail.id);
+
+      if (existingMail) {
         if (updatedMail.isDraft && updatedMail.removedAt) {
-          await mailService.remove(updatedMail.id)
-          setMails((prevMails) =>
-            prevMails.filter((mail) => mail.id !== updatedMail.id)
-          )
+          await mailService.remove(updatedMail.id);
+          setMails(prevMails =>
+            prevMails.filter(mail => mail.id !== updatedMail.id)
+          );
         } else {
-          setMails((prevMails) =>
-            prevMails.map((mail) => (mail.id === updatedMail.id ? updatedMail : mail))
+          setMails(prevMails =>
+            prevMails.map(mail => (mail.id === updatedMail.id ? updatedMail : mail))
           );
         }
       } else {
-        setMails((prevMails) => [...prevMails, updatedMail]);
+        setMails(prevMails => [...prevMails, updatedMail]);
       }
     }
   }
 
-  function onComposeClick() {
+  function onComposeNewDraft() {
     navigate(location.pathname + "?compose=new");
     setIsComposeMailOpen(true);
   }
+  async function fetchMailsByText(text, limit = 0) {
+    try {
+      if (text !== '') {
+        const searchMails = await mailService.queryByText(text, limit);
+        return searchMails;
+      }
+    } catch (error) {
+      console.error("Having issues with loading search mails:", error);
+    }
+  }
+
+  async function fetchMailsByAdvancedSearch(text, filters, limit = 0) {
+    try {
+      const searchMails = await mailService.queryByAdvancedSearch(text, filters, limit);
+      return searchMails;
+    } catch (error) {
+      console.error("Having issues with loading search mails:", error);
+    }
+  }
+
+  async function fetchMails() {
+    setLoadingMails(true);
+    const folder = currentUrl.split("/")[1];
+
+    if (folder === "advanced-search") {
+      if (isMailDetailsRoute()) {
+        try {
+          const segments = currentUrl.split("/");
+          const mailId = segments[segments.length - 1];
+          const mail = await mailService.getById(mailId);
+          setMails([mail]);
+          setLoadingMails(false);
+        } catch (error) {
+          console.error("Having issues with loading search mails:", error);
+        }
+        return;
+      }
+
+      const filters = decodeURIComponent(currentUrl.split("/")[2]).split("&")
+      const filtersMap = filters.reduce((acc, filter) => {
+        const [key, value] = filter.split("=");
+        acc[key] = value;
+        return acc;
+      }, {});
+
+      const mails = await fetchMailsByAdvancedSearch(filtersMap.query || "", filtersMap);
+      setMails(mails);
+      setLoadingMails(false);
+      return;
+    }
+    //TODO
+    if (folder === 'search') {
+      return;
+    }
+    try {
+      const { mails, unreadCounters } = await mailService.query(folder);
+      setMails(mails);
+      setUnreadCounters(unreadCounters);
+    } catch (error) {
+      console.error("Having issues with loading mails:", error);
+    } finally {
+      setLoadingMails(false);
+    }
+  }
+
+
+
+  async function handleComposeMailModal(isShow) {
+    if (!isShow && isNewMailInView()) {
+      await fetchMails();
+    }
+
+    if (!isShow) {
+      navigate({ pathname: location.pathname, search: '' });
+    }
+
+    setIsComposeMailOpen(isShow);
+  };
 
   function isMailDetailsRoute() {
     const pathSegments = location.pathname.split("/");
     const lastSegment = pathSegments[pathSegments.length - 1];
     return lastSegment.startsWith("MUIxx-");
+  }
+
+  function isNewMailInView() {
+    return location.pathname.includes("drafts") || location.pathname.includes("sent") || location.pathname.includes("all-mails")
   }
 
   return (
@@ -272,7 +276,7 @@ export function MailIndex() {
         fetchMailsByAdvancedSearch={fetchMailsByAdvancedSearch}
       />
       <section className="content">
-        <SideBar onComposeClick={onComposeClick} unreadCounters={unreadCounters} />
+        <SideBar onCompose={onComposeNewDraft} unreadCounters={unreadCounters} />
         <main className="main">
           {isLoadingMails ? (
             <Loader />
@@ -284,13 +288,12 @@ export function MailIndex() {
                 mails={mails}
                 reloadMails={fetchMails}
                 onUpdateSelectedMails={onUpdateSelectedMails}
-                openDraftById={onComposeMailModal}
+                openDraft={handleComposeMailModal}
               />
             )
           )}
           {isComposeMailOpen && (
-            // TODO onDraftEdit..., onCompose...
-            <ComposeMailModal closeComposeMailModal={onComposeMailModal} refeshDrafsOnComposeEdit={refeshDrafsOnComposeEdit} />
+            <ComposeMailModal onComposeNewDraft={handleComposeMailModal} onEditDraft={onDraftEdite} />
           )}
         </main>
       </section>
