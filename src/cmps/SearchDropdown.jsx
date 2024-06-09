@@ -189,7 +189,8 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
             {isAdvanceFilterPopoverOpen &&
                 <article style={{ position: 'relative' }}>
                     <AdvanceFilterPopover onClose={closeSearch} onSubmit={onAdvanceFilterPopoverSubmit} />
-                </article>}
+                </article>
+            }
         </section>
     )
 }
