@@ -6,7 +6,8 @@ import { mailService } from "../services/mail.service.js";
 import { useNavigate } from "react-router-dom";
 import { MailPreviewActions } from "./MailPreviewActions.jsx";
 
-export function MailPreview({ mail, checked, checkPreview, openDraftById, onUpdateSelectedMails }) {
+//TODO disable actions in trash
+export function MailPreview({ mail, checked, checkPreview, openDraft, onUpdateSelectedMails }) {
   const [isHover, setIsHover] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export function MailPreview({ mail, checked, checkPreview, openDraftById, onUpda
   const onPreviewClick = (e) => {
     if (mail.isDraft) {
       e.preventDefault();
-      openDraftById(true, mail.id)
+      openDraft(true)
       navigate({
         pathname: location.pathname,
         search: `?compose=${mail.id}`
