@@ -32,11 +32,10 @@ export function MailIndex() {
   }, [location.pathname]);
 
 
-  async function fetchMailsByText(text) {
-
+  async function fetchMailsByText(text, limit = 0) {
     try {
       if (text !== '') {
-        const searchMails = await mailService.queryByText(text);
+        const searchMails = await mailService.queryByText(text, limit);
         return searchMails;
       }
     } catch (error) {
@@ -44,11 +43,10 @@ export function MailIndex() {
     }
   }
 
-  async function fetchMailsByAdvancedSearch(text, filters) {
-    console.log("MailIndex, fetchMailsByAdvancedSearch", text, filters)
+  async function fetchMailsByAdvancedSearch(text, filters, limit = 0) {
     try {
-      // const searchMails = await mailService.queryByAdvancedSearch(text, filters);
-      // return searchMails;
+      const searchMails = await mailService.queryByAdvancedSearch(text, filters, limit);
+      return searchMails;
     } catch (error) {
       console.error("Having issues with loading search mails:", error);
     }
@@ -79,6 +77,16 @@ export function MailIndex() {
     }
     if (folder === "advanced-search") {
       //TODO decode filters and call fetchMailsByAdvancedSearch
+      const filters = decodeURIComponent(currentUrl.split("/")[2]).split("&")
+      const filtersMap = filters.reduce((acc, filter) => {
+        const [key, value] = filter.split("=");
+        acc[key] = value;
+        return acc;
+      }, {});
+      console.log("filtersMap", filtersMap);
+      const mails = await fetchMailsByAdvancedSearch(filtersMap.query || "", filtersMap);
+      setMails(mails);
+      setLoadingMails(false);
       return;
     }
     try {
@@ -203,7 +211,6 @@ export function MailIndex() {
     }
 
   }
-
 
   async function onComposeMailModal(isOpen, mailId) {
     // refresh if creating new mail when sent Mails are in view

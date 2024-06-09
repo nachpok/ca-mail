@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { SearchMailListPreview } from "./MailListPreview";
 import { useNavigate } from "react-router-dom";
+import { mailService } from "../services/mail.service";
 
 //TODO incode the search text
 //TODO on advance search put filters in the url, for example last 7 days and text 'abc':
 //https://mail.google.com/mail/u/1/#advanced-search/from=nachpok%40gmail.com&attach_or_drive=true&query=abc&isrefinement=true&fromdisplay=nachliel+pokroy&datestart=2024-06-03&daterangetype=custom_range
+//https://mail.google.com/mail/u/1/#advanced-search?query=so&hasAttachments=false&last7Days=true&fromMe=false
 export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch }) {
     const navigate = useNavigate();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -18,26 +20,33 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
         async function fetchData() {
             if (searchValue !== '' || hasAttachments || last7Days || fromMe) {
                 try {
-                    const filters = {
-                        hasAttachments: hasAttachments,
-                        last7Days: last7Days,
-                        fromMe: fromMe
-                    }
-                    try {
-                        let mails = []
-                        if (searchValue !== "" && !filterSelected()) {
-                            mails = await fetchMailsByText(searchValue);
-                        } else {
-                            mails = await fetchMailsByAdvancedSearch(searchValue, filters);
+                    let mails = []
+                    if (searchValue !== "" && !filterSelected()) {
+                        mails = await fetchMailsByText(searchValue, 5);
+                    } else {
+                        const filters = {}
+
+
+                        if (searchValue !== "") {
                         }
-                        if (mails) {
-                            setFilteredMails(mails.slice(0, 5));
+                        if (hasAttachments) {
+                            filters.attach_or_drive = hasAttachments;
                         }
-                    } catch (e) {
-                        console.error(e)
+                        if (last7Days) {
+                            filters.datestart = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                            filters.daterangetype = "custom_range";
+                        }
+                        if (fromMe) {
+                            filters.from = mailService.loggedinUser.email;
+                        }
+
+                        mails = await fetchMailsByAdvancedSearch(searchValue, filters, 5);
                     }
-                } catch (err) {
-                    console.error(err);
+                    if (mails) {
+                        setFilteredMails(mails.slice(0, 5));
+                    }
+                } catch (e) {
+                    console.error(`SearchDropdown.fetchData.Error fetching mails: ${e}`)
                 }
             }
         }
@@ -56,7 +65,25 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
         if (searchValue !== "" && !filterSelected()) {
             navigate(`/search/${searchValue}`)
         } else if (filterSelected()) {
-            navigate(`/advanced-search/${searchValue}`)
+            const paramsObj = {
+                isrefinement: true
+            }
+            if (searchValue !== "") {
+                paramsObj.query = searchValue;
+            }
+            if (hasAttachments) {
+                paramsObj.attach_or_drive = hasAttachments;
+            }
+            if (last7Days) {
+                paramsObj.datestart = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                paramsObj.daterangetype = "custom_range";
+            }
+            if (fromMe) {
+                paramsObj.from = mailService.loggedinUser.email;
+                paramsObj.fromdisplay = mailService.loggedinUser.fullname;
+            }
+            const advancedSearchParams = new URLSearchParams(paramsObj).toString();
+            navigate(`/advanced-search/${advancedSearchParams}`);
         }
         setIsSearchOpen(false);
     }
@@ -64,6 +91,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
     function onClear() {
         setSearchValue('');
         setFilteredMails([]);
+        setIsSearchOpen(false);
     }
     function handleInput(e) {
         const value = e.target.value;
@@ -122,7 +150,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
                     {filteredMails.map((mail) => (
                         <SearchMailListPreview key={mail.id} mail={mail} searchValue={searchValue} closeDropdown={closeDropdown} />
                     ))}
-                    <li className="dropdown-footer" onClick={viewAllSearchResults}>{searchFotterText !== "" && searchFotterText}</li>
+                    <li className="dropdown-footer" onClick={viewAllSearchResults}><span className="dropdown-footer-summary">{searchFotterText !== "" && searchFotterText}</span> <span className="dropdown-footer-press-enter">Press ENTER</span></li>
                 </ul>
             )}
         </section>

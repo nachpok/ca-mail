@@ -54,7 +54,7 @@ async function query(folder) {
     return { mails, unreadCounters }
 }
 
-async function queryByText(text) {
+async function queryByText(text, limit = 0) {
     let mails = []
     try {
         mails = await storageService.query(MAIL_KEY);
@@ -74,22 +74,22 @@ async function queryByText(text) {
     }
 
     mails = mails.sort((a, b) => b.sentAt - a.sentAt);
+    if (limit >= 1) {
+        mails = mails.slice(0, limit);
+    }
     return mails;
 }
 
-async function queryByAdvancedSearch(text, filters) {
+async function queryByAdvancedSearch(text, filters, limit = 0) {
 
     if (!filters) return [];
-    const { hasAttachments, last7Days, fromMe } = filters;
+
     let mails = []
     try {
         mails = await storageService.query(MAIL_KEY);
     } catch (err) {
         console.log(err)
     }
-
-    const now = Date.now();
-    const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
 
     if (text !== "") {
         mails = mails.filter(mail =>
@@ -102,15 +102,19 @@ async function queryByAdvancedSearch(text, filters) {
         );
     }
 
-    if (last7Days) {
-        mails = mails.filter(mail => mail.sentAt >= sevenDaysAgo);
+    if (filters.datestart && filters.daterangetype === "custom_range") {
+        const startDate = new Date(filters.datestart);
+        mails = mails.filter(mail => mail.sentAt >= startDate);
     }
 
-    if (fromMe) {
-        mails = mails.filter(mail => mail.from === loggedinUser.email);
+    if (filters.from) {
+        mails = mails.filter(mail => mail.from === filters.from);
     }
 
     mails = mails.sort((a, b) => b.sentAt - a.sentAt);
+    if (limit >= 1) {
+        mails = mails.slice(0, limit);
+    }
     return mails;
 }
 
