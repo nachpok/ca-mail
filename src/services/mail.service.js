@@ -32,6 +32,7 @@ async function query(folder) {
 
     switch (folder) {
         case 'all-mail':
+            mails = mails.filter(mail => mail.removedAt === null);
             break;
         case 'inbox':
             mails = mails.filter(mail => mail.to === loggedinUser.email && mail.removedAt === null && mail.isArchived === false);
