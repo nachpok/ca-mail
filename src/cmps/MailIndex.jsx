@@ -20,8 +20,6 @@ export function MailIndex() {
   });
 
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
-  //TODO array fo objects with subject to body and id
-  //getEmptyMail returns empty obj with temp id 
   const [isLoadingMails, setLoadingMails] = useState(false);
   const location = useLocation();
   const currentUrl = location.pathname;
@@ -51,29 +49,10 @@ export function MailIndex() {
       console.error("Having issues with loading search mails:", error);
     }
   }
+
   async function fetchMails() {
     setLoadingMails(true);
     const folder = currentUrl.split("/")[1];
-    //avoid refetching when back from detals to list of searched 
-    if (folder === "search") {
-      if (currentUrl.split("/").length > 3) {
-        const mailId = currentUrl.split("/")[3];
-        try {
-          const mail = await mailService.getById(mailId);
-          setMails([mail]);
-          setLoadingMails(false);
-        } catch (error) {
-          console.error("Having issues with loading search mails:", error);
-        }
-        return;
-      } else {
-        const searchByText = currentUrl.split("/")[2];
-        const searchMails = await fetchMailsByText(searchByText);
-        setMails(searchMails);
-        setLoadingMails(false);
-      }
-      return;
-    }
 
     if (folder === "advanced-search") {
       if (isMailDetailsRoute()) {
@@ -115,16 +94,18 @@ export function MailIndex() {
 
   async function onUpdateSelectedMails(action, ids) {
     let selectedMails = mails.filter((mail) => ids.includes(mail.id));
-    let text = "";
-    let undo = () => { }
+
+    let updateNotificationText = "";
+    let onUndoAction = () => { }
+
     switch (action) {
       case 'delete':
         selectedMails = selectedMails.filter((mail) => mail.removedAt === null);
         for (const mail of selectedMails) {
           await mailService.updateMail({ ...mail, removedAt: new Date() });
         }
-        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations moved to Trash.` : "Conversation moved to Trash."
-        undo = async () => {
+        updateNotificationText = selectedMails.length > 1 ? `${selectedMails.length} Conversations moved to Trash.` : "Conversation moved to Trash."
+        onUndoAction = async () => {
           for (const mail of selectedMails) {
             await mailService.updateMail({ ...mail, removedAt: null });
           }
@@ -136,7 +117,7 @@ export function MailIndex() {
         for (const mail of selectedMails) {
           await mailService.updateMail({ ...mail, removedAt: null });
         }
-        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations restored.` : "Conversation restored."
+        updateNotificationText = selectedMails.length > 1 ? `${selectedMails.length} Conversations restored.` : "Conversation restored."
         break;
 
       case 'read':
@@ -144,8 +125,8 @@ export function MailIndex() {
         for (const mail of selectedMails) {
           await mailService.updateMail({ ...mail, isRead: true });
         }
-        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations marked as read.` : "Conversation marked as read."
-        undo = async () => {
+        updateNotificationText = selectedMails.length > 1 ? `${selectedMails.length} Conversations marked as read.` : "Conversation marked as read."
+        onUndoAction = async () => {
           for (const mail of selectedMails) {
             await mailService.updateMail({ ...mail, isRead: false });
           }
@@ -157,8 +138,8 @@ export function MailIndex() {
         for (const mail of selectedMails) {
           await mailService.updateMail({ ...mail, isRead: false });
         }
-        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations marked as unread.` : "Conversation marked as unread."
-        undo = async () => {
+        updateNotificationText = selectedMails.length > 1 ? `${selectedMails.length} Conversations marked as unread.` : "Conversation marked as unread."
+        onUndoAction = async () => {
           for (const mail of selectedMails) {
             await mailService.updateMail({ ...mail, isRead: true });
           }
@@ -170,8 +151,8 @@ export function MailIndex() {
         for (const mail of selectedMails) {
           await mailService.updateMail({ ...mail, isArchived: true });
         }
-        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations archived.` : "Conversation archived."
-        undo = async () => {
+        updateNotificationText = selectedMails.length > 1 ? `${selectedMails.length} Conversations archived.` : "Conversation archived."
+        onUndoAction = async () => {
           for (const mail of selectedMails) {
             await mailService.updateMail({ ...mail, isArchived: false });
           }
@@ -183,7 +164,7 @@ export function MailIndex() {
         for (const mail of selectedMails) {
           await mailService.updateMail({ ...mail, isArchived: false });
         }
-        text = selectedMails.length > 1 ? `${selectedMails.length} Conversations unarchived.` : "Conversation unarchived."
+        updateNotificationText = selectedMails.length > 1 ? `${selectedMails.length} Conversations unarchived.` : "Conversation unarchived."
         break;
 
       case 'star':
@@ -193,22 +174,33 @@ export function MailIndex() {
         }
         break;
 
-
+      case 'unstar':
+        selectedMails = selectedMails.filter((mail) => mail.isStarred === true);
+        for (const mail of selectedMails) {
+          await mailService.updateMail({ ...mail, isStarred: false });
+        }
+        break;
 
       default:
         throw new Error('Invalid action type');
     }
+
     const undoAndRefresh = async () => {
       //Notice, undo needs to be async 
-      await undo()
+      await onUndoAction()
       await fetchMails()
     }
 
     if (selectedMails.length > 0) {
-      showSuccessMsg(text, undoAndRefresh);
+      showSuccessMsg(updateNotificationText, undoAndRefresh);
     }
 
     if (isMailDetailsRoute()) {
+      if (action === "star" || action === "unstar") {
+        return;
+      }
+
+      //Go Back and refresh
       setLoadingMails(true);
       const pathSegments = location.pathname.split("/");
       const lastSegment = pathSegments[pathSegments.length - 1];
