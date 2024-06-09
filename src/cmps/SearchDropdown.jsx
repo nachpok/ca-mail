@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { SearchMailListPreview } from "./MailListPreview";
 import { useNavigate } from "react-router-dom";
 import { mailService } from "../services/mail.service";
+import AdvanceFilterPopover from "./AdvanceFilterPopover";
+import { IoMdOptions } from "react-icons/io";
 
 //TODO incode the search text
 //TODO on advance search put filters in the url, for example last 7 days and text 'abc':
@@ -15,6 +17,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
     const [last7Days, setLast7Days] = useState(false);
     const [fromMe, setFromMe] = useState(false);
     const [hasAttachments, setHasAttachments] = useState(false);
+    const [isAdvanceFilterPopoverOpen, setIsAdvanceFilterPopoverOpen] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -111,6 +114,15 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
     function filterSelected() {
         return hasAttachments || last7Days || fromMe;
     }
+
+    function showSearchDropdown() {
+        setIsSearchOpen(true);
+        setIsAdvanceFilterPopoverOpen(false);
+    }
+    function showAdvanceFilterPopover() {
+        setIsAdvanceFilterPopoverOpen(true);
+        setIsSearchOpen(false);
+    }
     const numOfSelectedFilters = Number(!!hasAttachments + !!last7Days + !!fromMe);
     let searchFotterText = ""
     if (searchValue !== "" && numOfSelectedFilters > 0) {
@@ -134,10 +146,13 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
                         className="search-input"
                         placeholder="Search mail"
                         onChange={handleInput}
-                        onFocus={() => setIsSearchOpen(true)}
+                        onFocus={showSearchDropdown}
                         onBlur={() => setIsSearchOpen(false)}
                         onKeyDown={handleKeyDown}
                     />
+                    <span onClick={showAdvanceFilterPopover} className='advance-filter-icon'>
+                        <IoMdOptions />
+                    </span>
                 </div>
             </div>
             {isSearchOpen && (
@@ -150,9 +165,15 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
                     {filteredMails.map((mail) => (
                         <SearchMailListPreview key={mail.id} mail={mail} searchValue={searchValue} closeDropdown={closeDropdown} />
                     ))}
-                    <li className="dropdown-footer" onClick={viewAllSearchResults}><span className="dropdown-footer-summary">{searchFotterText !== "" && searchFotterText}</span> <span className="dropdown-footer-press-enter">Press ENTER</span></li>
+                    {filteredMails.length > 0 && <li className="dropdown-footer" onClick={viewAllSearchResults}>
+                        <span className="dropdown-footer-summary">{searchFotterText !== "" && searchFotterText}</span>
+                        <span className="dropdown-footer-press-enter">Press ENTER</span>
+                    </li>}
                 </ul>
             )}
+            {/* {isAdvanceFilterPopoverOpen && <article style={{ position: 'relative' }}>
+                <AdvanceFilterPopover />
+            </article>} */}
         </section>
     )
 }

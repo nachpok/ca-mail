@@ -75,20 +75,35 @@ export function MailIndex() {
       }
       return;
     }
+
     if (folder === "advanced-search") {
-      //TODO decode filters and call fetchMailsByAdvancedSearch
+      if (isMailDetailsRoute()) {
+        try {
+          const segments = currentUrl.split("/");
+          const mailId = segments[segments.length - 1];
+          const mail = await mailService.getById(mailId);
+          setMails([mail]);
+          setLoadingMails(false);
+        } catch (error) {
+          console.error("Having issues with loading search mails:", error);
+        }
+        return;
+      }
+
       const filters = decodeURIComponent(currentUrl.split("/")[2]).split("&")
       const filtersMap = filters.reduce((acc, filter) => {
         const [key, value] = filter.split("=");
         acc[key] = value;
         return acc;
       }, {});
+
       console.log("filtersMap", filtersMap);
       const mails = await fetchMailsByAdvancedSearch(filtersMap.query || "", filtersMap);
       setMails(mails);
       setLoadingMails(false);
       return;
     }
+
     try {
       const { mails, unreadCounters } = await mailService.query(folder);
       setMails(mails);

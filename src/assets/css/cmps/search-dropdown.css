@@ -139,3 +139,10 @@
     padding: 0.5em;
     /* Adjust padding as needed */
 }
+
+.advance-filter-icon {
+    margin: 4px 10px;
+    padding-top: 4px;
+    font-size: 18px;
+    color: #5f6368;
+}
