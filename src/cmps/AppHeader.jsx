@@ -5,10 +5,9 @@ export function AppHeader({ fetchMailsByText, fetchMailsByAdvancedSearch }) {
 
   return (
     <header className="app-header">
-      <section className="container">
-        <HomeButton />
-        <SearchDropdown fetchMailsByText={fetchMailsByText} fetchMailsByAdvancedSearch={fetchMailsByAdvancedSearch} />
-      </section>
+      <HomeButton />
+      <SearchDropdown fetchMailsByText={fetchMailsByText} fetchMailsByAdvancedSearch={fetchMailsByAdvancedSearch} />
+
     </header>
   );
 }
