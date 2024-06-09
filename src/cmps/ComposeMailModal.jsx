@@ -136,8 +136,8 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
         setModalStateOpen((prev) => !prev)
     }
 
-    function trashDraft() {
-        onEditDraft({ ...mail, isDraft: true, removedAt: Date.now() })
+    async function trashDraft() {
+        await onEditDraft({ ...mail, isDraft: true, removedAt: Date.now() })
         onCloseCompose(false)
     }
 
