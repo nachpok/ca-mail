@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 
-export function SideBar({ onComposeClick, unreadCounters }) {
+export function SideBar({ onCompose, unreadCounters }) {
   const location = useLocation();
   const currentSearchParams = location.search;
 
@@ -9,7 +9,7 @@ export function SideBar({ onComposeClick, unreadCounters }) {
       <section className="container">
         <button
           className="side-bar-btn"
-          onClick={onComposeClick}
+          onClick={onCompose}
         >
           Compose
         </button>
