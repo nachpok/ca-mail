@@ -154,7 +154,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
         <section className="search-dropdown">
             <div className="search-bar">
                 <div className={`search-container ${isSearchOpen && "open"} ${searchedMails.length > 0 && "list"}`}>
-                    <span className="search-icon">🔍</span>
+                    <span className="search-icon" onClick={onViewAllSearchResults}>🔍</span>
                     <input
                         type="search"
                         className="search-input"
