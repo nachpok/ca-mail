@@ -1,0 +1,10 @@
+.advance-filter-popover {
+    position: absolute;
+    width: 500px;
+    max-width: 1000px;
+    background-color: #fff;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border: 1px solid #815e5e;
+    z-index: 1000;
+}

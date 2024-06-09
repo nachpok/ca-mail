@@ -14,7 +14,8 @@ export const mailService = {
     updateMail,
     loggedinUser,
     queryByText,
-    createDraft
+    createDraft,
+    queryByAdvancedSearch
 }
 
 
@@ -53,17 +54,67 @@ async function query(folder) {
     return { mails, unreadCounters }
 }
 
-async function queryByText(text) {
-    let mails = await storageService.query(MAIL_KEY);
-    mails = mails.filter(mail =>
-        mail.subject?.toLowerCase().includes(text.toLowerCase()) ||
-        mail.body?.toLowerCase().includes(text.toLowerCase()) ||
-        mail.fromName?.toLowerCase().includes(text.toLowerCase()) ||
-        mail.toName?.toLowerCase().includes(text.toLowerCase()) ||
-        mail.from?.toLowerCase().includes(text.toLowerCase()) ||
-        mail.to?.toLowerCase().includes(text.toLowerCase())
-    );
+async function queryByText(text, limit = 0) {
+    let mails = []
+    try {
+        mails = await storageService.query(MAIL_KEY);
+    } catch (err) {
+        console.log(err)
+    }
+
+    if (text !== "") {
+        mails = mails.filter(mail =>
+            mail.subject?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.body?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.fromName?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.toName?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.from?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.to?.toLowerCase().includes(text.toLowerCase())
+        );
+    }
+
     mails = mails.sort((a, b) => b.sentAt - a.sentAt);
+    if (limit >= 1) {
+        mails = mails.slice(0, limit);
+    }
+    return mails;
+}
+
+async function queryByAdvancedSearch(text, filters, limit = 0) {
+
+    if (!filters) return [];
+
+    let mails = []
+    try {
+        mails = await storageService.query(MAIL_KEY);
+    } catch (err) {
+        console.log(err)
+    }
+
+    if (text !== "") {
+        mails = mails.filter(mail =>
+            mail.subject?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.body?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.fromName?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.toName?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.from?.toLowerCase().includes(text.toLowerCase()) ||
+            mail.to?.toLowerCase().includes(text.toLowerCase())
+        );
+    }
+
+    if (filters.datestart && filters.daterangetype === "custom_range") {
+        const startDate = new Date(filters.datestart);
+        mails = mails.filter(mail => mail.sentAt >= startDate);
+    }
+
+    if (filters.from) {
+        mails = mails.filter(mail => mail.from === filters.from);
+    }
+
+    mails = mails.sort((a, b) => b.sentAt - a.sentAt);
+    if (limit >= 1) {
+        mails = mails.slice(0, limit);
+    }
     return mails;
 }
 

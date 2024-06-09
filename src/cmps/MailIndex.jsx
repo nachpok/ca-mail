@@ -32,10 +32,10 @@ export function MailIndex() {
   }, [location.pathname]);
 
 
-  async function fetchMailsByText(text) {
+  async function fetchMailsByText(text, limit = 0) {
     try {
-      if (text !== '' && text.length > 2) {
-        const searchMails = await mailService.queryByText(text);
+      if (text !== '') {
+        const searchMails = await mailService.queryByText(text, limit);
         return searchMails;
       }
     } catch (error) {
@@ -43,6 +43,14 @@ export function MailIndex() {
     }
   }
 
+  async function fetchMailsByAdvancedSearch(text, filters, limit = 0) {
+    try {
+      const searchMails = await mailService.queryByAdvancedSearch(text, filters, limit);
+      return searchMails;
+    } catch (error) {
+      console.error("Having issues with loading search mails:", error);
+    }
+  }
   async function fetchMails() {
     setLoadingMails(true);
     const folder = currentUrl.split("/")[1];
@@ -61,9 +69,38 @@ export function MailIndex() {
       } else {
         const searchByText = currentUrl.split("/")[2];
         const searchMails = await fetchMailsByText(searchByText);
+        console.log("searchMails", searchMails)
         setMails(searchMails);
         setLoadingMails(false);
       }
+      return;
+    }
+
+    if (folder === "advanced-search") {
+      if (isMailDetailsRoute()) {
+        try {
+          const segments = currentUrl.split("/");
+          const mailId = segments[segments.length - 1];
+          const mail = await mailService.getById(mailId);
+          setMails([mail]);
+          setLoadingMails(false);
+        } catch (error) {
+          console.error("Having issues with loading search mails:", error);
+        }
+        return;
+      }
+
+      const filters = decodeURIComponent(currentUrl.split("/")[2]).split("&")
+      const filtersMap = filters.reduce((acc, filter) => {
+        const [key, value] = filter.split("=");
+        acc[key] = value;
+        return acc;
+      }, {});
+
+      console.log("filtersMap", filtersMap);
+      const mails = await fetchMailsByAdvancedSearch(filtersMap.query || "", filtersMap);
+      setMails(mails);
+      setLoadingMails(false);
       return;
     }
 
@@ -191,7 +228,6 @@ export function MailIndex() {
 
   }
 
-
   async function onComposeMailModal(isOpen, mailId) {
     // refresh if creating new mail when sent Mails are in view
     if (!isOpen && (currentUrl.includes("/sent") || currentUrl.includes("/all-mails") || currentUrl.includes("/drafts"))) {
@@ -243,6 +279,7 @@ export function MailIndex() {
     <section className="mail-index">
       <AppHeader
         fetchMailsByText={fetchMailsByText}
+        fetchMailsByAdvancedSearch={fetchMailsByAdvancedSearch}
       />
       <section className="content">
         <SideBar onComposeClick={onComposeClick} unreadCounters={unreadCounters} />
