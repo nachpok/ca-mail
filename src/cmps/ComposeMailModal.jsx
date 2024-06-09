@@ -3,11 +3,10 @@ import { mailService } from "../services/mail.service";
 import minimise from '../assets/imgs/minimise.svg'
 import expand from '../assets/imgs/expand.svg'
 import trash from '../assets/imgs/trash.svg'
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 //TODO test drafts with search params form advance filtering
-export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEdit }) {
-    const location = useLocation();
+export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
     const [errorModal, setErrorModal] = useState(false);
     const [modalStateOpen, setModalStateOpen] = useState(true)
     const [modalWindowFull, setModalWindowFull] = useState(false)
@@ -49,7 +48,7 @@ export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEd
 
         try {
             await mailService.updateMail({ id: mail.id, to: mail.to, subject: mail.subject, body: mail.body, isDraft: false, sentAt: Date.now() })
-            closeComposeMailModal(false)
+            onCloseCompose(false)
         } catch (err) {
             console.error("onSendMail.err", err)
         }
@@ -60,7 +59,7 @@ export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEd
             try {
                 await mailService.updateMail({ id: mail.id, to: mail.to, subject: mail.subject, body: mail.body })
                 setMail(prevMail => ({ ...prevMail, to: mail.to, subject: mail.subject, body: mail.body }))
-                refeshDrafsOnComposeEdit(mail)
+                onEditDraft(mail)
             } catch (err) {
                 console.error("onFormFieldBlur.err", err)
             }
@@ -74,7 +73,7 @@ export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEd
                     subject: newDraft.subject || '',
                     body: newDraft.body || ''
                 });
-                refeshDrafsOnComposeEdit(newDraft)
+                onEditDraft(newDraft)
                 setSearchParams({ compose: newDraft.id });
             } catch (err) {
                 console.error("onFormFieldBlur.err", err)
@@ -130,7 +129,7 @@ export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEd
     function closeModal(e) {
         e.preventDefault();
         e.stopPropagation();
-        closeComposeMailModal(false)
+        onCloseCompose(false)
     }
 
     function onModalHeaderClick(e) {
@@ -138,8 +137,8 @@ export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEd
     }
 
     function trashDraft() {
-        refeshDrafsOnComposeEdit({ ...mail, isDraft: true, removedAt: Date.now() })
-        closeComposeMailModal(false)
+        onEditDraft({ ...mail, isDraft: true, removedAt: Date.now() })
+        onCloseCompose(false)
     }
 
     return (
