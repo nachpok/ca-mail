@@ -24,11 +24,10 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
             if (searchValue !== '' || hasAttachments || last7Days || fromMe) {
                 try {
                     let mails = []
-                    if (searchValue !== "" && !filterSelected()) {
+                    if (searchValue !== "" && !isFilterShortcutSelected()) {
                         mails = await fetchMailsByText(searchValue, 5);
                     } else {
                         const filters = {}
-
 
                         if (searchValue !== "") {
                         }
@@ -46,7 +45,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
                         mails = await fetchMailsByAdvancedSearch(searchValue, filters, 5);
                     }
                     if (mails) {
-                        setFilteredMails(mails.slice(0, 5));
+                        setFilteredMails(mails);
                     }
                 } catch (e) {
                     console.error(`SearchDropdown.fetchData.Error fetching mails: ${e}`)
@@ -65,9 +64,9 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
     }
 
     function viewAllSearchResults() {
-        if (searchValue !== "" && !filterSelected()) {
+        if (searchValue !== "" && !isFilterShortcutSelected()) {
             navigate(`/search/${searchValue}`)
-        } else if (filterSelected()) {
+        } else if (isFilterShortcutSelected()) {
             const paramsObj = {
                 isrefinement: true
             }
@@ -96,6 +95,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
         setFilteredMails([]);
         setIsSearchOpen(false);
     }
+
     function handleInput(e) {
         const value = e.target.value;
         setSearchValue(value);
@@ -105,13 +105,13 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
     }
 
     function handleKeyDown(e) {
-        if (e.key === 'Enter' && (searchValue !== "" || filterSelected())) {
+        if (e.key === 'Enter' && (searchValue !== "" || isFilterShortcutSelected())) {
             e.preventDefault();
             viewAllSearchResults();
         }
     }
 
-    function filterSelected() {
+    function isFilterShortcutSelected() {
         return hasAttachments || last7Days || fromMe;
     }
 
@@ -119,10 +119,35 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
         setIsSearchOpen(true);
         setIsAdvanceFilterPopoverOpen(false);
     }
+
+    function onSearchBlur() {
+        setIsSearchOpen(false);
+        setIsAdvanceFilterPopoverOpen(false);
+    }
+
     function showAdvanceFilterPopover() {
         setIsAdvanceFilterPopoverOpen(true);
         setIsSearchOpen(false);
     }
+
+    function onAdvanceFilterPopoverBlur() {
+        setIsAdvanceFilterPopoverOpen(false);
+        setIsSearchOpen(false);
+    }
+
+    function onAdvanceFilterPopoverSubmit(filters) {
+        setIsAdvanceFilterPopoverOpen(false);
+        setIsSearchOpen(false);
+
+        const paramsObj = {
+            isrefinement: true,
+            ...filters
+        };
+
+        const advancedSearchParams = new URLSearchParams(paramsObj).toString();
+        navigate(`/advanced-search/${advancedSearchParams}`);
+    }
+
     const numOfSelectedFilters = Number(!!hasAttachments + !!last7Days + !!fromMe);
     let searchFotterText = ""
     if (searchValue !== "" && numOfSelectedFilters > 0) {
@@ -147,7 +172,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
                         placeholder="Search mail"
                         onChange={handleInput}
                         onFocus={showSearchDropdown}
-                        onBlur={() => setIsSearchOpen(false)}
+                        onBlur={onSearchBlur}
                         onKeyDown={handleKeyDown}
                     />
                     <span onClick={showAdvanceFilterPopover} className='advance-filter-icon'>
@@ -171,9 +196,9 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
                     </li>}
                 </ul>
             )}
-            {/* {isAdvanceFilterPopoverOpen && <article style={{ position: 'relative' }}>
-                <AdvanceFilterPopover />
-            </article>} */}
+            {isAdvanceFilterPopoverOpen && <article style={{ position: 'relative' }}>
+                <AdvanceFilterPopover onFormBlur={onAdvanceFilterPopoverBlur} submitSearchFrom={onAdvanceFilterPopoverSubmit} />
+            </article>}
         </section>
     )
 }

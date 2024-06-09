@@ -69,7 +69,6 @@ export function MailIndex() {
       } else {
         const searchByText = currentUrl.split("/")[2];
         const searchMails = await fetchMailsByText(searchByText);
-        console.log("searchMails", searchMails)
         setMails(searchMails);
         setLoadingMails(false);
       }
@@ -97,7 +96,6 @@ export function MailIndex() {
         return acc;
       }, {});
 
-      console.log("filtersMap", filtersMap);
       const mails = await fetchMailsByAdvancedSearch(filtersMap.query || "", filtersMap);
       setMails(mails);
       setLoadingMails(false);
