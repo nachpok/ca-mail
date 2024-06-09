@@ -6,7 +6,6 @@ import { mailService } from "../services/mail.service.js";
 import { useNavigate } from "react-router-dom";
 import { MailPreviewActions } from "./MailPreviewActions.jsx";
 
-//TODO disable actions in trash
 export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpdateSelectedMails }) {
   const [isHover, setIsHover] = useState(false);
   const location = useLocation();

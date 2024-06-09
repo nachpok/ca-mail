@@ -31,7 +31,8 @@ export function MailDetails() {
     const targetPath = `/${location.pathname.split("/")[1]}`;
 
     if (location.pathname.includes("search")) {
-      // Gmail disables this
+      const newPath = location.pathname.split('/').slice(0, -1).join('/');
+      navigate(newPath);
     } else {
       navigate(targetPath);
     }

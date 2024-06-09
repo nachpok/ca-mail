@@ -12,7 +12,6 @@ export default function StarCheckbox({ cb, defaultChecked, className }) {
         <i
             className={`star-checkbox ${isChecked ? "fas fa-star" : "far fa-star"} ${className}`}
             onClick={toggleStar}
-
         ></i>
     );
 }

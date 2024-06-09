@@ -8,7 +8,7 @@ import { ComposeMailModal } from "./ComposeMailModal.jsx";
 import { Loader } from "./Loader.jsx";
 import { useNavigate } from "react-router-dom";
 import { showSuccessMsg } from "../services/event-bus.service";
-//TODO state/effect/on...
+
 export function MailIndex() {
   const navigate = useNavigate();
   const [mails, setMails] = useState([]);
@@ -232,6 +232,20 @@ export function MailIndex() {
     }
     //TODO
     if (folder === 'search') {
+      try {
+        const segments = currentUrl.split("/");
+        const lastSegment = segments[segments.length - 1];
+        if (lastSegment.startsWith("MUIxx-")) {
+          const mail = await mailService.getById(lastSegment);
+          setMails([mail]);
+        } else {
+          const mails = await fetchMailsByText(lastSegment);
+          setMails(mails);
+        }
+        setLoadingMails(false);
+      } catch (error) {
+        console.error("Having issues with loading mails:", error);
+      }
       return;
     }
     try {

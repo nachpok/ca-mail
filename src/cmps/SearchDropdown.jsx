@@ -53,7 +53,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
     function handleMouseDown(e) {
         e.preventDefault();
         //the mail preview does not open without this
-        //TODO figure out the issue and better name the function
+        //TODO figure out the issue and better name the method
     };
 
     function onCloseDropdown() {
@@ -148,7 +148,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
         navigate(`/advanced-search/${advancedSearchParams}`);
     }
 
-    const searchFooterText = formatSearchFooter(searchValue, filterTags);
+    const searchFooterText = formatSearchFooterText(searchValue, filterTags);
 
     return (
         <section className="search-dropdown">
@@ -195,7 +195,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
     )
 }
 
-function formatSearchFooter(searchValue, filterButtons) {
+function formatSearchFooterText(searchValue, filterButtons) {
     const numOfSelectedFilters = Number(!!filterButtons.hasAttachments + !!filterButtons.last7Days + !!filterButtons.fromMe);
     let searchFotterText = ""
     if (searchValue !== "" && numOfSelectedFilters > 0) {
