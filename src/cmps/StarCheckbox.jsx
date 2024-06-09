@@ -5,7 +5,6 @@ export default function StarCheckbox({ cb, defaultChecked, className }) {
     const [isChecked, setIsChecked] = useState(defaultChecked);
     const toggleStar = (e) => {
         e.preventDefault();
-        // const current = isChecked;
         setIsChecked(isChecked => !isChecked);
         cb(!isChecked);
     }
