@@ -1,4 +1,4 @@
-.advance-filter-popover {
+.advanced-filter-popover {
     position: absolute;
     width: 500px;
     max-width: 1000px;
@@ -9,18 +9,18 @@
     z-index: 1000;
 }
 
-.advance-filter-popover-input-container {
+.advanced-filter-popover .input-field {
     display: flex;
     flex-direction: row;
     gap: 10px;
     margin: 10px 0;
 }
 
-.advance-filter-popover-input-label {
+.advanced-filter-popover .input-field .input-label {
     width: 150px;
 }
 
-.advance-filter-popover-input {
+.advanced-filter-popover .input-field .popover-input {
     width: 100%;
     border: none;
     outline: none;
@@ -28,32 +28,32 @@
 }
 
 
-.advance-filter-popover-input:focus {
+.advanced-filter-popover-input:focus {
     border-bottom: 1px solid #7150f3;
 }
 
-.advance-filter-popover-select {
+.advanced-filter-popover .input-field .popover-select {
     flex: 1;
     border: none;
     outline: none;
     border-bottom: 1px solid #d8baba;
 }
 
-.advance-filter-popover-date {
+.advanced-filter-popover .input-field .popover-date {
     flex: 1;
     border: none;
     outline: none;
     border-bottom: 1px solid #d8baba;
 }
 
-.advance-filter-popover-button-container {
+.advanced-filter-popover .button-container {
     display: flex;
     flex-direction: row;
     gap: 10px;
     justify-content: flex-end;
 }
 
-.advance-filter-popover-btn {
+.advanced-filter-popover .button-container .btn {
     padding: 10px 20px;
     border: none;
     outline: none;
@@ -62,15 +62,15 @@
     background-color: #fff;
 }
 
-.advance-filter-popover-btn.search-btn {
+.advanced-filter-popover .button-container .btn.search-btn {
     background-color: #7150f3;
     color: #fff;
 }
 
-.advance-filter-popover-btn.search-btn:hover {
+.advanced-filter-popover .button-container .btn.search-btn:hover {
     background-color: #6346c9;
 }
 
-.advance-filter-popover-btn.clear-btn:hover {
+.advanced-filter-popover .button-container .btn:hover {
     background-color: #d7d1d1;
 }

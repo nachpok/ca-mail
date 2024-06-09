@@ -8,7 +8,7 @@ import { ComposeMailModal } from "./ComposeMailModal.jsx";
 import { Loader } from "./Loader.jsx";
 import { useNavigate } from "react-router-dom";
 import { showSuccessMsg } from "../services/event-bus.service";
-
+//TODO state/effect/on...
 export function MailIndex() {
   const navigate = useNavigate();
   const [mails, setMails] = useState([]);
@@ -18,11 +18,11 @@ export function MailIndex() {
     trash: 0,
     allMail: 0,
   });
-  //TODO move to params
+
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
   //TODO array fo objects with subject to body and id
   //getEmptyMail returns empty obj with temp id 
-  const [loadingMails, setLoadingMails] = useState(false);
+  const [isLoadingMails, setLoadingMails] = useState(false);
   const location = useLocation();
   const currentUrl = location.pathname;
 
@@ -281,7 +281,7 @@ export function MailIndex() {
       <section className="content">
         <SideBar onComposeClick={onComposeClick} unreadCounters={unreadCounters} />
         <main className="main">
-          {loadingMails ? (
+          {isLoadingMails ? (
             <Loader />
           ) : (
             isMailDetailsRoute() ? (
@@ -296,6 +296,7 @@ export function MailIndex() {
             )
           )}
           {isComposeMailOpen && (
+            // TODO onDraftEdit..., onCompose...
             <ComposeMailModal closeComposeMailModal={onComposeMailModal} refeshDrafsOnComposeEdit={refeshDrafsOnComposeEdit} />
           )}
         </main>

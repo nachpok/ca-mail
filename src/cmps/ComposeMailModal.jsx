@@ -3,11 +3,9 @@ import { mailService } from "../services/mail.service";
 import minimise from '../assets/imgs/minimise.svg'
 import expand from '../assets/imgs/expand.svg'
 import trash from '../assets/imgs/trash.svg'
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
-//TODO on seve darft //audo save
 export function ComposeMailModal({ closeComposeMailModal, refeshDrafsOnComposeEdit }) {
-    const navigate = useNavigate();
     const location = useLocation();
     const [errorModal, setErrorModal] = useState(false);
     const [modalStateOpen, setModalStateOpen] = useState(true)

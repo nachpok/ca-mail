@@ -3,12 +3,12 @@ import { utilService } from "../services/util.service.js";
 import { useNavigate } from "react-router-dom";
 import { mailService } from "../services/mail.service.js";
 
-export function SearchMailListPreview({ mail, searchValue, closeDropdown }) {
+export function SearchMailListPreview({ mail, searchValue, handleCloseDropdown }) {
     const navigate = useNavigate();
 
     const onOpenMail = () => {
         navigate(`/search/${searchValue}/${mail.id}`);
-        closeDropdown();
+        handleCloseDropdown();
     };
 
     const isSent = mail.from === mailService.loggedinUser.email;
