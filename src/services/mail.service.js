@@ -1,6 +1,6 @@
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
-
+import dayjs from 'dayjs'
 const loggedinUser = {
     email: 'user@appsus.com',
     fullname: 'Mahatma Appsus'
@@ -52,6 +52,9 @@ async function query(folder) {
         default:
             throw new Error(`Invalid folder: ${folder}`)
     }
+
+    mails = mails.sort((a, b) => b.sentAt - a.sentAt);
+
     return { mails, unreadCounters }
 }
 
@@ -95,7 +98,6 @@ async function queryByAdvancedSearch(text, filters, limit = 0) {
     } catch (err) {
         console.log(err)
     }
-
     if (text !== "") {
         const searchRegex = new RegExp(text);
 
@@ -108,7 +110,8 @@ async function queryByAdvancedSearch(text, filters, limit = 0) {
             searchRegex.test(mail.to)
         );
     }
-    if (filters.hasWords !== "") {
+
+    if (filters.hasWords && filters.hasWords !== "") {
         const decodedHasWords = decodeURIComponent(filters.hasWords);
         const searchText = decodedHasWords.toLowerCase();
         const searchRegex = new RegExp(searchText);
@@ -145,11 +148,9 @@ async function queryByAdvancedSearch(text, filters, limit = 0) {
     }
 
     if (filters.dateWithinSelect && filters.dateWithinInput) {
-        const inputDate = new Date(filters.dateWithinInput);
-        const startDate = new Date(inputDate);
-        startDate.setDate(inputDate.getDate() - filters.dateWithinSelect);
-        const endDate = new Date(inputDate);
-        endDate.setDate(inputDate.getDate() + filters.dateWithinSelect);
+        const inputDate = dayjs(filters.dateWithinInput).toDate();
+        const startDate = dayjs(inputDate).subtract(filters.dateWithinSelect, 'day').toDate().setHours(0, 0, 0, 0);
+        const endDate = dayjs(inputDate).add(filters.dateWithinSelect, 'day').toDate().setHours(23, 59, 59, 999);
         mailsToFilter = mailsToFilter.filter(mail => mail.sentAt >= startDate && mail.sentAt <= endDate);
     }
 
@@ -211,289 +212,290 @@ async function _createMockMails() {
     let mails = await storageService.query(MAIL_KEY);
     const mockEmails = [
         {
-            id: 'MUIxx-e101',
-            subject: 'Meeting Reminder',
-            body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            isRead: false,
-            isArchived: false,
-            isStarred: false,
-            isDraft: false,
-            sentAt: 1631133930594,
-            removedAt: null,
-            from: 'boss@company.com',
-            to: 'user@appsus.com',
-            fromName: 'Boss',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e101",
+            "subject": "Meeting Reminder",
+            "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            "isRead": false,
+            "isArchived": false,
+            "isStarred": false,
+            "isDraft": false,
+            "sentAt": 1715457028597,
+            "removedAt": null,
+            "from": "boss@company.com",
+            "to": "user@appsus.com",
+            "fromName": "Boss",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e102',
-            subject: 'Project Update',
-            body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            isRead: true,
-            isStarred: true,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1631133930594,
-            removedAt: null,
-            from: 'manager@company.com',
-            to: 'user@appsus.com',
-            fromName: 'Manager',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e102",
+            "subject": "Project Update",
+            "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            "isRead": true,
+            "isStarred": true,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1715456028597,
+            "removedAt": null,
+            "from": "manager@company.com",
+            "to": "user@appsus.com",
+            "fromName": "Manager",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e103',
-            subject: 'Lunch Plans',
-            body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            isRead: false,
-            isStarred: false,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1717209600,
-            removedAt: null,
-            from: 'friend@social.com',
-            to: 'user@appsus.com',
-            fromName: 'Friend',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e103",
+            "subject": "Lunch Plans",
+            "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            "isRead": false,
+            "isStarred": false,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1715555028597,
+            "removedAt": null,
+            "from": "friend@social.com",
+            "to": "user@appsus.com",
+            "fromName": "Friend",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e104',
-            subject: 'Invoice #12345',
-            body: 'Please find attached the invoice for your recent purchase.',
-            isRead: true,
-            isStarred: false,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1717296000,
-            removedAt: null,
-            from: 'billing@service.com',
-            to: 'user@appsus.com',
-            fromName: 'Billing Service',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e104",
+            "subject": "Invoice #12345",
+            "body": "Please find attached the invoice for your recent purchase.",
+            "isRead": true,
+            "isStarred": false,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1715654228597,
+            "removedAt": null,
+            "from": "billing@service.com",
+            "to": "user@appsus.com",
+            "fromName": "Billing Service",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e105',
-            subject: 'Welcome to Our Service',
-            body: 'Thank you for signing up for our service. We hope you enjoy it!',
-            isRead: false,
-            isStarred: true,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1717382400,
-            removedAt: null,
-            from: 'support@service.com',
-            to: 'user@appsus.com',
-            fromName: 'Support Service',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e105",
+            "subject": "Welcome to Our Service",
+            "body": "Thank you for signing up for our service. We hope you enjoy it!",
+            "isRead": false,
+            "isStarred": true,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1715753628597,
+            "removedAt": null,
+            "from": "support@service.com",
+            "to": "user@appsus.com",
+            "fromName": "Support Service",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e106',
-            subject: 'Password Reset',
-            body: 'Click the link below to reset your password.',
-            isRead: true,
-            isStarred: false,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1717468800,
-            removedAt: null,
-            from: 'no-reply@service.com',
-            to: 'user@appsus.com',
-            fromName: 'No Reply Service',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e106",
+            "subject": "Password Reset",
+            "body": "Click the link below to reset your password.",
+            "isRead": true,
+            "isStarred": false,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1715853028597,
+            "removedAt": null,
+            "from": "no-reply@service.com",
+            "to": "user@appsus.com",
+            "fromName": "No Reply Service",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e107',
-            subject: 'Weekly Newsletter',
-            body: 'Here is your weekly newsletter with the latest updates.',
-            isRead: false,
-            isStarred: false,
-            isArchived: false,
-            sentAt: 1717555200,
-            removedAt: null,
-            from: 'newsletter@service.com',
-            to: 'user@appsus.com',
-            fromName: 'Newsletter Service',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e107",
+            "subject": "Weekly Newsletter",
+            "body": "Here is your weekly newsletter with the latest updates.",
+            "isRead": false,
+            "isStarred": false,
+            "isArchived": false,
+            "sentAt": 1715952428597,
+            "removedAt": null,
+            "from": "newsletter@service.com",
+            "to": "user@appsus.com",
+            "fromName": "Newsletter Service",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e108',
-            subject: 'Job Application Status',
-            body: 'We are pleased to inform you that your application has been accepted.',
-            isRead: true,
-            isStarred: true,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1717641600,
-            removedAt: null,
-            from: 'hr@company.com',
-            to: 'user@appsus.com',
-            fromName: 'HR Department',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e108",
+            "subject": "Job Application Status",
+            "body": "We are pleased to inform you that your application has been accepted.",
+            "isRead": true,
+            "isStarred": true,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1716052028597,
+            "removedAt": null,
+            "from": "hr@company.com",
+            "to": "user@appsus.com",
+            "fromName": "HR Department",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e109',
-            subject: 'Event Invitation',
-            body: 'You are invited to our annual event. Please RSVP.',
-            isRead: false,
-            isStarred: false,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1717728000,
-            removedAt: null,
-            from: 'events@company.com',
-            to: 'user@appsus.com',
-            fromName: 'Events Team',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e109",
+            "subject": "Event Invitation",
+            "body": "You are invited to our annual event. Please RSVP.",
+            "isRead": false,
+            "isStarred": false,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1716151428597,
+            "removedAt": null,
+            "from": "events@company.com",
+            "to": "user@appsus.com",
+            "fromName": "Events Team",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e110',
-            subject: 'Subscription Confirmation',
-            body: 'Thank you for subscribing to our service.',
-            isRead: true,
-            isStarred: false,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1717900800,
-            removedAt: null,
-            from: 'no-reply@service.com',
-            to: 'user@appsus.com',
-            fromName: 'No Reply Service',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e110",
+            "subject": "Subscription Confirmation",
+            "body": "Thank you for subscribing to our service.",
+            "isRead": true,
+            "isStarred": false,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1716251028597,
+            "removedAt": null,
+            "from": "no-reply@service.com",
+            "to": "user@appsus.com",
+            "fromName": "No Reply Service",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e111',
-            subject: 'Order Shipped',
-            body: 'Your order has been shipped and is on its way.',
-            isRead: false,
-            isStarred: true,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1717987200,
-            removedAt: null,
-            from: 'shipping@store.com',
-            to: 'user@appsus.com',
-            fromName: 'Shipping Department',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e111",
+            "subject": "Order Shipped",
+            "body": "Your order has been shipped and is            order has been shipped and is on its way.",
+            "isRead": false,
+            "isStarred": true,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1716350628597,
+            "removedAt": null,
+            "from": "shipping@store.com",
+            "to": "user@appsus.com",
+            "fromName": "Shipping Department",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e113',
-            subject: 'Feedback Request',
-            body: 'We would love to hear your feedback on our service.',
-            isRead: false,
-            isStarred: false,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1631133930594,
-            removedAt: null,
-            from: 'feedback@service.com',
-            to: 'user@appsus.com',
-            fromName: 'Feedback Team',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e113",
+            "subject": "Feedback Request",
+            "body": "We would love to hear your feedback on our service.",
+            "isRead": false,
+            "isStarred": false,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1716450228597,
+            "removedAt": null,
+            "from": "feedback@service.com",
+            "to": "user@appsus.com",
+            "fromName": "Feedback Team",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e114',
-            subject: 'Security Alert',
-            body: 'We detected a new login to your account from an unknown device.',
-            isRead: true,
-            isStarred: true,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1631133930594,
-            removedAt: null,
-            from: 'security@service.com',
-            to: 'user@appsus.com',
-            fromName: 'Security Team',
-            toName: 'Mahatma Appsus'
+            "id": "MUIxx-e114",
+            "subject": "Security Alert",
+            "body": "We detected a new login to your account from an unknown device.",
+            "isRead": true,
+            "isStarred": true,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1716549828597,
+            "removedAt": null,
+            "from": "security@service.com",
+            "to": "user@appsus.com",
+            "fromName": "Security Team",
+            "toName": "Mahatma Appsus"
         },
         {
-            id: 'MUIxx-e115',
-            subject: 'Promotion Offer',
-            body: 'Get 20% off on your next purchase with this promo code.',
-            isRead: false,
-            isStarred: false,
-            isArchived: false,
-            sentAt: 1631133930594,
-            removedAt: null,
-            from: 'user@appsus.com',
-            to: 'promotions@store.com',
-            fromName: 'Mahatma Appsus',
-            toName: 'Promotions Team'
+            "id": "MUIxx-e115",
+            "subject": "Promotion Offer",
+            "body": "Get 20% off on your next purchase with this promo code.",
+            "isRead": false,
+            "isStarred": false,
+            "isArchived": false,
+            "sentAt": 1716649428597,
+            "removedAt": null,
+            "from": "user@appsus.com",
+            "to": "promotions@store.com",
+            "fromName": "Mahatma Appsus",
+            "toName": "Promotions Team"
         },
         {
-            id: 'MUIxx-e116',
-            subject: 'Service Downtime Notice',
-            body: 'Our service will be down for maintenance on Saturday from 2 AM to 4 AM.',
-            isRead: true,
-            isStarred: false,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1631133930594,
-            removedAt: null,
-            from: 'user@appsus.com',
-            to: 'support@service.com',
-            fromName: 'Mahatma Appsus',
-            toName: 'Support Team'
+            "id": "MUIxx-e116",
+            "subject": "Service Downtime Notice",
+            "body": "Our service will be down for maintenance on Saturday from 2 AM to 4 AM.",
+            "isRead": true,
+            "isStarred": false,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1716749028597,
+            "removedAt": null,
+            "from": "user@appsus.com",
+            "to": "support@service.com",
+            "fromName": "Mahatma Appsus",
+            "toName": "Support Team"
         },
         {
-            id: 'MUIxx-e117',
-            subject: 'New Feature Announcement',
-            body: 'We are excited to announce a new feature in our app.',
-            isRead: false,
-            isStarred: true,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1631133930594,
-            removedAt: null,
-            from: 'user@appsus.com',
-            to: 'updates@service.com',
-            fromName: 'Mahatma Appsus',
-            toName: 'Updates Team'
+            "id": "MUIxx-e117",
+            "subject": "New Feature Announcement",
+            "body": "We are excited to announce a new feature in our app.",
+            "isRead": false,
+            "isStarred": true,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1716848628597,
+            "removedAt": null,
+            "from": "user@appsus.com",
+            "to": "updates@service.com",
+            "fromName": "Mahatma Appsus",
+            "toName": "Updates Team"
         },
         {
-            id: 'MUIxx-e118',
-            subject: 'Account Verification',
-            body: 'Please verify your email address by clicking the link below.',
-            isRead: true,
-            isStarred: false,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1631133930594,
-            removedAt: null,
-            from: 'user@appsus.com',
-            to: 'no-reply@service.com',
-            fromName: 'Mahatma Appsus',
-            toName: 'No Reply Service'
+            "id": "MUIxx-e118",
+            "subject": "Account Verification",
+            "body": "Please verify your email address by clicking the link below.",
+            "isRead": true,
+            "isStarred": false,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 1716948228597,
+            "removedAt": null,
+            "from": "user@appsus.com",
+            "to": "no-reply@service.com",
+            "fromName": "Mahatma Appsus",
+            "toName": "No Reply Service"
         },
         {
-            id: 'MUIxx-e119',
-            subject: 'Survey Invitation',
-            body: 'We invite you to participate in our customer satisfaction survey.',
-            isRead: false,
-            isStarred: false,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1631133930594,
-            removedAt: null,
-            from: 'user@appsus.com',
-            to: 'survey@service.com',
-            fromName: 'Mahatma Appsus',
-            toName: 'Survey Team'
+            "id": "MUIxx-e119",
+            "subject": "Survey Invitation",
+            "body": "We invite you to participate in our customer satisfaction survey.",
+            "isRead": false,
+            "isStarred": false,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 14604400285,
+            "removedAt": null,
+            "from": "user@appsus.com",
+            "to": "survey@service.com",
+            "fromName": "Mahatma Appsus",
+            "toName": "Survey Team"
         },
         {
-            id: 'MUIxx-e120',
-            subject: 'Thank You!',
-            body: 'Thank you for being a valued customer.',
-            isRead: true,
-            isStarred: true,
-            isArchived: false,
-            isDraft: false,
-            sentAt: 1631133930594,
-            removedAt: 1631133931594,
-            from: 'user@appsus.com',
-            to: 'support@service.com',
-            fromName: 'Mahatma',
-            toName: 'Support Team'
+            "id": "MUIxx-e120",
+            "subject": "Thank You!",
+            "body": "Thank you for being a valued customer.",
+            "isRead": true,
+            "isStarred": true,
+            "isArchived": false,
+            "isDraft": false,
+            "sentAt": 169211982859,
+            "removedAt": 171803992859,
+            "from": "user@appsus.com",
+            "to": "support@service.com",
+            "fromName": "Mahatma",
+            "toName": "Support Team"
         }
-    ];
+    ]
+
     if (!mails || mails.length === 0) {
         for (const mail of mockEmails) {
 

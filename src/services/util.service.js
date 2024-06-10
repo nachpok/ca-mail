@@ -30,14 +30,26 @@ function formatDate(timestamp) {
     const now = new Date();
     const date = new Date(timestamp);
 
-    if (now.getDate() === date.getDate()) {
+    if (now.toDateString() === date.toDateString()) {
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
         return `${hours}:${minutes}`;
     }
+
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(now.getFullYear() - 1);
+
+    if (date > oneYearAgo) {
+        return date.toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'numeric'
+        });
+    }
+
     return date.toLocaleDateString('en-GB', {
         day: 'numeric',
-        month: 'numeric'
+        month: 'numeric',
+        year: 'numeric'
     });
 }
 
