@@ -39,7 +39,7 @@ export function SideBar({ onCompose, unreadCounters, isSideBarOpen }) {
           <SideBarLink to={`/trash${currentSearchParams}`} icon={<FaRegTrashAlt />} label="Trash" unreadCount={unreadCounters.trash} expandedSideBar={expandedSideBar} />
         </nav>
       </section>
-      <div className={`side-bar-filler ${expandedSideBar && isSideBarHover && 'active'}`}></div>
+      <div className={`side-bar-filler ${!isSideBarOpen && isSideBarHover && 'active'}`}></div>
     </div>
   );
 }
