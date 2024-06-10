@@ -34,8 +34,16 @@
     background-color: #dbdee0;
 }
 
-/* .filter-icon {
-    margin-left: 10px;
-    font-size: 18px;
-    color: #5f6368;
-} */
+@media (max-width: 425px) {
+    .app-header {
+        /* display: block; */
+    }
+
+    .app-header .menu-btn {
+        display: none;
+    }
+
+    .header-home-link {
+        display: none;
+    }
+}

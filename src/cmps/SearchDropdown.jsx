@@ -5,6 +5,7 @@ import { mailService } from "../services/mail.service";
 import AdvanceFilterPopover from "./AdvanceFilterPopover";
 import { IoMdOptions } from "react-icons/io";
 import { utilService } from "../services/util.service";
+import { IoMenu } from "react-icons/io5";
 
 export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch }) {
     const navigate = useNavigate();
@@ -154,22 +155,25 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
 
     return (
         <section className="search-dropdown">
-            <article className="search-bar">
-                <div className={`search-container ${isSearchOpen && "open"} ${searchedMails.length > 0 && "list"}`}>
-                    <span className="search-icon" onClick={onViewAllSearchResults}>🔍</span>
-                    <input
-                        type="search"
-                        className="search-input"
-                        placeholder="Search mail"
-                        onChange={onSearchInputChange}
-                        onFocus={showSearchDropdown}
-                        onBlur={closeSearch}
-                        onKeyDown={handleKeyDown}
-                    />
-                    <span onClick={showAdvanceFilterPopover} className='advance-filter-icon'>
-                        <IoMdOptions />
-                    </span>
-                </div>
+            <article className={`search-container ${isSearchOpen && "open"} ${searchedMails.length > 0 && "list"}`}>
+                <span className="search-icon" onClick={onViewAllSearchResults}>🔍</span>
+                <button
+                    className={`responsive-menu-btn`}
+                >
+                    <IoMenu />
+                </button>
+                <input
+                    type="search"
+                    className="search-input"
+                    placeholder="Search mail"
+                    onChange={onSearchInputChange}
+                    onFocus={showSearchDropdown}
+                    onBlur={closeSearch}
+                    onKeyDown={handleKeyDown}
+                />
+                <span onClick={showAdvanceFilterPopover} className='advance-filter-icon'>
+                    <IoMdOptions />
+                </span>
             </article>
             {isSearchOpen && (
                 <ul className="dropdown-list" onMouseDown={handleMouseDown}>
