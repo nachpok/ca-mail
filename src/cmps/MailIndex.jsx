@@ -23,7 +23,6 @@ export function MailIndex() {
   const [isLoadingMails, setLoadingMails] = useState(false);
   const location = useLocation();
   const currentUrl = location.pathname;
-
   //TODO move to hook file, add cleanup in the case that the location changes
   useEffect(() => {
     fetchMails();
@@ -235,7 +234,7 @@ export function MailIndex() {
       setLoadingMails(false);
       return;
     }
-    //TODO
+
     if (folder === 'search') {
       try {
         const segments = currentUrl.split("/");
@@ -253,6 +252,7 @@ export function MailIndex() {
       }
       return;
     }
+
     try {
       const { mails, unreadCounters } = await mailService.query(folder);
       setMails(mails);
@@ -263,8 +263,6 @@ export function MailIndex() {
       setLoadingMails(false);
     }
   }
-
-
 
   async function handleComposeMailModal(isShow) {
     if (!isShow && isNewMailInView()) {

@@ -3,7 +3,16 @@ import { useState } from 'react';
 export default function AdvanceFilterPopover({ onClose, onSubmit }) {
     //TODO get list of sent from and sent to, use for autocomplete
     //TODO dynamic list of folders
-    const [filters, setFilters] = useState({});
+    const [filters, setFilters] = useState({
+        from: '',
+        to: '',
+        subject: '',
+        hasWords: '',
+        doesntHave: '',
+        dateWithinSelect: '',
+        dateWithinInput: '',
+        search: ''
+    });
 
     function onChange(e) {
         setFilters({ ...filters, [e.target.name]: e.target.value });

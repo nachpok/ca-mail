@@ -5,13 +5,18 @@ import { useState } from "react";
 
 export function AppHeader({ fetchMailsByText, fetchMailsByAdvancedSearch, onSideBarToggle }) {
   const [isMenuBtnFocus, setIsMenuBtnFocus] = useState(false);
+  const [isMouseOverMenu, setIsMouseOverMenu] = useState(false);
+
+  const isMenuBtnActive = isMenuBtnFocus || isMouseOverMenu;
   return (
     <header className="app-header">
       <button
-        className={`menu-btn ${isMenuBtnFocus && "focus"}`}
+        className={`menu-btn ${isMenuBtnActive && "focus"}`}
         onClick={onSideBarToggle}
         onFocus={() => setIsMenuBtnFocus(true)}
         onBlur={() => setIsMenuBtnFocus(false)}
+        onMouseEnter={() => setIsMouseOverMenu(true)}
+        onMouseLeave={() => setIsMouseOverMenu(false)}
       >
         <IoMenu />
       </button>
