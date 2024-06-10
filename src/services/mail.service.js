@@ -145,8 +145,11 @@ async function queryByAdvancedSearch(text, filters, limit = 0) {
     }
 
     if (filters.dateWithinSelect && filters.dateWithinInput) {
-        const startDate = new Date(filters.dateWithinInput);
-        const endDate = new Date(filters.dateWithinInput);
+        const inputDate = new Date(filters.dateWithinInput);
+        const startDate = new Date(inputDate);
+        startDate.setDate(inputDate.getDate() - filters.dateWithinSelect);
+        const endDate = new Date(inputDate);
+        endDate.setDate(inputDate.getDate() + filters.dateWithinSelect);
         mailsToFilter = mailsToFilter.filter(mail => mail.sentAt >= startDate && mail.sentAt <= endDate);
     }
 
@@ -245,7 +248,7 @@ async function _createMockMails() {
             isStarred: false,
             isArchived: false,
             isDraft: false,
-            sentAt: 1631133930594,
+            sentAt: 1717209600,
             removedAt: null,
             from: 'friend@social.com',
             to: 'user@appsus.com',
@@ -260,7 +263,7 @@ async function _createMockMails() {
             isStarred: false,
             isArchived: false,
             isDraft: false,
-            sentAt: 1631133930594,
+            sentAt: 1717296000,
             removedAt: null,
             from: 'billing@service.com',
             to: 'user@appsus.com',
@@ -275,7 +278,7 @@ async function _createMockMails() {
             isStarred: true,
             isArchived: false,
             isDraft: false,
-            sentAt: 1631133930594,
+            sentAt: 1717382400,
             removedAt: null,
             from: 'support@service.com',
             to: 'user@appsus.com',
@@ -290,7 +293,7 @@ async function _createMockMails() {
             isStarred: false,
             isArchived: false,
             isDraft: false,
-            sentAt: 1631133930594,
+            sentAt: 1717468800,
             removedAt: null,
             from: 'no-reply@service.com',
             to: 'user@appsus.com',
@@ -304,7 +307,7 @@ async function _createMockMails() {
             isRead: false,
             isStarred: false,
             isArchived: false,
-            sentAt: 1631133930594,
+            sentAt: 1717555200,
             removedAt: null,
             from: 'newsletter@service.com',
             to: 'user@appsus.com',
@@ -319,7 +322,7 @@ async function _createMockMails() {
             isStarred: true,
             isArchived: false,
             isDraft: false,
-            sentAt: 1631133930594,
+            sentAt: 1717641600,
             removedAt: null,
             from: 'hr@company.com',
             to: 'user@appsus.com',
@@ -334,7 +337,7 @@ async function _createMockMails() {
             isStarred: false,
             isArchived: false,
             isDraft: false,
-            sentAt: 1631133930594,
+            sentAt: 1717728000,
             removedAt: null,
             from: 'events@company.com',
             to: 'user@appsus.com',
@@ -349,7 +352,7 @@ async function _createMockMails() {
             isStarred: false,
             isArchived: false,
             isDraft: false,
-            sentAt: 1631133930594,
+            sentAt: 1717900800,
             removedAt: null,
             from: 'no-reply@service.com',
             to: 'user@appsus.com',
@@ -364,7 +367,7 @@ async function _createMockMails() {
             isStarred: true,
             isArchived: false,
             isDraft: false,
-            sentAt: 1631133930594,
+            sentAt: 1717987200,
             removedAt: null,
             from: 'shipping@store.com',
             to: 'user@appsus.com',

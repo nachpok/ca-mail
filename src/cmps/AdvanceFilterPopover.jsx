@@ -9,9 +9,9 @@ export default function AdvanceFilterPopover({ onClose, onSubmit }) {
         subject: '',
         hasWords: '',
         doesntHave: '',
-        dateWithinSelect: '',
+        dateWithinSelect: '1',
         dateWithinInput: '',
-        search: ''
+        search: 'all-mail'
     });
 
     function onChange(e) {
