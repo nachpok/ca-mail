@@ -4,6 +4,7 @@ export const utilService = {
     saveToStorage,
     loadFromStorage,
     formatDate,
+    removeEmptyKeys
 }
 
 function makeId(length = 5) {
@@ -40,3 +41,8 @@ function formatDate(timestamp) {
     });
 }
 
+function removeEmptyKeys(obj) {
+    return Object.fromEntries(
+        Object.entries(obj).filter(([_, value]) => value !== "")
+    );
+}
