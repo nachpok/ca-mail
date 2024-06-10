@@ -1,43 +1,64 @@
 import { NavLink, useLocation } from "react-router-dom";
+import { MdInbox } from "react-icons/md";
+import { FaRegStar } from "react-icons/fa";
+import { BiSend } from "react-icons/bi";
+import { LuMails } from "react-icons/lu";
+import { FaRegFile } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { MdOutlineModeEdit } from "react-icons/md";
+import { useState } from "react";
 
-export function SideBar({ onCompose, unreadCounters }) {
+export function SideBar({ onCompose, unreadCounters, isSideBarOpen }) {
+  const [isSideBarHover, setIsSideBarHover] = useState(false);
   const location = useLocation();
   const currentSearchParams = location.search;
 
+  const expandedSideBar = isSideBarOpen || isSideBarHover;
   return (
-    <header className="app-side-bar">
-      <section className="container">
+    <div className="parent-container">
+      <section
+        className={`app-side-bar ${isSideBarOpen ? "open" : "closed"} ${isSideBarHover && "focus"}`}
+        onMouseEnter={() => setIsSideBarHover(true)}
+        onMouseLeave={() => setIsSideBarHover(false)}
+      >
         <button
-          className="side-bar-btn"
+          className={`side-bar-btn ${expandedSideBar ? "open" : "closed"}`}
           onClick={onCompose}
         >
-          Compose
+          <span className="side-bar-btn-icon">
+            <MdOutlineModeEdit />
+          </span>
+          {expandedSideBar && "Compose"}
         </button>
         <nav>
-          <NavLink className={`side-bar-link`} to={`/inbox${currentSearchParams}`}>
-            <h3>Inbox</h3>
-            {unreadCounters.inbox > 0 && <span className="unread-count">{unreadCounters.inbox}</span>}
-          </NavLink>
-          <NavLink className={`side-bar-link `} to={`/starred${currentSearchParams}`}>
-            <h3>Starred</h3>
-            {unreadCounters.starred > 0 && <span className="unread-count">{unreadCounters.starred}</span>}
-          </NavLink>
-          <NavLink className={`side-bar-link `} to={`/sent${currentSearchParams}`}>
-            <h3>Sent</h3>
-          </NavLink>
-          <NavLink className={`side-bar-link `} to={`/all-mail${currentSearchParams}`}>
-            <h3>All Mail</h3>
-            {unreadCounters.allMail > 0 && <span className="unread-count">{unreadCounters.allMail}</span>}
-          </NavLink>
-          <NavLink className={`side-bar-link `} to={`/drafts${currentSearchParams}`}>
-            <h3>Drafts</h3>
-          </NavLink>
-          <NavLink className={`side-bar-link `} to={`/trash${currentSearchParams}`}>
-            <h3>Trash</h3>
-            {unreadCounters.trash > 0 && <span className="unread-count">{unreadCounters.trash}</span>}
-          </NavLink>
+          <SideBarLink to={`/inbox${currentSearchParams}`} icon={<MdInbox />} label="Inbox" unreadCount={unreadCounters.inbox} expandedSideBar={expandedSideBar} />
+          <SideBarLink to={`/starred${currentSearchParams}`} icon={<FaRegStar />} label="Starred" unreadCount={unreadCounters.starred} expandedSideBar={expandedSideBar} />
+          <SideBarLink to={`/sent${currentSearchParams}`} icon={<BiSend />} label="Sent" expandedSideBar={expandedSideBar} />
+          <SideBarLink to={`/all-mail${currentSearchParams}`} icon={<LuMails />} label="All Mail" unreadCount={unreadCounters.allMail} expandedSideBar={expandedSideBar} />
+          <SideBarLink to={`/drafts${currentSearchParams}`} icon={<FaRegFile />} label="Drafts" unreadCount={unreadCounters.drafts} expandedSideBar={expandedSideBar} />
+          <SideBarLink to={`/trash${currentSearchParams}`} icon={<FaRegTrashAlt />} label="Trash" unreadCount={unreadCounters.trash} expandedSideBar={expandedSideBar} />
         </nav>
       </section>
-    </header>
+      <div className={`side-bar-filler ${expandedSideBar && isSideBarHover && 'active'}`}></div>
+    </div>
   );
 }
+
+const SideBarLink = ({ to, icon, label, unreadCount, expandedSideBar }) => {
+  return (
+    <NavLink className={`side-bar-link`} to={to}>
+      <span className="side-bar-link-title">
+        <span className="icon-wrapper">
+          {icon}
+          {!expandedSideBar && unreadCount > 0 && (
+            <span className="notification-bubble"></span>
+          )}
+        </span>
+        &nbsp;
+        {expandedSideBar && <h3>{label}</h3>}
+      </span>
+      {expandedSideBar && unreadCount > 0 && <span className="unread-count">{unreadCount}</span>}
+    </NavLink>
+  );
+};
+

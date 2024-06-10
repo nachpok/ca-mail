@@ -1,29 +1,73 @@
+.parent-container {
+    position: relative;
+    display: flex;
+}
+
 .app-side-bar {
     display: flex;
     flex-direction: column;
-    width: 220px;
+    width: 80px;
     height: 100%;
     padding-top: 20px;
 }
 
+.app-side-bar.open {
+    width: 220px;
+}
 
+.app-side-bar.closed {
+    width: 80px;
+}
+
+.app-side-bar.closed.focus {
+    position: absolute;
+    width: 220px;
+    overflow-x: auto;
+    z-index: 1000;
+    background-color: #f7f8fd;
+    /* left: 0; */
+}
+
+.side-bar-filler.active {
+    width: 80px;
+}
 
 .side-bar-btn {
-    display: block;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
     background-color: #c1e7fe;
-    padding: 10px 20px;
+    padding: 10px 10px;
     width: 150px;
     height: 60px;
     border-radius: 10px;
     border: none;
     transition: box-shadow 0.2s ease-in-out;
-    font-size: 1.4em;
-    margin: 0 10px 20px 20px;
+    font-size: 0.9em;
+    margin: 0 10px 20px 10px;
+}
 
+.side-bar-btn.open {
+    width: 150px;
+    height: 60px;
+}
+
+.side-bar-btn.closed {
+    width: 60px;
+    height: 60px;
 }
 
 .side-bar-btn:hover {
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.side-bar-btn-icon {
+    padding-top: 3px;
+    margin-left: 5px;
+    font-size: 1.4em;
+    width: 30px;
+    height: 30px;
 }
 
 .side-bar-link {
@@ -36,8 +80,16 @@
     padding: 10px 0;
     flex-grow: 1;
     margin-right: 20px;
-    padding-left: 20px;
+    padding-left: 25px;
     border-radius: 0 20px 20px 0;
+    height: 51px;
+}
+
+.side-bar-link-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
 }
 
 .side-bar-link:hover {
@@ -59,4 +111,19 @@
 
 .side-bar-link.active .unread-count {
     font-weight: bold;
+}
+
+.icon-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-bubble {
+    position: absolute;
+    top: -5px;
+    right: -7px;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
 }

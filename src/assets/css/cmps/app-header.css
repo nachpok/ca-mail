@@ -13,6 +13,26 @@
     margin-right: 100px;
 }
 
+.app-header .menu-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    padding: 10px 10px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    transition: box-shadow 0.4s ease-in-out;
+    font-size: 1.4em;
+    margin: 11px 0 20px 10px;
+    background-color: #f7f8fd;
+}
+
+.app-header .menu-btn.focus {
+    background-color: #dbdee0;
+}
+
 /* .filter-icon {
     margin-left: 10px;
     font-size: 18px;

@@ -18,7 +18,7 @@ export function MailIndex() {
     trash: 0,
     allMail: 0,
   });
-
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
   const [isLoadingMails, setLoadingMails] = useState(false);
   const location = useLocation();
@@ -180,6 +180,11 @@ export function MailIndex() {
     navigate(location.pathname + "?compose=new");
     setIsComposeMailOpen(true);
   }
+
+  function onSideBarToggle() {
+    setIsSideBarOpen(prevIsSideBarOpen => !prevIsSideBarOpen);
+  }
+
   async function fetchMailsByText(text, limit = 0) {
     try {
       if (text !== '') {
@@ -288,9 +293,10 @@ export function MailIndex() {
       <AppHeader
         fetchMailsByText={fetchMailsByText}
         fetchMailsByAdvancedSearch={fetchMailsByAdvancedSearch}
+        onSideBarToggle={onSideBarToggle}
       />
       <section className="content">
-        <SideBar onCompose={onComposeNewDraft} unreadCounters={unreadCounters} />
+        <SideBar onCompose={onComposeNewDraft} unreadCounters={unreadCounters} isSideBarOpen={isSideBarOpen} />
         <main className="main">
           {isLoadingMails ? (
             <Loader />
