@@ -66,7 +66,6 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
         } else {
             try {
                 const newDraft = await mailService.createDraft({ to: mail.to, subject: mail.subject, body: mail.body })
-                console.log("onFormFieldBlur.newDraft", newDraft)
                 setMail({
                     ...newDraft,
                     to: newDraft.to || '',
