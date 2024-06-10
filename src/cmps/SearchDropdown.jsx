@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { mailService } from "../services/mail.service";
 import AdvanceFilterPopover from "./AdvanceFilterPopover";
 import { IoMdOptions } from "react-icons/io";
+import { utilService } from "../services/util.service";
 
 export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch }) {
     const navigate = useNavigate();
@@ -81,6 +82,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
                 paramsObj.from = mailService.loggedinUser.email;
                 paramsObj.fromdisplay = mailService.loggedinUser.fullname;
             }
+
             const advancedSearchParams = new URLSearchParams(paramsObj).toString();
             navigate(`/advanced-search/${advancedSearchParams}`);
         }
@@ -138,10 +140,10 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
 
     function onAdvanceFilterPopoverSubmit(filters) {
         closeSearch()
-
+        const cleanedFilters = utilService.removeEmptyKeys({ ...filters });
         const paramsObj = {
             isrefinement: true,
-            ...filters
+            ...cleanedFilters
         };
 
         const advancedSearchParams = new URLSearchParams(paramsObj).toString();
@@ -152,7 +154,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
 
     return (
         <section className="search-dropdown">
-            <div className="search-bar">
+            <article className="search-bar">
                 <div className={`search-container ${isSearchOpen && "open"} ${searchedMails.length > 0 && "list"}`}>
                     <span className="search-icon" onClick={onViewAllSearchResults}>🔍</span>
                     <input
@@ -168,7 +170,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
                         <IoMdOptions />
                     </span>
                 </div>
-            </div>
+            </article>
             {isSearchOpen && (
                 <ul className="dropdown-list" onMouseDown={handleMouseDown}>
                     <li className="dropdown-header">
