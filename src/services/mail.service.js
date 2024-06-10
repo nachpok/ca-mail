@@ -82,7 +82,6 @@ async function queryByText(text, limit = 0) {
 }
 
 async function queryByAdvancedSearch(text, filters, limit = 0) {
-
     if (!filters) return [];
 
     let mailsToFilter = []
@@ -93,27 +92,36 @@ async function queryByAdvancedSearch(text, filters, limit = 0) {
         } else {
             mailsToFilter = await storageService.query(MAIL_KEY);
         }
-
     } catch (err) {
         console.log(err)
     }
 
-    if (text !== "" || filters.hastWords) {
-        let searchText = text.toLowerCase();
-        if (filters.hastWords) {
-            searchText = filters.hastWords.toLowerCase();
-        }
+    if (text !== "") {
+        const searchRegex = new RegExp(text);
+
         mailsToFilter = mailsToFilter.filter(mail =>
-            mail.subject?.toLowerCase().includes(searchText) ||
-            mail.body?.toLowerCase().includes(searchText) ||
-            mail.fromName?.toLowerCase().includes(searchText) ||
-            mail.toName?.toLowerCase().includes(searchText) ||
-            mail.from?.toLowerCase().includes(searchText) ||
-            mail.to?.toLowerCase().includes(searchText)
+            searchRegex.test(mail.subject) ||
+            searchRegex.test(mail.body) ||
+            searchRegex.test(mail.fromName) ||
+            searchRegex.test(mail.toName) ||
+            searchRegex.test(mail.from) ||
+            searchRegex.test(mail.to)
         );
     }
+    if (filters.hasWords !== "") {
+        const decodedHasWords = decodeURIComponent(filters.hasWords);
+        const searchText = decodedHasWords.toLowerCase();
+        const searchRegex = new RegExp(searchText);
 
-
+        mailsToFilter = mailsToFilter.filter(mail =>
+            searchRegex.test(mail.subject) ||
+            searchRegex.test(mail.body) ||
+            searchRegex.test(mail.fromName) ||
+            searchRegex.test(mail.toName) ||
+            searchRegex.test(mail.from) ||
+            searchRegex.test(mail.to)
+        );
+    }
 
     if (filters.from) {
         mailsToFilter = mailsToFilter.filter(mail => mail.from === filters.from);
