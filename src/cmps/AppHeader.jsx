@@ -8,7 +8,7 @@ export function AppHeader({ fetchMailsByText, fetchMailsByAdvancedSearch, onSide
   return (
     <header className="app-header">
       <button
-        className={`menu-btn ${isMenuBtnFocus ? "focus" : ""}`}
+        className={`menu-btn ${isMenuBtnFocus && "focus"}`}
         onClick={onSideBarToggle}
         onFocus={() => setIsMenuBtnFocus(true)}
         onBlur={() => setIsMenuBtnFocus(false)}
