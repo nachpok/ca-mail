@@ -113,7 +113,10 @@
     justify-content: space-between;
     align-items: center;
     height: 50px;
-
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }
 
 .compose-mail-modal .footer .send-btn {
@@ -197,4 +200,6 @@
     .responsive-minimise-btn {
         display: none;
     }
+
+
 }

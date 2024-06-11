@@ -64,18 +64,20 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
                 console.error("onFormFieldBlur.err", err)
             }
         } else {
-            try {
-                const newDraft = await mailService.createDraft({ to: mail.to, subject: mail.subject, body: mail.body })
-                setMail({
-                    ...newDraft,
-                    to: newDraft.to || '',
-                    subject: newDraft.subject || '',
-                    body: newDraft.body || ''
-                });
-                onEditDraft(newDraft)
-                setSearchParams({ compose: newDraft.id });
-            } catch (err) {
-                console.error("onFormFieldBlur.err", err)
+            if (mail.to !== 'new' || mail.subject !== '' || mail.body !== '') {
+                try {
+                    const newDraft = await mailService.createDraft({ to: mail.to, subject: mail.subject, body: mail.body })
+                    setMail({
+                        ...newDraft,
+                        to: newDraft.to || '',
+                        subject: newDraft.subject || '',
+                        body: newDraft.body || ''
+                    });
+                    onEditDraft(newDraft)
+                    setSearchParams({ compose: newDraft.id });
+                } catch (err) {
+                    console.error("onFormFieldBlur.err", err)
+                }
             }
         }
 
