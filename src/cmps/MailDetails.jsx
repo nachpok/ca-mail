@@ -55,7 +55,7 @@ export function MailDetails() {
         </article>
         <article className="meta">
           <div className="from">
-            {mail.fromName} &lt;{mail.from}&gt;
+            {mail.fromName} <span className="responsive-from-email">&lt;{mail.from}&gt;</span>
           </div>
           <div className="sub-header">
             <div className="">{parseDate(mail.sentAt)}</div>

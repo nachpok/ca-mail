@@ -54,7 +54,7 @@
 .mail-details .body {
     flex: 1;
     padding-left: 40px;
-    width: 600px;
+    width: 100%;
     height: calc(100vh - 64px - 20px - 48px - 31px - 48px);
     overflow-y: scroll;
 }
@@ -63,4 +63,20 @@
     max-width: 600px;
     margin: 0.5rem;
     overflow-wrap: break-word;
+}
+
+@media (max-width: 425px) {
+    .mail-details .body {
+        width: 100%;
+    }
+
+    .responsive-from-email {
+        display: none;
+    }
+
+    .mail-details .header .meta {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
 }
