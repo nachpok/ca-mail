@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { SearchMailListPreview } from "./MailListPreview";
+import { SearchMailListPreview } from "./SearchMailListPreview";
 import { useNavigate } from "react-router-dom";
 import { mailService } from "../services/mail.service";
 import AdvanceFilterPopover from "./AdvanceFilterPopover";

@@ -12,3 +12,9 @@
 .mail-list-header .select-all {
     margin-left: 0.5rem;
 }
+
+@media (max-width: 425px) {
+    .mail-list-header {
+        display: none;
+    }
+}

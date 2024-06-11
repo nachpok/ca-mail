@@ -122,3 +122,58 @@
     width: 100px;
     margin-left: auto;
 }
+
+.responsive-date-start {
+    display: none;
+}
+
+@media (max-width: 425px) {
+    .mail-preview {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .mail-preview-checkbox-container,
+    .mail-preview-date-container {
+        display: none;
+    }
+
+    .responsive-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .mail-preview-main {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .mail-preview-hyphen {
+        display: none;
+    }
+
+    .mail-preview-body {
+        margin-left: 0;
+    }
+
+    .responsive-date-start {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        align-items: flex-end;
+        /* align-items: stretch; */
+        justify-content: space-between;
+    }
+
+    .mail-preview-date {
+        margin-left: 0;
+        width: 100%;
+    }
+}

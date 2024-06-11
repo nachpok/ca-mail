@@ -57,33 +57,45 @@ export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpda
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
     >
-      <aside className="mail-preview-aside">
-        <div className="mail-preview-checkbox-container" onClick={e => e.preventDefault()}>
-          <input
-            type="checkbox"
-            className="mail-preview-checkbox"
-            checked={isChecked}
-            onClick={onClick}
-            onChange={onChange}
-          />
-          <StarCheckbox
-            cb={onStar}
-            defaultChecked={mail.isStarred}
-            className="mail-preview-star-checkbox"
-          />
-        </div>
-        <p className="mail-preview-from">{isSent ? mail.to : mail.fromName}</p>
-      </aside>
-      <main className="mail-preview-main">
-        <h3 className="mail-preview-subject">{mail.subject}</h3>&nbsp;-&nbsp;
-        <p className="mail-preview-body">{mail.body}</p>
-      </main>
+      <section className="responsive-container">
+        <aside className="mail-preview-aside">
+          <div className="mail-preview-checkbox-container" onClick={e => e.preventDefault()}>
+            <input
+              type="checkbox"
+              className="mail-preview-checkbox"
+              checked={isChecked}
+              onClick={onClick}
+              onChange={onChange}
+            />
+            <StarCheckbox
+              cb={onStar}
+              defaultChecked={mail.isStarred}
+              className="mail-preview-star-checkbox"
+            />
+          </div>
+          <p className="mail-preview-from">{isSent ? mail.to : mail.fromName}</p>
+        </aside>
+        <main className="mail-preview-main">
+          <h3 className="mail-preview-subject">{mail.subject}</h3><span className="mail-preview-hyphen">&nbsp;-&nbsp;</span>
+          <p className="mail-preview-body">{mail.body}</p>
+        </main>
+      </section>
       <aside className="mail-preview-date-container">
         {isHover ? <MailPreviewActions onUpdateSelectedMails={onUpdateSelectedMails} checkId={[mail.id]} isRead={mail.isRead} /> : (
           <p className="mail-preview-date">
             {utilService.formatDate(mail.sentAt)}
           </p>
         )}
+      </aside>
+      <aside className="responsive-date-start">
+        <p className="mail-preview-date">
+          {utilService.formatDate(mail.sentAt)}
+        </p>
+        <StarCheckbox
+          cb={onStar}
+          defaultChecked={mail.isStarred}
+          className="mail-preview-star-checkbox"
+        />
       </aside>
     </Link>
   );

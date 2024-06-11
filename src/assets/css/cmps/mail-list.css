@@ -17,3 +17,9 @@
     overflow-y: auto;
     -ms-overflow-style: none;
 }
+
+@media (max-width: 425px) {
+    .mail-list {
+        margin-top: 10px;
+    }
+}

@@ -20,3 +20,9 @@
 .mail-preview-actions-btn:hover {
     background-color: rgb(201, 186, 186);
 }
+
+@media (max-width: 425px) {
+    .mail-preview-actions {
+        display: none;
+    }
+}

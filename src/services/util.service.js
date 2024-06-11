@@ -49,7 +49,7 @@ function formatDate(timestamp) {
     return date.toLocaleDateString('en-GB', {
         day: 'numeric',
         month: 'numeric',
-        year: 'numeric'
+        year: '2-digit'
     });
 }
 
