@@ -287,6 +287,7 @@ export function MailIndex() {
     return location.pathname.includes("drafts") || location.pathname.includes("sent") || location.pathname.includes("all-mails")
   }
 
+  const isResponsiveOverlay = isSideBarOpen || isComposeMailOpen
   return (
     <section className={`mail-index ${isSideBarOpen ? "side-bar-open" : ""}`}>
       <AppHeader
@@ -319,7 +320,7 @@ export function MailIndex() {
           </article>
         </main>
       </section>
-      {isSideBarOpen && <div className="overlay" ></div>}
+      {isResponsiveOverlay && <div className="overlay" ></div>}
     </section>
   );
 }
