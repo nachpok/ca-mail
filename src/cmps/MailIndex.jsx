@@ -18,7 +18,8 @@ export function MailIndex() {
     trash: 0,
     allMail: 0,
   });
-  const [isSideBarOpen, setIsSideBarOpen] = useState(true);
+
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
   const [isLoadingMails, setLoadingMails] = useState(false);
   const location = useLocation();

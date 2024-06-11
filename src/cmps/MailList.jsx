@@ -30,7 +30,7 @@ export function MailList({ mails, reloadMails, onUpdateSelectedMails, onOpenDraf
         checkIds={checkIds}
         onUpdateSelectedMails={onUpdateSelectedMails}
       />
-      <div className="mail-preview-list">
+      <div className="">
         {mails.map((mail) => (
           <MailPreview
             key={mail.id}
