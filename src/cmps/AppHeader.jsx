@@ -21,7 +21,7 @@ export function AppHeader({ fetchMailsByText, fetchMailsByAdvancedSearch, onSide
         <IoMenu />
       </button>
       <HomeButton />
-      <SearchDropdown fetchMailsByText={fetchMailsByText} fetchMailsByAdvancedSearch={fetchMailsByAdvancedSearch} />
+      <SearchDropdown fetchMailsByText={fetchMailsByText} fetchMailsByAdvancedSearch={fetchMailsByAdvancedSearch} onSideBarToggle={onSideBarToggle} />
     </header>
   );
 }

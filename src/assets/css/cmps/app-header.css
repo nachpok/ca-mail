@@ -36,7 +36,8 @@
 
 @media (max-width: 425px) {
     .app-header {
-        /* display: block; */
+        margin: 0;
+        padding: 0;
     }
 
     .app-header .menu-btn {

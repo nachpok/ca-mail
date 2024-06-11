@@ -146,6 +146,7 @@
 @media (max-width: 425px) {
     .search-dropdown {
         width: 100%;
+        margin: 0 5px;
     }
 
     .search-container {

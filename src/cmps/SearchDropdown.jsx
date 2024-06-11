@@ -7,7 +7,7 @@ import { IoMdOptions } from "react-icons/io";
 import { utilService } from "../services/util.service";
 import { IoMenu } from "react-icons/io5";
 
-export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch }) {
+export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch, onSideBarToggle }) {
     const navigate = useNavigate();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchedMails, setSearchedMails] = useState([]);
@@ -159,6 +159,7 @@ export function SearchDropdown({ fetchMailsByText, fetchMailsByAdvancedSearch })
                 <span className="search-icon" onClick={onViewAllSearchResults}>🔍</span>
                 <button
                     className={`responsive-menu-btn`}
+                    onClick={onSideBarToggle}
                 >
                     <IoMenu />
                 </button>
