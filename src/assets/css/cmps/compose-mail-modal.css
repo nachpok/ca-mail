@@ -179,3 +179,22 @@
 .error-modal-content .modal-close-btn:hover {
     background-color: #b3b3b3;
 }
+
+@media (max-width: 425px) {
+    .compose-mail-modal.open {
+        width: 90%;
+        height: 90%;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .responsive-minimise-btn {
+        display: none;
+    }
+}

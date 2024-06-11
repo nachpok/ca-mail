@@ -147,8 +147,8 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
                 <div className="btns">
                     {modalStateOpen && <button className="btn" onClick={(e) => minimiseModal(e)}>_</button>}
                     {!modalStateOpen && <button className="btn flip-btn" onClick={(e) => openModal(e)}>_</button>}
-                    {(!modalWindowFull || !modalStateOpen) && <button className="btn svg-btn" onClick={(e) => expandModal(e)}><img src={expand} alt="expand" /></button>}
-                    {modalWindowFull && modalStateOpen && <button className="btn svg-btn" onClick={(e) => shrinkModal(e)}><img src={minimise} alt="shrink" /></button>}
+                    {(!modalWindowFull || !modalStateOpen) && <button className="btn svg-btn responsive-minimise-btn" onClick={(e) => expandModal(e)}><img src={expand} alt="expand" /></button>}
+                    {modalWindowFull && modalStateOpen && <button className="btn svg-btn responsive-minimise-btn" onClick={(e) => shrinkModal(e)}><img src={minimise} alt="shrink" /></button>}
                     <button className='btn' onClick={(e) => closeModal(e)}>X</button>
                 </div>
             </header>

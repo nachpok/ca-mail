@@ -8,7 +8,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { useState } from "react";
 
-export function SideBar({ onCompose, unreadCounters, isSideBarOpen }) {
+export function SideBar({ onCompose, unreadCounters, isSideBarOpen, onSideBarToggle }) {
   const [isSideBarHover, setIsSideBarHover] = useState(false);
   const location = useLocation();
   const currentSearchParams = location.search;
@@ -31,12 +31,12 @@ export function SideBar({ onCompose, unreadCounters, isSideBarOpen }) {
           {expandedSideBar && "Compose"}
         </button>
         <nav>
-          <SideBarLink to={`/inbox${currentSearchParams}`} icon={<MdInbox />} label="Inbox" unreadCount={unreadCounters.inbox} expandedSideBar={expandedSideBar} />
-          <SideBarLink to={`/starred${currentSearchParams}`} icon={<FaRegStar />} label="Starred" unreadCount={unreadCounters.starred} expandedSideBar={expandedSideBar} />
-          <SideBarLink to={`/sent${currentSearchParams}`} icon={<BiSend />} label="Sent" expandedSideBar={expandedSideBar} />
-          <SideBarLink to={`/all-mail${currentSearchParams}`} icon={<LuMails />} label="All Mail" unreadCount={unreadCounters.allMail} expandedSideBar={expandedSideBar} />
-          <SideBarLink to={`/drafts${currentSearchParams}`} icon={<FaRegFile />} label="Drafts" unreadCount={unreadCounters.drafts} expandedSideBar={expandedSideBar} />
-          <SideBarLink to={`/trash${currentSearchParams}`} icon={<FaRegTrashAlt />} label="Trash" unreadCount={unreadCounters.trash} expandedSideBar={expandedSideBar} />
+          <SideBarLink to={`/inbox${currentSearchParams}`} icon={<MdInbox />} label="Inbox" unreadCount={unreadCounters.inbox} expandedSideBar={expandedSideBar} onSideBarToggle={onSideBarToggle} />
+          <SideBarLink to={`/starred${currentSearchParams}`} icon={<FaRegStar />} label="Starred" unreadCount={unreadCounters.starred} expandedSideBar={expandedSideBar} onSideBarToggle={onSideBarToggle} />
+          <SideBarLink to={`/sent${currentSearchParams}`} icon={<BiSend />} label="Sent" expandedSideBar={expandedSideBar} onSideBarToggle={onSideBarToggle} />
+          <SideBarLink to={`/all-mail${currentSearchParams}`} icon={<LuMails />} label="All Mail" unreadCount={unreadCounters.allMail} expandedSideBar={expandedSideBar} onSideBarToggle={onSideBarToggle} />
+          <SideBarLink to={`/drafts${currentSearchParams}`} icon={<FaRegFile />} label="Drafts" unreadCount={unreadCounters.drafts} expandedSideBar={expandedSideBar} onSideBarToggle={onSideBarToggle} />
+          <SideBarLink to={`/trash${currentSearchParams}`} icon={<FaRegTrashAlt />} label="Trash" unreadCount={unreadCounters.trash} expandedSideBar={expandedSideBar} onSideBarToggle={onSideBarToggle} />
         </nav>
       </section>
       <div className={`side-bar-filler ${!isSideBarOpen && isSideBarHover && 'active'}`}></div>
@@ -44,9 +44,15 @@ export function SideBar({ onCompose, unreadCounters, isSideBarOpen }) {
   );
 }
 
-const SideBarLink = ({ to, icon, label, unreadCount, expandedSideBar }) => {
+const SideBarLink = ({ to, icon, label, unreadCount, expandedSideBar, onSideBarToggle }) => {
+  const handleClick = () => {
+    if (window.matchMedia("(max-width: 425px)").matches) {
+      onSideBarToggle();
+    }
+  };
+
   return (
-    <NavLink className={`side-bar-link`} to={to}>
+    <NavLink className={`side-bar-link`} to={to} onClick={handleClick}>
       <span className="side-bar-link-title">
         <span className="icon-wrapper">
           {icon}
@@ -61,4 +67,3 @@ const SideBarLink = ({ to, icon, label, unreadCount, expandedSideBar }) => {
     </NavLink>
   );
 };
-

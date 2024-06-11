@@ -288,14 +288,14 @@ export function MailIndex() {
   }
 
   return (
-    <section className="mail-index">
+    <section className={`mail-index ${isSideBarOpen ? "side-bar-open" : ""}`}>
       <AppHeader
         fetchMailsByText={fetchMailsByText}
         fetchMailsByAdvancedSearch={fetchMailsByAdvancedSearch}
         onSideBarToggle={onSideBarToggle}
       />
       <section className="content">
-        <SideBar onCompose={onComposeNewDraft} unreadCounters={unreadCounters} isSideBarOpen={isSideBarOpen} />
+        <SideBar onCompose={onComposeNewDraft} unreadCounters={unreadCounters} isSideBarOpen={isSideBarOpen} onSideBarToggle={onSideBarToggle} />
         <main className="main">
           {isLoadingMails ? (
             <Loader />
@@ -314,8 +314,12 @@ export function MailIndex() {
           {isComposeMailOpen && (
             <ComposeMailModal onCloseCompose={handleComposeMailModal} onEditDraft={onDraftEdite} />
           )}
+          <article className="responsive-componse-btn">
+            {!isComposeMailOpen && !isSideBarOpen && <button onClick={() => handleComposeMailModal(true)}>Compose</button>}
+          </article>
         </main>
       </section>
+      {isSideBarOpen && <div className="overlay" ></div>}
     </section>
   );
 }

@@ -134,6 +134,12 @@
 
 
 @media (max-width: 425px) {
+    .parent-container {
+        position: relative;
+        display: flex;
+        height: 100vh;
+    }
+
     .side-bar-btn {
         display: none;
     }
@@ -147,10 +153,13 @@
     }
 
     .app-side-bar.open {
-        position: absolute;
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 220px;
         overflow-x: auto;
         z-index: 1000;
         background-color: #f7f8fd;
     }
+
 }

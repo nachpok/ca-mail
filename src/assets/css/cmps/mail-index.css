@@ -22,3 +22,45 @@
     height: 100%;
     width: 100%;
 }
+
+.responsive-componse-btn {
+    display: none;
+}
+
+@media (max-width: 425px) {
+    .responsive-componse-btn {
+        display: block;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .responsive-componse-btn button {
+        padding: 10px 20px;
+        background-color: #e8ebee;
+        color: 000;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .responsive-componse-btn button:hover {
+        background-color: #0056b3;
+    }
+
+    .mail-index.side-bar-open {
+        overflow: hidden;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+}
