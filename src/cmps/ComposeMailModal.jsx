@@ -127,9 +127,10 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
         setModalStateOpen(true)
     }
 
-    function closeModal(e) {
+    async function closeModal(e) {
         e.preventDefault();
         e.stopPropagation();
+        await onFormFieldBlur()
         onCloseCompose(false)
     }
 
