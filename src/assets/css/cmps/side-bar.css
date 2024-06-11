@@ -73,7 +73,9 @@
 .side-bar-link {
     display: flex;
     align-items: center;
+    align-self: center;
     justify-content: space-between;
+
     text-decoration: none;
     color: black;
     font-size: 1.4em;
@@ -107,6 +109,7 @@
 .side-bar-link .unread-count {
     font-size: 0.7em;
     margin-right: 10px;
+    margin-top: 5px;
 }
 
 .side-bar-link.active .unread-count {
@@ -116,6 +119,7 @@
 .icon-wrapper {
     position: relative;
     display: inline-block;
+    margin-top: 5px;
 }
 
 .notification-bubble {
@@ -126,4 +130,27 @@
     height: 10px;
     background-color: red;
     border-radius: 50%;
+}
+
+
+@media (max-width: 425px) {
+    .side-bar-btn {
+        display: none;
+    }
+
+    .side-bar-filler {
+        display: none;
+    }
+
+    .app-side-bar.closed {
+        display: none;
+    }
+
+    .app-side-bar.open {
+        position: absolute;
+        width: 220px;
+        overflow-x: auto;
+        z-index: 1000;
+        background-color: #f7f8fd;
+    }
 }
