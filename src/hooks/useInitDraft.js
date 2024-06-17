@@ -29,8 +29,10 @@ export function useInitDraft(setMail, setComposeTitle, setIsInitComplete) {
         } else if (currentDraftId && currentDraftId.includes('new')) {
             const to = searchParams.get('to');
             const subject = searchParams.get('subject');
-            setMail({ to, subject, body: '' })
-            setComposeTitle(subject)
+            if (to && subject) {
+                setMail({ to, subject, body: '' })
+                setComposeTitle(subject)
+            }
             setIsInitComplete(true)
         }
     }, [searchParams, setIsInitComplete])
