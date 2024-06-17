@@ -1,14 +1,21 @@
 import { useEffect, useRef } from "react"
 
-export function useSaveDraft(mailToEdit, onSaveDraft, setComposeTitle) {
+export function useSaveDraft(mailToEdit, onSaveDraft, setComposeTitle, isInitComplete) {
     const timeoutRef = useRef()
     const previousMailRef = useRef()
+    const isFirstRun = useRef(true);
 
     useEffect(() => {
         previousMailRef.current = mailToEdit
     }, [])
 
     useEffect(() => {
+        if (isFirstRun.current && isInitComplete) {
+            isFirstRun.current = false;
+            return;
+        }
+        if (!isInitComplete) return;
+
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current)
             timeoutRef.current = null

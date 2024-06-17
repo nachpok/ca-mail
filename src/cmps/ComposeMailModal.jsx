@@ -15,9 +15,10 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
     const [mail, setMail] = useState({ id: 'new', to: '', subject: '', body: '' })
     const [searchParams, setSearchParams] = useSearchParams();
     const [composeTitle, setComposeTitle] = useState('New Message')
+    const [isInitComplete, setIsInitComplete] = useState(false)
 
-    useInitDraft(setMail, setComposeTitle)
-    const clearSaveDraftTimeout = useSaveDraft(mail, onSaveDraft, setComposeTitle)
+    useInitDraft(setMail, setComposeTitle, setIsInitComplete)
+    const clearSaveDraftTimeout = useSaveDraft(mail, onSaveDraft, setComposeTitle, isInitComplete)
 
 
     async function onSendMail() {
@@ -45,7 +46,7 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
                 setMail(prevMail => ({ ...prevMail, to: mail.to, subject: mail.subject, body: mail.body }))
                 onEditDraft(mail)
             } catch (err) {
-                console.error("onFormFieldBlur.err", err)
+                console.error("onSaveDraft.err", err)
             }
         } else {
             if (mail.to !== 'new' || mail.subject !== '' || mail.body !== '') {
@@ -60,8 +61,9 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
                     onEditDraft(newDraft)
                     setSearchParams({ compose: newDraft.id });
                 } catch (err) {
-                    console.error("onFormFieldBlur.err", err)
+                    console.error("onSaveDraft.err", err)
                 }
+
             }
         }
 

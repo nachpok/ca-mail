@@ -195,7 +195,7 @@ function save(mail) {
 }
 
 function createDraft(mail) {
-    const newMail = { id: utilService.makeId(), sentAt: Date.now(), removedAt: null, isRead: false, isStarred: false, isArchived: false, from: loggedinUser.email, to: mail.to, fromName: loggedinUser.fullname, toName: mail.toName, isDraft: true }
+    const newMail = { id: utilService.makeId(), sentAt: Date.now(), removedAt: null, isRead: false, isStarred: false, isArchived: false, from: loggedinUser.email, to: mail.to, fromName: loggedinUser.fullname, toName: mail.toName, isDraft: true, subject: mail.subject, body: mail.body }
     return storageService.post(MAIL_KEY, newMail)
 }
 

@@ -22,9 +22,11 @@ export function MailIndex() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
   const [isLoadingMails, setLoadingMails] = useState(false);
+  const [composeMailKey, setComposeMailKey] = useState(0); //unmount compose mail modal when the key changes
+
   const location = useLocation();
   const currentUrl = location.pathname;
-  //TODO move to hook file, add cleanup in the case that the location changes
+
   useEffect(() => {
     fetchMails();
   }, [location.pathname]);
@@ -266,6 +268,7 @@ export function MailIndex() {
   }
 
   async function handleComposeMailModal(isShow) {
+
     if (!isShow && isNewMailInView()) {
       await fetchMails();
     }
@@ -275,6 +278,7 @@ export function MailIndex() {
     }
 
     setIsComposeMailOpen(isShow);
+    setComposeMailKey(prevKey => prevKey + 1);
   };
 
   function isMailDetailsRoute() {
@@ -313,7 +317,7 @@ export function MailIndex() {
             )
           )}
           {isComposeMailOpen && (
-            <ComposeMailModal onCloseCompose={handleComposeMailModal} onEditDraft={onDraftEdite} />
+            <ComposeMailModal key={composeMailKey} onCloseCompose={handleComposeMailModal} onEditDraft={onDraftEdite} />
           )}
           <article className="responsive-componse-btn">
             {!isComposeMailOpen && !isSideBarOpen && <button onClick={() => handleComposeMailModal(true)}>Compose</button>}

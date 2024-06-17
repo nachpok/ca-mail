@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 import { mailService } from "../services/mail.service.js"
-export function useInitDraft(setMail, setComposeTitle) {
+export function useInitDraft(setMail, setComposeTitle, setIsInitComplete) {
     const [searchParams] = useSearchParams()
 
     useEffect(() => {
@@ -23,6 +23,12 @@ export function useInitDraft(setMail, setComposeTitle) {
 
         if (currentDraftId && currentDraftId.includes('MUIxx')) {
             initDraft()
+        } else if (currentDraftId && currentDraftId.includes('new')) {
+            const to = searchParams.get('to');
+            const subject = searchParams.get('subject');
+            setMail({ to, subject, body: '' })
+            setComposeTitle(subject)
+            setIsInitComplete(true)
         }
-    }, [searchParams])
+    }, [searchParams, setIsInitComplete])
 }
