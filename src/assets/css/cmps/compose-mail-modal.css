@@ -144,6 +144,11 @@
 
 }
 
+
+.compose-mail-modal .footer.closed {
+    display: none;
+}
+
 .compose-mail-modal .error-modal {
     position: fixed;
     top: 0;
