@@ -80,6 +80,7 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
 
     function onEditMailField(e) {
         const { name, value } = e.target;
+        console.log('onEditMailField', name, value)
         setMail(prevMail => ({ ...prevMail, [name]: value }));
     }
 
@@ -123,8 +124,7 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
                 <form className='form'>
                     <input type="email" name="to" placeholder='To' className={`form-item form-input`} value={mail.to} onChange={onEditMailField} />
                     <input type="text" name="subject" placeholder='Subject' className={`form-item form-input`} value={mail.subject} onChange={onEditMailField} />
-                    {/* <textarea name="body" placeholder='Message' className={`form-item form-textarea`} value={mail.body} onChange={onEditMailField} ></textarea> */}
-                    <MDXEditor ref={ref} markdown="# Hello world" plugins={[listsPlugin(), imagePlugin(), linkDialogPlugin(), toolbarPlugin({
+                    <MDXEditor ref={ref} name="body" className={`form-item form-textarea`} placeholder='Message' markdown={mail.body} onChange={(value) => onEditMailField({ target: { name: 'body', value: value } })} plugins={[listsPlugin(), toolbarPlugin({
                         toolbarContents: () => (
                             <>
                                 <UndoRedo />
@@ -132,8 +132,6 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
                                 <BlockTypeSelect />
                                 <CodeToggle />
                                 <ListsToggle />
-                                <CreateLink />
-                                <InsertImage />
                             </>
                         )
                     })]} />
