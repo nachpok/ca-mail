@@ -6,6 +6,7 @@ import trash from '../assets/imgs/trash.svg'
 import { useSearchParams } from "react-router-dom";
 
 //TODO test drafts with search params form advance filtering
+//TODO update on debounce not blure, clear timeout on send, move to cosume hook
 export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
     const [errorModal, setErrorModal] = useState(false);
     const [modalStateOpen, setModalStateOpen] = useState(true)
