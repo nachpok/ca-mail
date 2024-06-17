@@ -4,7 +4,8 @@ export const utilService = {
     saveToStorage,
     loadFromStorage,
     formatDate,
-    removeEmptyKeys
+    removeEmptyKeys,
+    validateEmail
 }
 
 function makeId(length = 5) {
@@ -58,3 +59,8 @@ function removeEmptyKeys(obj) {
         Object.entries(obj).filter(([_, value]) => value !== "")
     );
 }
+
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+};
