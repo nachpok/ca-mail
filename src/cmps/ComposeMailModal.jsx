@@ -77,30 +77,11 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
         setMail(prevMail => ({ ...prevMail, [name]: value }));
     }
 
-    function minimiseModal(e) {
+    function handleModalState(e, { stateOpen, windowFull }) {
         e.preventDefault();
         e.stopPropagation();
-        setModalStateOpen(false)
-    }
-
-    function openModal(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        setModalStateOpen(true)
-    }
-
-    function expandModal(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        setModalStateOpen(true)
-        setModalWindowFull(true)
-    }
-
-    function shrinkModal(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        setModalWindowFull(false)
-        setModalStateOpen(true)
+        if (stateOpen !== undefined) setModalStateOpen(stateOpen);
+        if (windowFull !== undefined) setModalWindowFull(windowFull);
     }
 
     async function closeModal(e) {
@@ -125,10 +106,10 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
             <header className='header' onClick={onModalHeaderClick}>
                 <h1 className='title'>{composeTitle}</h1>
                 <div className="btns">
-                    {modalStateOpen && <button className="btn" onClick={(e) => minimiseModal(e)}>_</button>}
-                    {!modalStateOpen && <button className="btn flip-btn" onClick={(e) => openModal(e)}>_</button>}
-                    {(!modalWindowFull || !modalStateOpen) && <button className="btn svg-btn responsive-minimise-btn" onClick={(e) => expandModal(e)}><img src={expand} alt="expand" /></button>}
-                    {modalWindowFull && modalStateOpen && <button className="btn svg-btn responsive-minimise-btn" onClick={(e) => shrinkModal(e)}><img src={minimise} alt="shrink" /></button>}
+                    {modalStateOpen && <button className="btn" onClick={(e) => handleModalState(e, { stateOpen: false })}>_</button>}
+                    {!modalStateOpen && <button className="btn flip-btn" onClick={(e) => handleModalState(e, { stateOpen: true })}>_</button>}
+                    {(!modalWindowFull || !modalStateOpen) && <button className="btn svg-btn responsive-minimise-btn" onClick={(e) => handleModalState(e, { stateOpen: true, windowFull: true })}><img src={expand} alt="expand" /></button>}
+                    {modalWindowFull && modalStateOpen && <button className="btn svg-btn responsive-minimise-btn" onClick={(e) => handleModalState(e, { stateOpen: true, windowFull: false })}><img src={minimise} alt="shrink" /></button>}
                     <button className='btn' onClick={(e) => closeModal(e)}>X</button>
                 </div>
             </header>
