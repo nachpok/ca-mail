@@ -1,7 +1,7 @@
 import { MailList } from "./MailList.jsx";
 import { useState, useEffect } from "react";
 import { mailService } from "../services/mail.service.js";
-import { useLocation, Outlet } from "react-router-dom";
+import { useLocation, Outlet, useSearchParams } from "react-router-dom";
 import { AppHeader } from "./AppHeader.jsx";
 import { SideBar } from "./SideBar.jsx";
 import { ComposeMailModal } from "./ComposeMailModal.jsx";
@@ -18,7 +18,7 @@ export function MailIndex() {
     trash: 0,
     allMail: 0,
   });
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
   const [isLoadingMails, setLoadingMails] = useState(false);
@@ -30,6 +30,12 @@ export function MailIndex() {
   useEffect(() => {
     fetchMails();
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (searchParams.get('compose') === 'new') {
+      setIsComposeMailOpen(true);
+    }
+  }, [searchParams])
 
   async function onUpdateSelectedMails(action, ids) {
     let selectedMails = mails.filter((mail) => ids.includes(mail.id));
