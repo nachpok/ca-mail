@@ -21,7 +21,6 @@ export function useSaveDraft(mailToEdit, onSaveDraft, setComposeTitle) {
                     setComposeTitle('Draft Saved')
                     setTimeout(() => {
                         if (mailToEdit.subject !== '') {
-                            console.log('mailToEdit.subject', mailToEdit.subject)
                             setComposeTitle(mailToEdit.subject)
                         } else {
                             setComposeTitle('New Message')
