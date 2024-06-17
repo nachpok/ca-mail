@@ -80,7 +80,6 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
 
     function onEditMailField(e) {
         const { name, value } = e.target;
-        console.log('onEditMailField', name, value)
         setMail(prevMail => ({ ...prevMail, [name]: value }));
     }
 

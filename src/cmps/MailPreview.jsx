@@ -5,6 +5,8 @@ import { Link, useLocation } from "react-router-dom";
 import { mailService } from "../services/mail.service.js";
 import { useNavigate } from "react-router-dom";
 import { MailPreviewActions } from "./MailPreviewActions.jsx";
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw';
 
 export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpdateSelectedMails }) {
   const [isHover, setIsHover] = useState(false);
@@ -77,7 +79,11 @@ export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpda
         </aside>
         <main className="mail-preview-main">
           <h3 className="mail-preview-subject">{mail.subject}</h3><span className="mail-preview-hyphen">&nbsp;-&nbsp;</span>
-          <p className="mail-preview-body">{mail.body}</p>
+          <div className="mail-preview-body">
+            <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+              {mail.body}
+            </ReactMarkdown>
+          </div>
         </main>
       </section>
       <aside className="mail-preview-date-container">

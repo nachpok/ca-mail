@@ -6,6 +6,7 @@ import StarCheckbox from "./StarCheckbox.jsx";
 import { IoReturnUpBack } from "react-icons/io5";
 import { MailActions } from "./MailActions.jsx";
 import { useOutletContext } from "react-router-dom";
+import { MDXEditor } from '@mdxeditor/editor'
 
 export function MailDetails() {
   const [mail, setMail] = useState(null);
@@ -71,9 +72,10 @@ export function MailDetails() {
         </article>
       </header>
       <main className="body">
-        {breakBody.map((line, idx) => (
+        {/* {breakBody.map((line, idx) => (
           <p key={idx} className="text-line">{line}<br /></p>
-        ))}
+        ))} */}
+        <MDXEditor markdown={mail.body} />
       </main>
     </article>
   );
