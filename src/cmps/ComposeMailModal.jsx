@@ -7,6 +7,8 @@ import { useSearchParams } from "react-router-dom";
 import { useInitDraft } from "../hooks/useInitDraft";
 import { useSaveDraft } from "../hooks/useSaveDraft";
 import { utilService } from "../services/util.service";
+import { MDXEditor, BlockTypeSelect, CreateLink, InsertImage, ListsToggle, CodeToggle, UndoRedo, BoldItalicUnderlineToggles, toolbarPlugin } from '@mdxeditor/editor'
+import { listsPlugin, imagePlugin, linkDialogPlugin } from '@mdxeditor/editor'
 
 export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
     const [errorModal, setErrorModal] = useState(false);
@@ -16,6 +18,8 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
     const [searchParams, setSearchParams] = useSearchParams();
     const [composeTitle, setComposeTitle] = useState('New Message')
     const [isInitComplete, setIsInitComplete] = useState(false)
+
+    const ref = useRef(null)
 
     useInitDraft(setMail, setComposeTitle, setIsInitComplete)
     const clearSaveDraftTimeout = useSaveDraft(mail, onSaveDraft, setComposeTitle, isInitComplete)
@@ -119,7 +123,20 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
                 <form className='form'>
                     <input type="email" name="to" placeholder='To' className={`form-item form-input`} value={mail.to} onChange={onEditMailField} />
                     <input type="text" name="subject" placeholder='Subject' className={`form-item form-input`} value={mail.subject} onChange={onEditMailField} />
-                    <textarea name="body" placeholder='Message' className={`form-item form-textarea`} value={mail.body} onChange={onEditMailField} ></textarea>
+                    {/* <textarea name="body" placeholder='Message' className={`form-item form-textarea`} value={mail.body} onChange={onEditMailField} ></textarea> */}
+                    <MDXEditor ref={ref} markdown="# Hello world" plugins={[listsPlugin(), imagePlugin(), linkDialogPlugin(), toolbarPlugin({
+                        toolbarContents: () => (
+                            <>
+                                <UndoRedo />
+                                <BoldItalicUnderlineToggles />
+                                <BlockTypeSelect />
+                                <CodeToggle />
+                                <ListsToggle />
+                                <CreateLink />
+                                <InsertImage />
+                            </>
+                        )
+                    })]} />
                 </form>
                 <footer className={`footer ${modalStateOpen ? 'open' : 'closed'}`}>
                     <button className='send-btn' onClick={onSendMail}>Send</button>

@@ -189,6 +189,11 @@
     background-color: #b3b3b3;
 }
 
+._linkDialogPopoverContent_yms4a_600 {
+    position: relative !important;
+    z-index: 2000 !important;
+}
+
 @media (max-width: 425px) {
     .compose-mail-modal.open {
         width: 90%;
