@@ -16,6 +16,8 @@ export function useInitDraft(setMail, setComposeTitle, setIsInitComplete) {
                 } else {
                     setComposeTitle('New Message')
                 }
+                setIsInitComplete(true)
+
             } catch (err) {
                 console.error("initDraft.err", err)
             }
@@ -23,6 +25,7 @@ export function useInitDraft(setMail, setComposeTitle, setIsInitComplete) {
 
         if (currentDraftId && currentDraftId.includes('MUIxx')) {
             initDraft()
+
         } else if (currentDraftId && currentDraftId.includes('new')) {
             const to = searchParams.get('to');
             const subject = searchParams.get('subject');
