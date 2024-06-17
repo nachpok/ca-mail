@@ -11,7 +11,11 @@ export function useInitDraft(setMail, setComposeTitle) {
             try {
                 const draft = await mailService.getById(currentDraftId)
                 setMail({ ...draft, to: draft.to || '', subject: draft.subject || '', body: draft.body || '' })
-                setComposeTitle(draft.subject)
+                if (draft.subject !== '') {
+                    setComposeTitle(draft.subject)
+                } else {
+                    setComposeTitle('New Message')
+                }
             } catch (err) {
                 console.error("initDraft.err", err)
             }
