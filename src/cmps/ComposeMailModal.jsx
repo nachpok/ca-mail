@@ -4,9 +4,10 @@ import minimise from '../assets/imgs/minimise.svg'
 import expand from '../assets/imgs/expand.svg'
 import trash from '../assets/imgs/trash.svg'
 import { useSearchParams } from "react-router-dom";
+import { useInitDraft } from "../hooks/useInitDraft";
+import { useSaveDraft } from "../hooks/useSaveDraft";
+import { utilService } from "../services/util.service";
 
-//TODO test drafts with search params form advance filtering
-//TODO update on debounce not blure, clear timeout on send, move to cosume hook
 export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
     const [errorModal, setErrorModal] = useState(false);
     const [modalStateOpen, setModalStateOpen] = useState(true)
@@ -15,30 +16,12 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
     const [searchParams, setSearchParams] = useSearchParams();
     const [composeTitle, setComposeTitle] = useState('New Message')
 
-    useEffect(() => {
-        const currentDraftId = searchParams.get('compose');
+    useInitDraft(setMail, setComposeTitle)
+    const clearSaveDraftTimeout = useSaveDraft(mail, onSaveDraft, setComposeTitle)
 
-        async function initDraft() {
-            try {
-                const draft = await mailService.getById(currentDraftId)
-                setMail({ ...draft, to: draft.to || '', subject: draft.subject || '', body: draft.body || '' })
-            } catch (err) {
-                console.error("initDraft.err", err)
-            }
-        }
-
-        if (currentDraftId && currentDraftId.includes('MUIxx')) {
-            initDraft()
-        }
-    }, [searchParams])
-
-    function validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(String(email).toLowerCase());
-    };
 
     async function onSendMail() {
-        if (!validateEmail(mail.to)) {
+        if (!utilService.validateEmail(mail.to)) {
             setErrorModal(true)
             return;
         }
@@ -55,7 +38,7 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
         }
     };
 
-    async function onFormFieldBlur() {
+    async function onSaveDraft() {
         if (mail.id && mail.id.includes('MUIxx')) {
             try {
                 await mailService.updateMail({ id: mail.id, to: mail.to, subject: mail.subject, body: mail.body })
@@ -87,14 +70,6 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
             searchParams.set('compose', mail.id);
         }
 
-        setComposeTitle('Draft Saved')
-        setTimeout(() => {
-            if (mail.subject !== "") {
-                setComposeTitle(mail.subject)
-            } else {
-                setComposeTitle('New Message')
-            }
-        }, 1500)
     }
 
     function onEditMailField(e) {
@@ -131,7 +106,8 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
     async function closeModal(e) {
         e.preventDefault();
         e.stopPropagation();
-        await onFormFieldBlur()
+        clearSaveDraftTimeout();
+        await onSaveDraft();
         onCloseCompose(false)
     }
 
@@ -158,11 +134,11 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
             </header>
             {modalStateOpen !== 'minimised' && <>
                 <form className='form'>
-                    <input type="email" name="to" placeholder='To' className={`form-item form-input`} value={mail.to} onChange={onEditMailField} onBlur={onFormFieldBlur} />
-                    <input type="text" name="subject" placeholder='Subject' className={`form-item form-input`} value={mail.subject} onChange={onEditMailField} onBlur={onFormFieldBlur} />
-                    <textarea name="body" placeholder='Message' className={`form-item form-textarea`} value={mail.body} onChange={onEditMailField} onBlur={onFormFieldBlur}></textarea>
+                    <input type="email" name="to" placeholder='To' className={`form-item form-input`} value={mail.to} onChange={onEditMailField} />
+                    <input type="text" name="subject" placeholder='Subject' className={`form-item form-input`} value={mail.subject} onChange={onEditMailField} />
+                    <textarea name="body" placeholder='Message' className={`form-item form-textarea`} value={mail.body} onChange={onEditMailField} ></textarea>
                 </form>
-                <footer className='footer'>
+                <footer className={`footer ${modalStateOpen ? 'open' : 'closed'}`}>
                     <button className='send-btn' onClick={onSendMail}>Send</button>
                     <button className="btn trash-btn" onClick={trashDraft}><img src={trash} alt="trash" /></button>
                 </footer>
