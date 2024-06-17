@@ -23,3 +23,6 @@
 @import "./cmps/user-messge.css";
 @import "./cmps/advance-filter-popover.css";
 @import "./cmps/mail-actions.css";
+
+/* packages */
+@import "@mdxeditor/editor/style.css";
