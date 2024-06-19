@@ -11,9 +11,9 @@
      cursor: pointer;
  }
 
- .side-bar-closed .mail-preview {
-     width: calc(100vw - 160px);
- }
+ /* .side-bar-closed .mail-preview {
+     width: calc(100vw - 80px);
+ } */
 
  .side-bar-open .mail-preview {
      width: calc(100vw - 220px);
