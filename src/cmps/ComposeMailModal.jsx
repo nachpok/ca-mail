@@ -130,7 +130,7 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
                 <form className='form'>
                     <input type="email" name="to" placeholder='To' className={`form-item form-input`} value={mail.to} onChange={onEditMailField} />
                     <input type="text" name="subject" placeholder='Subject' className={`form-item form-input`} value={mail.subject} onChange={onEditMailField} />
-                    <MDXEditor ref={ref} name="body" className={`form-item form-textarea`} placeholder='Message' markdown={mail.body} onChange={(value) => onEditMailField({ target: { name: 'body', value: value } })} plugins={[listsPlugin(), toolbarPlugin({
+                    {/* <MDXEditor ref={ref} name="body" className={`form-item form-textarea`} placeholder='Message' markdown={mail.body} onChange={(value) => onEditMailField({ target: { name: 'body', value: value } })} plugins={[listsPlugin(), toolbarPlugin({
                         toolbarContents: () => (
                             <>
                                 <UndoRedo />
@@ -140,7 +140,8 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
                                 <ListsToggle />
                             </>
                         )
-                    })]} />
+                    })]} /> */}
+                    <textarea name="body" className={`form-item form-textarea`} placeholder='Message' value={mail.body} onChange={(e) => onEditMailField(e)} />
                 </form>
                 <footer className={`footer ${modalStateOpen ? 'open' : 'closed'}`}>
                     <button className='send-btn' onClick={onSendMail}>Send</button>
