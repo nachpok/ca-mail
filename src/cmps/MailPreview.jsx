@@ -61,7 +61,7 @@ export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpda
       onMouseLeave={() => setIsHover(false)}
       // I have a css bug that i was not able to figur out, the width of the mail-preview is not correct 
       // when the sidebar is closed and doing the calc in the css file is not working as expected
-      style={width > 425 ? { width: `calc(100% - ${sidebarWidth}px)` } : {}}
+      style={width > 425 && !mail.isDraft ? { width: `calc(100% - ${sidebarWidth}px)` } : {}}
     >
       {/* <section className="responsive-container"> */}
       <aside className="mail-preview-aside">
