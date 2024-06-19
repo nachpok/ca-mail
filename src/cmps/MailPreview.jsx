@@ -52,7 +52,6 @@ export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpda
 
   const isSent = mail.from === mailService.loggedinUser.email;
 
-  console.log(sidebarWidth);
   return (
     <Link
       onClick={(e) => onPreviewClick(e)}
@@ -60,30 +59,30 @@ export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpda
       className={`mail-preview ${mail.isRead ? "mail-preview-read" : "mail-preview-unread"} `}
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
-    // I have a css bug that i was not able to figur out, the width of the mail-preview is not correct 
-    // when the sidebar is closed and doing the calc in the css file is not working as exprected
-    // style={width > 425 ? { width: `calc(100% - ${sidebarWidth}px)` } : {}}
+      // I have a css bug that i was not able to figur out, the width of the mail-preview is not correct 
+      // when the sidebar is closed and doing the calc in the css file is not working as expected
+      style={width > 425 ? { width: `calc(100% - ${sidebarWidth}px)` } : {}}
     >
-      <section className="responsive-container">
-        <aside className="mail-preview-aside">
-          <div className="mail-preview-checkbox-container" onClick={e => e.preventDefault()}>
-            <input
-              type="checkbox"
-              className="mail-preview-checkbox"
-              checked={isChecked}
-              onClick={onClick}
-              onChange={onChange}
-            />
-            <StarCheckbox
-              cb={onStar}
-              defaultChecked={mail.isStarred}
-              className="mail-preview-star-checkbox"
-            />
-          </div>
-          <p className="mail-preview-from">{isSent ? mail.to : mail.fromName}</p>
-        </aside>
-      </section>
+      {/* <section className="responsive-container"> */}
+      <aside className="mail-preview-aside">
+        <div className="mail-preview-checkbox-container" onClick={e => e.preventDefault()}>
+          <input
+            type="checkbox"
+            className="mail-preview-checkbox"
+            checked={isChecked}
+            onClick={onClick}
+            onChange={onChange}
+          />
+          <StarCheckbox
+            cb={onStar}
+            defaultChecked={mail.isStarred}
+            className="mail-preview-star-checkbox"
+          />
+        </div>
+        <p className="mail-preview-from">{isSent ? mail.to : mail.fromName}</p>
+      </aside>
       <main className="mail-preview-main">
+        <p className="mail-preview-from-responsive">{isSent ? mail.to : mail.fromName}</p>
         <h3 className="mail-preview-subject">{mail.subject}</h3><span className="mail-preview-hyphen">&nbsp;-&nbsp;</span>
         <div className="mail-preview-body">
           <ReactMarkdown rehypePlugins={[rehypeRaw]}>
@@ -91,6 +90,7 @@ export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpda
           </ReactMarkdown>
         </div>
       </main>
+      {/* </section> */}
       <aside className="mail-preview-date-container">
         {isHover ? <MailPreviewActions onUpdateSelectedMails={onUpdateSelectedMails} checkId={[mail.id]} isRead={mail.isRead} /> : (
           <p className="mail-preview-date">
