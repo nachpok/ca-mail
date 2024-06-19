@@ -156,7 +156,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 220px;
+        width: 90%;
         overflow-x: auto;
         z-index: 1000;
         background-color: #f7f8fd;
