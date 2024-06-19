@@ -21,6 +21,13 @@ export function ComposeMailModal({ onCloseCompose, onEditDraft }) {
 
     const ref = useRef(null)
 
+    useEffect(() => {
+        if (ref.current) {
+            ref.current.setMarkdown(mail.body);
+        }
+    }, [mail.body]);
+
+
     useInitDraft(setMail, setComposeTitle, setIsInitComplete)
     const clearSaveDraftTimeout = useSaveDraft(mail, onSaveDraft, setComposeTitle, isInitComplete)
 
