@@ -298,6 +298,7 @@ export function MailIndex() {
   }
 
   const isResponsiveOverlay = isSideBarOpen || isComposeMailOpen
+  const sidebarWidth = isSideBarOpen ? 220 : 80;
   return (
     <section className={`mail-index ${isSideBarOpen ? "side-bar-open" : ""}`}>
       <AppHeader
@@ -319,6 +320,7 @@ export function MailIndex() {
                 reloadMails={fetchMails}
                 onUpdateSelectedMails={onUpdateSelectedMails}
                 onOpenDraft={handleComposeMailModal}
+                sidebarWidth={sidebarWidth}
               />
             )
           )}

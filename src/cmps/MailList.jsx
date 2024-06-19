@@ -2,7 +2,7 @@ import { MailPreview } from "./MailPreview.jsx";
 import { MailListHeader } from "./MailListHeader.jsx";
 import { useState } from "react";
 
-export function MailList({ mails, reloadMails, onUpdateSelectedMails, onOpenDraft }) {
+export function MailList({ mails, reloadMails, onUpdateSelectedMails, onOpenDraft, sidebarWidth }) {
   const [checkIds, setCheckIds] = useState([]);
 
   function onSelectAll(e) {
@@ -30,7 +30,7 @@ export function MailList({ mails, reloadMails, onUpdateSelectedMails, onOpenDraf
         checkIds={checkIds}
         onUpdateSelectedMails={onUpdateSelectedMails}
       />
-      <div className="">
+      <div className="mail-list-container">
         {mails.map((mail) => (
           <MailPreview
             key={mail.id}
@@ -39,6 +39,7 @@ export function MailList({ mails, reloadMails, onUpdateSelectedMails, onOpenDraf
             onCheckPreview={onCheckPreview}
             onOpenDraft={onOpenDraft}
             onUpdateSelectedMails={onUpdateSelectedMails}
+            sidebarWidth={sidebarWidth}
           />
         ))}
       </div>

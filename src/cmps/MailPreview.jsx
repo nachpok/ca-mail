@@ -7,9 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { MailPreviewActions } from "./MailPreviewActions.jsx";
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw';
+import { useWindowSize } from "../hooks/useWindowSize.js";
 
-export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpdateSelectedMails }) {
+export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpdateSelectedMails, sidebarWidth }) {
   const [isHover, setIsHover] = useState(false);
+  const { width } = useWindowSize();
   const location = useLocation();
   const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(checked);
@@ -50,14 +52,17 @@ export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpda
 
   const isSent = mail.from === mailService.loggedinUser.email;
 
+  console.log(sidebarWidth);
   return (
     <Link
       onClick={(e) => onPreviewClick(e)}
       to={!mail.isDraft && `${location.pathname}/${mail.id}`}
-      className={`mail-preview ${mail.isRead || isSent ? "mail-preview-read" : "mail-preview-unread"
-        }`}
+      className={`mail-preview ${mail.isRead ? "mail-preview-read" : "mail-preview-unread"} `}
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
+    // I have a css bug that i was not able to figur out, the width of the mail-preview is not correct 
+    // when the sidebar is closed and doing the calc in the css file is not working as exprected
+    // style={width > 425 ? { width: `calc(100% - ${sidebarWidth}px)` } : {}}
     >
       <section className="responsive-container">
         <aside className="mail-preview-aside">
@@ -77,15 +82,15 @@ export function MailPreview({ mail, checked, onCheckPreview, onOpenDraft, onUpda
           </div>
           <p className="mail-preview-from">{isSent ? mail.to : mail.fromName}</p>
         </aside>
-        <main className="mail-preview-main">
-          <h3 className="mail-preview-subject">{mail.subject}</h3><span className="mail-preview-hyphen">&nbsp;-&nbsp;</span>
-          <div className="mail-preview-body">
-            <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-              {mail.body}
-            </ReactMarkdown>
-          </div>
-        </main>
       </section>
+      <main className="mail-preview-main">
+        <h3 className="mail-preview-subject">{mail.subject}</h3><span className="mail-preview-hyphen">&nbsp;-&nbsp;</span>
+        <div className="mail-preview-body">
+          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+            {mail.body}
+          </ReactMarkdown>
+        </div>
+      </main>
       <aside className="mail-preview-date-container">
         {isHover ? <MailPreviewActions onUpdateSelectedMails={onUpdateSelectedMails} checkId={[mail.id]} isRead={mail.isRead} /> : (
           <p className="mail-preview-date">

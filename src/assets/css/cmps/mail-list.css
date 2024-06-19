@@ -5,6 +5,10 @@
     border-radius: 10px;
 }
 
+.mail-list-container {
+    width: 100%;
+}
+
 .mail-preview-list {
     display: flex;
     flex-direction: column;
